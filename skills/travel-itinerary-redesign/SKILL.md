@@ -1,6 +1,6 @@
 ---
 name: travel-itinerary-redesign
-description: Create or refactor travel itineraries into reusable, weather-aware, mobile-first guides with packing lists, hotels, day-by-day plans, embedded restaurants and shopping, preserved content, explicit reservation or walk-in notes, and final markdown plus HTML deliverables. Use when planning trips, editing trip-planner pages, or simplifying fragmented travel guides.
+description: Use when planning a trip, restructuring fragmented travel notes, or redesigning a trip-planner page into a reusable, weather-aware itinerary guide with hotel recommendations and route-fit dining and shopping notes.
 ---
 
 # Travel Itinerary Redesign
@@ -9,14 +9,12 @@ description: Create or refactor travel itineraries into reusable, weather-aware,
 
 Turn a travel brief or fragmented plan into a reusable guide without losing content.
 
-See [planning-rules.md](references/planning-rules.md) for the intake, weather, and output rules, and [hotel-selection.md](references/hotel-selection.md) for hotel selection rules.
+Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, weather handling, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules.
 
 ## Intake First
 
-- Ask for missing trip inputs progressively, in this order: travel dates, destination, trip purpose, food preferences, budget.
-- Ask only the next missing item when possible.
-- If hotel suggestions are needed and room style or party size is missing, ask that after the five core inputs.
-- Do not start detailed planning until the trip brief is usable.
+- Follow [planning-rules.md](references/planning-rules.md) for the required inputs and question order.
+- Treat that file as canonical instead of restating those rules in derived outputs or companion files.
 
 ## Core Workflow
 
@@ -41,8 +39,7 @@ See [planning-rules.md](references/planning-rules.md) for the intake, weather, a
    - Avoid hiding core content behind mode switches unless the user explicitly wants separate views.
 
 5. Adapt to weather.
-   - Check the destination's forecast for the travel window, or use seasonal averages when exact forecasts are unavailable.
-   - Adjust clothing, shoes, outerwear, rain gear, sunscreen, hydration, indoor/outdoor ratio, and pacing.
+   - Apply the weather rules in [planning-rules.md](references/planning-rules.md).
    - Use weather to decide whether a day should be slower, more indoor, or more flexible.
 
 6. Recommend hotels with evidence.
@@ -62,9 +59,7 @@ See [planning-rules.md](references/planning-rules.md) for the intake, weather, a
    - Check desktop and mobile screenshots.
    - Confirm anchors, navigation, and section visibility.
    - If publishing is requested, commit only the intended files.
-   - Produce a final markdown file and an HTML file.
-   - If the user wants a standalone page, keep the HTML in one file.
-   - If the user wants a maintainable project, split HTML, CSS, and JS as needed.
+   - Use [planning-rules.md](references/planning-rules.md) to decide whether the task needs conversational output only, markdown plus HTML deliverables, or a standalone vs split web output.
 
 ## Editing Rules
 
@@ -74,8 +69,8 @@ See [planning-rules.md](references/planning-rules.md) for the intake, weather, a
 - Prefer route-fit venues with usable booking paths; otherwise mark them as walk-in or backup.
 - Keep packing, transport, meal, shopping, and return-day details visible in the same guide.
 - If the user provides dates and destination only, generate a weather-aware scaffold first, then refine with budget and food preferences.
-- Always end with both a markdown deliverable and an HTML deliverable.
-- Choose single-file HTML vs split HTML/CSS/JS based on the user's request and project complexity.
+- Do not force file generation for planning-only requests.
+- When the user wants a redesigned guide, page, or shareable artifact, follow [planning-rules.md](references/planning-rules.md) for markdown and HTML deliverables.
 
 ## Default Page Shape
 

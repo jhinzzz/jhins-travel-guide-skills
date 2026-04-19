@@ -42,4 +42,3 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 - Keep hotel recommendations short and scannable.
 - Put the best option first in each budget group.
 - Keep only a few strong options per tier.
-

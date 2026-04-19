@@ -1,0 +1,28 @@
+{
+  "name": "jhins-travel-guide-skills",
+  "owner": {
+    "name": "jhinzzz"
+  },
+  "metadata": {
+    "description": "Marketplace for travel itinerary planning and guide redesign plugins.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "travel-itinerary-redesign",
+      "source": "./",
+      "description": "Weather-aware travel itinerary redesign and planning skill.",
+      "version": "0.1.0",
+      "author": {
+        "name": "jhinzzz"
+      },
+      "homepage": "https://github.com/jhinzzz/jhins-travel-guide-skills",
+      "category": "travel",
+      "tags": [
+        "travel",
+        "itinerary",
+        "planning"
+      ]
+    }
+  ]
+}

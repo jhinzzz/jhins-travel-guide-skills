@@ -16,7 +16,8 @@
 
 ## Output
 
-- Always produce a markdown deliverable and an HTML deliverable.
+- If the user wants planning help only, a conversational itinerary or markdown outline is enough unless they explicitly ask for files.
+- If the user wants a redesigned guide, trip-planner page, or other shareable artifact, produce both a markdown deliverable and an HTML deliverable.
 - If the user wants a standalone page, output one HTML file.
 - If the user wants a maintainable project, split HTML, CSS, and JS as needed.
 - State the chosen HTML structure explicitly.

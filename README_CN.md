@@ -14,8 +14,9 @@
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)：当前仓库自己的 Claude marketplace 清单
 - [`skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/)：真正的 skill 目录
 - [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md)：主技能文件
-- [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md)：行程输入、天气处理、交付形式的唯一规则来源
+- [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md)：行程输入、天气处理、交通规划、交付形式的唯一规则来源
 - [`skills/travel-itinerary-redesign/references/hotel-selection.md`](./skills/travel-itinerary-redesign/references/hotel-selection.md)：酒店证据标准、分层与输出规则
+- [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装
@@ -123,6 +124,7 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 - 从粗略旅行需求开始做行程规划
 - 整理碎片化旅行笔记
 - 把旅行页面重构成可复用、考虑天气因素的行程指南
+- 规划往返交通（航班、高铁、火车、巴士、穿梭巴士、渡轮、的士等），含购票时间、票价区间、建议到站时间、备选方案
 - 输出酒店建议，以及贴合路线的餐饮和购物信息
 
 预期输出：

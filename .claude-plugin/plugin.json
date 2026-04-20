@@ -1,12 +1,12 @@
 {
   "name": "travel-itinerary-redesign",
-  "description": "Travel itinerary redesign plugin with a weather-aware trip planning skill.",
-  "version": "0.1.0",
+  "description": "Weather-aware trip planning skill with round-trip transport booking, hotel recommendations, and route-fit dining and shopping notes.",
+  "version": "0.2.0",
   "author": {
     "name": "jhinzzz"
   },
   "homepage": "https://github.com/jhinzzz/jhins-travel-guide-skills",
   "repository": "https://github.com/jhinzzz/jhins-travel-guide-skills",
   "skills": "./skills/",
-  "agents": "./agents/"
+  "agents": "./agents/openai.yaml"
 }

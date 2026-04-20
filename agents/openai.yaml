@@ -1,6 +1,6 @@
 interface:
   display_name: "Travel Itinerary Redesign"
-  short_description: "Weather-aware travel guide redesign and planning."
-  default_prompt: "Use $travel-itinerary-redesign to turn a trip brief, fragmented notes, or an existing itinerary page into a weather-aware guide; classify whether this is planning-only or a guide redesign first, then ask for dates, destination, purpose, food preferences, and budget."
+  short_description: "Weather-aware travel planning with round-trip transport, hotels, dining, and shopping."
+  default_prompt: "Use $travel-itinerary-redesign to turn a trip brief, fragmented notes, or an existing itinerary page into a weather-aware guide; classify whether this is planning-only or a guide redesign first, then ask for dates, destination, purpose, food preferences, budget, and preferred transport mode."
 policy:
   allow_implicit_invocation: true

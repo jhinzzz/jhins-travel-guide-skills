@@ -14,8 +14,9 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json): custom Claude marketplace manifest for this repo
 - [`skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/): actual skill directory
 - [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md): main skill file
-- [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md): canonical intake, weather, and deliverable rules
+- [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md): canonical intake, weather, transport, and deliverable rules
 - [`skills/travel-itinerary-redesign/references/hotel-selection.md`](./skills/travel-itinerary-redesign/references/hotel-selection.md): hotel evidence, tiering, and output rules
+- [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md): round-trip transport booking, timing, pricing, transfer planning, and arrival time rules
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace
@@ -118,6 +119,7 @@ The `travel-itinerary-redesign` skill is designed for:
 - planning a trip from a rough brief
 - restructuring fragmented travel notes
 - redesigning an itinerary page into a reusable, weather-aware guide
+- planning round-trip transport (flights, high-speed rail, trains, buses, shuttles, ferries, taxis) with booking windows, price ranges, recommended arrival times, and backup options
 - producing hotel recommendations and route-fit dining and shopping notes
 
 Expected outputs:

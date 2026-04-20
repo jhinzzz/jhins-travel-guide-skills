@@ -1,6 +1,6 @@
 ---
 name: travel-itinerary-redesign
-description: Use when turning a trip brief, fragmented travel notes, or an existing itinerary page into a weather-aware guide with day-by-day structure, hotel recommendations, and route-fit dining or shopping notes.
+description: Use when turning a trip brief, fragmented travel notes, or an existing itinerary page into a weather-aware guide with round-trip transport planning, day-by-day structure, hotel recommendations, and route-fit dining or shopping notes.
 ---
 
 # Travel Itinerary Redesign
@@ -9,7 +9,7 @@ description: Use when turning a trip brief, fragmented travel notes, or an exist
 
 Turn a travel brief or fragmented plan into a reusable guide without losing content.
 
-Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, weather handling, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules.
+Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, weather handling, transport planning, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules. Use [transportation.md](references/transportation.md) for round-trip transport booking, timing, pricing, and transfer planning.
 
 ## Classify The Task First
 
@@ -41,6 +41,7 @@ Ask for confirmation before crossing these boundaries:
 
 - Switching from advice or outline mode into markdown plus HTML deliverables
 - Replacing an existing page structure instead of only reorganizing content inside it
+- Choosing a transport mode when the user has not stated a preference
 - Treating missing dates, destination, or budget as permission to invent specifics
 - Dropping existing sections, venues, or notes instead of preserving them as backup or reference
 
@@ -62,6 +63,14 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
   - Do not promote a hotel as a first pick.
   - Keep it as backup, niche, or omit it according to [hotel-selection.md](references/hotel-selection.md).
 
+- Missing transport preference
+  - Present the most common viable modes for the route with a price-vs-time comparison.
+  - Do not default to a single mode without asking.
+
+- Transport schedule or price unavailable
+  - State the typical range and mark it as approximate with the research date.
+  - Do not invent specific departure times, flight numbers, or train numbers.
+
 - Existing content is incomplete or contradictory
   - Preserve the source facts, flag the conflict briefly, and avoid silently resolving it by invention.
 
@@ -72,44 +81,58 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
    - Preserve all facts. Move content instead of deleting it.
    - If the request is `planning-only`, inventory the user's brief and constraints instead of inventing page structure too early.
 
-2. Rebuild around a generic trip timeline.
+2. Plan round-trip transport first.
+   - Determine the outbound and return transport before filling in daily activities.
+   - Follow [transportation.md](references/transportation.md) for booking windows, arrival times, pricing, and transfer chains.
+   - On the arrival day, start the itinerary from the actual arrival time — do not schedule activities before the user can realistically reach the destination.
+   - On the departure day, work backward from the hard cutoff time to set the latest check-out and last activity.
+   - Include a transport card for each leg with mode, route, booking window, price range, recommended arrival, and backup option.
+   - When multiple modes are viable, present a comparison table (price, duration, convenience) and let the user decide.
+
+3. Rebuild around a generic trip timeline.
    - Use day archetypes such as arrival, city exploration, day trip, weather buffer, food-focused day, and departure.
    - Keep the day-by-day itinerary as the main spine.
-   - Keep appendices for full restaurant, shopping, sightseeing, and hotel references.
+   - Keep appendices for full restaurant, shopping, sightseeing, hotel, and transport references.
    - Avoid hard-coding a specific destination into the day template unless the user explicitly gave one.
 
-3. Embed local context into each day.
+4. Embed local context into each day.
    - Surface restaurants, shops, attractions, and shopping targets inside the matching day card.
    - Label each item as `main line`, `backup`, `walk-in`, `reservation required`, or `weather-only`.
    - If a restaurant does not fit the route, hours, or booking constraints, move it to backup instead of forcing it into the day.
    - Keep the meal and shopping blocks inside the relevant day so the user does not need to jump across sections.
+   - Include intra-city transport notes where relevant (metro lines, bus routes, taxi estimates, walking distances).
 
-4. Remove hidden-mode friction.
+5. Remove hidden-mode friction.
    - If the page uses tabs or modes, convert them into anchors or shortcuts.
    - Avoid hiding core content behind mode switches unless the user explicitly wants separate views.
 
-5. Adapt to weather.
+6. Adapt to weather.
    - Apply the weather rules in [planning-rules.md](references/planning-rules.md).
    - Use weather to decide whether a day should be slower, more indoor, or more flexible.
+   - Consider weather impact on transport: typhoons can cancel ferries and flights, heavy rain causes road delays — flag these risks when applicable.
 
-6. Recommend hotels with evidence.
+7. Recommend hotels with evidence.
    - Use the dedicated hotel selection rules in [hotel-selection.md](references/hotel-selection.md).
+   - Factor in proximity to the main transport hub (station, airport) for arrival and departure convenience.
 
-7. Optimize for readability.
+8. Optimize for readability.
    - Use short labels, chips, and compact notes.
    - Prefer plain travel-guide wording over AI-style explanations.
    - Keep paragraphs short and scan-friendly.
+   - For transport cards, use tables or chip-style labels, not paragraphs.
 
-8. Optimize for web and mobile.
+9. Optimize for web and mobile.
    - Desktop: editorial two-column layouts are fine.
    - Mobile: single-column flow, stacked cards, no horizontal overflow.
    - Make the iPhone-sized view readable without extra taps.
 
-9. Verify before finishing.
-   - Check desktop and mobile screenshots.
-   - Confirm anchors, navigation, and section visibility.
-   - If publishing is requested, commit only the intended files.
-   - Use [planning-rules.md](references/planning-rules.md) to decide whether the task needs conversational output only, markdown plus HTML deliverables, or a standalone vs split web output.
+10. Verify before finishing.
+    - Check desktop and mobile screenshots.
+    - Confirm anchors, navigation, and section visibility.
+    - Verify all transport legs have booking windows, price ranges, arrival times, and backup options.
+    - Verify departure-day timing works backward correctly from the hard cutoff.
+    - If publishing is requested, commit only the intended files.
+    - Use [planning-rules.md](references/planning-rules.md) to decide whether the task needs conversational output only, markdown plus HTML deliverables, or a standalone vs split web output.
 
 ## Non-Goals
 
@@ -117,6 +140,9 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Do not replace route fit, booking constraints, or weather logic with generic sightseeing filler.
 - Do not drop existing facts just to make the layout cleaner.
 - Do not hide core trip content behind tabs or mode switches unless the user explicitly wants that.
+- Do not invent specific flight numbers, train numbers, or departure times without evidence.
+- Do not guarantee transport prices — always present as ranges with research date.
+- Do not skip the return trip or treat it as an afterthought.
 
 ## Editing Rules
 
@@ -125,6 +151,8 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Make reservation status explicit for restaurants.
 - Prefer route-fit venues with usable booking paths; otherwise mark them as walk-in or backup.
 - Keep packing, transport, meal, shopping, and return-day details visible in the same guide.
+- Transport cards must include booking window, price range (with currency and research date), recommended arrival time, hard cutoff, and backup option.
+- Anchor the arrival day forward from transport arrival time and the departure day backward from transport hard cutoff.
 - If the user provides dates and destination only, generate a weather-aware scaffold first, then refine with budget and food preferences.
 - Do not force file generation for planning-only requests.
 - When the user wants a redesigned guide, page, or shareable artifact, follow [planning-rules.md](references/planning-rules.md) for markdown and HTML deliverables.
@@ -135,6 +163,11 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Weather assumptions are visible and practical.
 - Fallback labels are visible where evidence or inputs were incomplete.
 - Hotel recommendations follow [hotel-selection.md](references/hotel-selection.md).
+- Transport plan follows [transportation.md](references/transportation.md).
+- Both outbound and return transport legs are present with booking windows, price ranges, arrival times, and backup options.
+- Departure-day timeline works backward correctly from the transport hard cutoff.
+- Transfer chains between modes are mapped with realistic buffers.
+- All transport prices are labeled with currency, class, and research date.
 - Restaurant and shopping items are attached to the right day or marked as backup.
 - Existing source content is preserved unless the user asked to remove it.
 
@@ -146,6 +179,7 @@ Use the smallest fitting structure for the chosen mode:
 
 - Trip summary
 - Assumptions or missing inputs
+- Round-trip transport plan (mode, booking window, price range, timing)
 - Day-by-day outline
 - Hotel direction if requested
 - Packing or weather notes
@@ -153,18 +187,21 @@ Use the smallest fitting structure for the chosen mode:
 ### `guide-redesign`
 
 - Hero summary
+- Round-trip transport cards (outbound and return with full details)
 - Prep or packing
-- Daily itinerary cards
+- Daily itinerary cards (arrival and departure days anchored to transport times)
 - Hotel shortlist
-- Embedded dining and shopping notes
-- Reference appendix
+- Embedded dining, shopping, and intra-city transport notes
+- Reference appendix (including transport comparison if multiple modes were considered)
 
 ## Default Page Shape
 
 - Hero summary
+- Round-trip transport plan
 - Packing essentials
-- Time-sensitive prep
+- Time-sensitive prep (including ticket booking deadlines)
 - Daily itinerary cards
 - Hotel shortlist by budget and quality tier
 - Embedded restaurant / shop / shopping blocks per day
+- Intra-city transport notes per day
 - Full reference appendices

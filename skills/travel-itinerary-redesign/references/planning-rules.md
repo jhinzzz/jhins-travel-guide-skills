@@ -2,9 +2,10 @@
 
 ## Intake
 
-- Ask for missing trip inputs in this order: travel dates, destination, trip purpose, food preferences, budget.
+- Ask for missing trip inputs in this order: travel dates, destination, trip purpose, food preferences, budget, preferred transport mode.
 - Ask one missing item at a time when possible.
-- If hotel suggestions are needed and room style or party size is missing, ask that after the five core inputs.
+- If hotel suggestions are needed and room style or party size is missing, ask that after the core inputs.
+- If the user has not mentioned transport preferences, ask after budget: "Do you have a preferred transport mode for getting there and back (flight, high-speed rail, etc.)?"
 - Do not start detailed planning until the trip brief is usable.
 
 ## Weather
@@ -13,6 +14,15 @@
 - If forecast is unavailable, use seasonal averages for the destination and dates.
 - Adjust packing, shoes, outerwear, rain gear, sunscreen, hydration, indoor/outdoor ratio, and pacing.
 - Mark weather-only or weather-sensitive blocks clearly.
+
+## Transportation
+
+- Plan round-trip transport as a first-class part of the itinerary, not an afterthought.
+- See [transportation.md](transportation.md) for booking windows, arrival times, pricing rules, transfer planning, and output format.
+- Include transport cards for both outbound and return trips in the daily itinerary.
+- For the arrival day: work forward from arrival time to plan the rest of the day.
+- For the departure day: work backward from departure time to plan check-out, luggage, last activities, and transit to the departure point.
+- When multiple transport modes are feasible, present a price-vs-time comparison table so the user can choose.
 
 ## Output
 

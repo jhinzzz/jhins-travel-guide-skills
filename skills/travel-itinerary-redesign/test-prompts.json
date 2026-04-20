@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "scenario": "happy-path",
+    "prompt": "我想五一假期（5月1日-5月3日）和女朋友去杭州玩3天，预算5000元，我们从上海出发，喜欢吃本帮菜和杭帮菜",
+    "expected": "分类为 planning-only；先规划上海→杭州往返高铁（含购票时间、票价区间、到站时间）；天气感知的3天行程大纲；酒店方向建议；餐饮嵌入每日卡片"
+  },
+  {
+    "id": 2,
+    "scenario": "existing-content-refactor",
+    "prompt": "我有一份去大阪5天的零散旅行笔记（含酒店预订截图、餐厅清单、景点收藏），帮我整理成一份完整的行程指南页面",
+    "expected": "分类为 existing-page-refactor；先盘点已有内容不删除；规划往返航班；按日重组内容；产出 markdown + HTML 双交付物；保留原始参考"
+  },
+  {
+    "id": 3,
+    "scenario": "incomplete-inputs",
+    "prompt": "下个月想出去玩几天，有什么建议？",
+    "expected": "触发 fallback 规则；按 intake 顺序逐一追问（日期→目的地→目的→口味→预算→交通偏好）；不编造具体内容；停留在 scaffold 模式"
+  }
+]

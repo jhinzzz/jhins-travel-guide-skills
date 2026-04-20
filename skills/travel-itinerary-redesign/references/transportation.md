@@ -6,7 +6,7 @@ Plan round-trip transport that is bookable, correctly timed, and honestly priced
 
 ## Scope
 
-Covers: flights, high-speed rail, conventional rail, long-distance bus, shuttle bus, airport/station express, ferry, taxi, and ride-hailing.
+Covers: flights, high-speed rail, conventional rail, long-distance bus, shuttle bus, airport/station express, ferry, taxi, ride-hailing, and rental car / self-drive.
 
 ## Evidence Standard
 
@@ -30,7 +30,7 @@ Use these as default recommendations. Adjust for peak seasons, holidays, and loc
 ### High-Speed Rail / Intercity Rail
 
 - China (12306): tickets release 15 days before departure. Book on release day for popular routes during holidays.
-- Japan (JR): reserve up to 1 month ahead; JR Pass must be purchased before arrival if applicable.
+- Japan (JR): reserve up to 1 month ahead; JR Pass can be purchased in Japan but is cheaper when bought before arrival — recommend pre-purchase for cost savings.
 - Europe (DB, SNCF, Trenitalia, Renfe): advance fares open 3–6 months ahead; best prices 2–3 months out.
 - Taiwan (THSR): up to 28 days ahead; early-bird discounts available at 10%, 20%, or 35% off.
 - South Korea (KTX): up to 1 month ahead via Korail.
@@ -61,6 +61,16 @@ Use these as default recommendations. Adjust for peak seasons, holidays, and loc
 - Pre-book airport or station transfers 1 day ahead for early-morning or late-night departures.
 - Flag surge pricing risk during peak hours, rain, and holidays.
 
+### Rental Car / Self-Drive
+
+- Book 2–4 weeks ahead for standard destinations; 4–6 weeks for peak season or popular routes (e.g., Iceland Ring Road, Australian Great Ocean Road, US national parks).
+- Confirm driver's license validity: International Driving Permit (IDP) required in many countries; Japan requires a specific JAF translation, not a standard IDP.
+- Note: China does not recognize foreign or international driver's licenses — rental car is not a viable option for foreign visitors in mainland China.
+- Include insurance options (CDW, liability, personal accident) in the price estimate.
+- Check fuel type (petrol, diesel, EV charging network), road toll systems (ETC, vignette, toll-by-plate), and parking cost at the hotel.
+- For one-way rentals (pick up city A, drop off city B), flag the drop-off surcharge — it can be significant.
+- Return time is a hard deadline: late return typically incurs a full extra day charge.
+
 ## Recommended Arrival Times
 
 These are the recommended times to arrive at the departure point before the scheduled departure. The "minimum" column is the absolute cutoff — arriving later risks missing the service.
@@ -75,6 +85,7 @@ These are the recommended times to arrive at the departure point before the sche
 
 - Check-in counters typically close 45–60 minutes before departure.
 - Boarding gates typically close 15–20 minutes before departure.
+- For international arrivals, add immigration + baggage claim + customs time to the landing time before planning ground activities: typically 30–90 minutes depending on airport congestion, visa type, and whether the traveler has automated clearance (e.g., Global Entry, trusted traveller programs). Do not use "wheels down" as "available in the city".
 
 ### High-Speed Rail
 
@@ -84,6 +95,7 @@ These are the recommended times to arrive at the departure point before the sche
 | Large hub with security screening (e.g., Beijing South, Shanghai Hongqiao, Guangzhou South) | 45–60 minutes | 20 minutes |
 
 - In China, ticket check closes 5 minutes before departure — this is a hard gate closure, not a suggestion.
+- During Spring Festival, National Day, and other peak holidays, add 15–30 minutes to the above for mega-hubs (e.g., Guangzhou South, Beijing West, Shanghai Hongqiao) due to security screening queues.
 
 ### Conventional Rail
 

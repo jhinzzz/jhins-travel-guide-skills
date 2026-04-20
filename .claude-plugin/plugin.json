@@ -1,7 +1,7 @@
 {
   "name": "travel-itinerary-redesign",
   "description": "Weather-aware trip planning skill with round-trip transport booking, hotel recommendations, and route-fit dining and shopping notes.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": {
     "name": "jhinzzz"
   },

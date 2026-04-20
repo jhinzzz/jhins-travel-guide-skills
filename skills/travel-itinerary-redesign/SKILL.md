@@ -1,6 +1,8 @@
 ---
 name: travel-itinerary-redesign
-description: Use when turning a trip brief, fragmented travel notes, or an existing itinerary page into a weather-aware guide with round-trip transport planning, day-by-day structure, hotel recommendations, and route-fit dining or shopping notes.
+description: >
+  Use when turning a trip brief, fragmented travel notes, or an existing itinerary page into a weather-aware guide with round-trip transport planning, day-by-day structure, hotel recommendations, and route-fit dining or shopping notes.
+  Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign.
 ---
 
 # Travel Itinerary Redesign

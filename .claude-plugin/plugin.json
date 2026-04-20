@@ -1,12 +1,11 @@
 {
   "name": "travel-itinerary-redesign",
   "description": "Weather-aware trip planning skill with round-trip transport booking, hotel recommendations, and route-fit dining and shopping notes.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "jhinzzz"
   },
   "homepage": "https://github.com/jhinzzz/jhins-travel-guide-skills",
   "repository": "https://github.com/jhinzzz/jhins-travel-guide-skills",
-  "skills": "./skills/",
-  "agents": "./agents/openai.yaml"
+  "skills": "./skills/"
 }

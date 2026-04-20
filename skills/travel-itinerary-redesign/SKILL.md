@@ -32,6 +32,25 @@ Decide which mode fits before planning details:
 
 If the request could fit both `planning-only` and `guide-redesign`, ask one direct confirmation question before generating files or page structure.
 
+## Mode-Specific Scope
+
+Not every mode needs every workflow step. Use the lightest path that fits:
+
+| Step | `planning-only` | `guide-redesign` / `existing-page-refactor` |
+|---|---|---|
+| 1. Inventory | Brief and constraints only | Full page map |
+| 2. Transport | Summary (mode, price range, timing) — no full cards | Full transport cards per [transportation.md](references/transportation.md) |
+| 3. Timeline | Day-by-day outline | Full daily itinerary cards |
+| 4. Local context | Key recommendations inline | Full embedded blocks per day |
+| 5. Hidden-mode friction | Skip | Apply |
+| 6. Weather | Apply | Apply |
+| 7. Hotels | Direction only if asked | Full shortlist with cards |
+| 8. Readability | Conversational tone | Guide-style chips and labels |
+| 9. Web and mobile | Skip | Apply |
+| 10. Verify | Check completeness of advice | Screenshots, anchors, transport cards |
+
+When in doubt, start lighter — the user can always ask for more detail.
+
 ## Intake First
 
 - Follow [planning-rules.md](references/planning-rules.md) for the required inputs and question order.

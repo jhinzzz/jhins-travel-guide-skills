@@ -2,7 +2,7 @@
 name: travel-itinerary-redesign
 description: >
   Use when turning a trip brief, fragmented travel notes, or an existing itinerary page into a weather-aware guide with round-trip transport planning, day-by-day structure, hotel recommendations, and route-fit dining or shopping notes.
-  Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign.
+  Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, 帮我规划旅行, 出行计划, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign.
 ---
 
 # Travel Itinerary Redesign
@@ -51,6 +51,13 @@ Not every mode needs every workflow step. Use the lightest path that fits:
 | 10. Verify | Check completeness of advice | Screenshots, anchors, transport cards, budget check |
 
 When in doubt, start lighter — the user can always ask for more detail.
+
+## Language
+
+- Detect the user's language from their first message and use it for all output (itinerary, cards, labels, notes, confirmation questions).
+- If the user switches language mid-conversation, follow the switch.
+- Skill instructions are in English for LLM readability — this does not affect output language.
+- For place names, use the user's language first with the local-language name in parentheses on first mention (e.g., "东京（Tokyo）" for Chinese users, "Tokyo (東京)" for English users). This helps with both reading and on-the-ground wayfinding.
 
 ## Intake First
 

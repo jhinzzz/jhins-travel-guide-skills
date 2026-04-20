@@ -68,8 +68,7 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
   - Do not default to a single mode without asking.
 
 - Transport schedule or price unavailable
-  - State the typical range and mark it as approximate with the research date.
-  - Do not invent specific departure times, flight numbers, or train numbers.
+  - Follow the evidence standard in [transportation.md](references/transportation.md): use approximate ranges with research date, never fabricate specifics.
 
 - Existing content is incomplete or contradictory
   - Preserve the source facts, flag the conflict briefly, and avoid silently resolving it by invention.
@@ -82,12 +81,10 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
    - If the request is `planning-only`, inventory the user's brief and constraints instead of inventing page structure too early.
 
 2. Plan round-trip transport first.
-   - Determine the outbound and return transport before filling in daily activities.
-   - Follow [transportation.md](references/transportation.md) for booking windows, arrival times, pricing, and transfer chains.
-   - On the arrival day, start the itinerary from the actual arrival time — do not schedule activities before the user can realistically reach the destination.
-   - On the departure day, work backward from the hard cutoff time to set the latest check-out and last activity.
-   - Include a transport card for each leg with mode, route, booking window, price range, recommended arrival, and backup option.
-   - When multiple modes are viable, present a comparison table (price, duration, convenience) and let the user decide.
+   - Determine outbound and return transport before filling in daily activities.
+   - Follow [transportation.md](references/transportation.md) for all transport rules: booking windows, arrival times, pricing, transfers, and return-trip planning.
+   - Anchor arrival day forward from actual arrival time; anchor departure day backward from the hard cutoff.
+   - For each transport leg, output a card per the format in [transportation.md](references/transportation.md) (mode, route, booking window, price range, recommended arrival, hard cutoff, transfer details, backup).
 
 3. Rebuild around a generic trip timeline.
    - Use day archetypes such as arrival, city exploration, day trip, weather buffer, food-focused day, and departure.
@@ -140,9 +137,7 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Do not replace route fit, booking constraints, or weather logic with generic sightseeing filler.
 - Do not drop existing facts just to make the layout cleaner.
 - Do not hide core trip content behind tabs or mode switches unless the user explicitly wants that.
-- Do not invent specific flight numbers, train numbers, or departure times without evidence.
-- Do not guarantee transport prices — always present as ranges with research date.
-- Do not skip the return trip or treat it as an afterthought.
+- Do not violate the transport evidence standard or skip the return trip — see [transportation.md](references/transportation.md) for the full list of transport non-goals.
 
 ## Editing Rules
 
@@ -151,8 +146,7 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Make reservation status explicit for restaurants.
 - Prefer route-fit venues with usable booking paths; otherwise mark them as walk-in or backup.
 - Keep packing, transport, meal, shopping, and return-day details visible in the same guide.
-- Transport cards must include booking window, price range (with currency and research date), recommended arrival time, hard cutoff, and backup option.
-- Anchor the arrival day forward from transport arrival time and the departure day backward from transport hard cutoff.
+- Format transport cards per [transportation.md](references/transportation.md) output format.
 - If the user provides dates and destination only, generate a weather-aware scaffold first, then refine with budget and food preferences.
 - Do not force file generation for planning-only requests.
 - When the user wants a redesigned guide, page, or shareable artifact, follow [planning-rules.md](references/planning-rules.md) for markdown and HTML deliverables.
@@ -163,11 +157,8 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Weather assumptions are visible and practical.
 - Fallback labels are visible where evidence or inputs were incomplete.
 - Hotel recommendations follow [hotel-selection.md](references/hotel-selection.md).
-- Transport plan follows [transportation.md](references/transportation.md).
-- Both outbound and return transport legs are present with booking windows, price ranges, arrival times, and backup options.
+- Both outbound and return transport legs are present and each card passes the checklist in [transportation.md](references/transportation.md) (booking window, price range, arrival time, hard cutoff, transfers, backup).
 - Departure-day timeline works backward correctly from the transport hard cutoff.
-- Transfer chains between modes are mapped with realistic buffers.
-- All transport prices are labeled with currency, class, and research date.
 - Restaurant and shopping items are attached to the right day or marked as backup.
 - Existing source content is preserved unless the user asked to remove it.
 

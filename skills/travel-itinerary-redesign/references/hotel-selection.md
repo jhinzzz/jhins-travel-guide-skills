@@ -26,6 +26,17 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 - `niche`: good but only for a specific use case
 - `avoid`: weak rating, bad location, poor value, or booking friction
 
+## Check-In, Check-Out, and Luggage
+
+- Standard check-in: 14:00–15:00. Standard check-out: 10:00–12:00. Varies by hotel — always verify.
+- Early arrival (before check-in): note whether the hotel offers luggage storage at the front desk so the user can explore before the room is ready.
+- Late departure (after check-out): note whether the hotel offers luggage storage post-checkout and until what time. This directly affects departure-day planning.
+- If the arrival transport lands early morning (before 10:00) or the departure transport leaves late evening (after 20:00), flag the gap and recommend a luggage plan:
+  - Hotel front desk storage (most common, usually free)
+  - Station/airport coin lockers (Japan, Europe — note size limits and cost)
+  - Commercial luggage storage services (e.g., LuggAgent, Bounce)
+- Early check-in and late check-out may be available for an extra fee or via loyalty status — note if applicable.
+
 ## Price Guidance
 
 - State nightly rates as ranges (e.g., "¥400–¥650/night"), not single numbers.

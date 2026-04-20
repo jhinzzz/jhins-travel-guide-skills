@@ -10,11 +10,12 @@ Covers: flights, high-speed rail, conventional rail, long-distance bus, shuttle 
 
 ## Evidence Standard
 
-- Always research current schedules and prices at planning time using official sources or major OTAs.
+- Always research current schedules and prices at planning time using official sources or major OTAs. See [travel-sources.md](travel-sources.md) for the canonical source list and which platforms to use for each transport type.
 - Never fabricate specific departure times, flight numbers, train numbers, or fares.
 - If schedule or price data is unavailable, state the typical range and mark it as approximate.
 - Prefer official booking channels: airline websites, 12306 (China rail), national rail sites, official bus company portals.
 - Cross-check prices on at least two sources when the trip cost is significant.
+- Cite the source and research date for every schedule and price claim, using the citation format in [travel-sources.md](travel-sources.md).
 
 ## Booking Window Guidelines
 

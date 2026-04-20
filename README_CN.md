@@ -17,6 +17,8 @@
 - [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md)：行程输入、天气处理、交通规划、交付形式的唯一规则来源
 - [`skills/travel-itinerary-redesign/references/hotel-selection.md`](./skills/travel-itinerary-redesign/references/hotel-selection.md)：酒店证据标准、分层与输出规则
 - [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
+- [`skills/travel-itinerary-redesign/references/local-specialties.md`](./skills/travel-itinerary-redesign/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）
+- [`skills/travel-itinerary-redesign/references/travel-sources.md`](./skills/travel-itinerary-redesign/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装
@@ -126,6 +128,7 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 - 把旅行页面重构成可复用、考虑天气因素的行程指南
 - 规划往返交通（航班、高铁、火车、巴士、穿梭巴士、渡轮、的士等），含购票时间、票价区间、建议到站时间、备选方案
 - 输出酒店建议，以及贴合路线的餐饮和购物信息
+- 推荐当地手信/特产，含证据分级、海关和运输提示
 
 预期输出：
 
@@ -143,6 +146,49 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 3. [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md) 是否仍与 references 一致
 4. [`agents/openai.yaml`](./agents/openai.yaml) 是否仍与当前 skill 行为一致
 5. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试
+
+## 版本变动
+
+### v0.4.0 (2026-04-20)
+
+**新功能：**
+- **当地手信/特产推荐** — 新增参考文件 `local-specialties.md`，含证据选品标准、4 级评分体系（signature / recommended / niche / skip）、海关和运输约束提示、输出卡片格式。特产推荐嵌入每日行程卡片中对应购买地点附近。
+- **旅游攻略数据源** — 新增参考文件 `travel-sources.md`，定义中国平台（马蜂窝、携程、去哪儿、小红书、大众点评、飞猪、12306）和国际平台（TripAdvisor、Klook、Lonely Planet、Trip.com、Condé Nast Traveler、Booking.com、Google Maps 等）的交叉验证规则和引用格式。
+- **数据可追溯约束** — 所有事实性推荐（价格、时刻表、评分、酒店名、店铺名）必须标注来源和查询日期，禁止编造具体信息。
+
+**优化（Darwin Skill 11 轮优化，总分 86.0 → 93.15）：**
+- 明显路线（如上海→杭州高铁）不再阻塞询问交通偏好，直接推荐主要方式并列出替代选项
+- intake 批量化：缺 3 个以上核心输入时批量提问；模糊请求自动提供目的地灵感
+- 预算超标 15% 时触发确认检查点
+- 用户约束互相矛盾时明确暴露冲突并提供优先级选项
+- 临时出行（48 小时内）fallback：跳过订票窗口建议，优先实时渠道
+- 缓冲时间量化：附近（~1 km / 步行 10 分钟）vs 跨区（需换乘 / >1 km）vs 带行李（+10–15 分钟）
+- 步骤 10 验证从「检查截图」改为具体 HTML 验证标准（375px 视口、断链检查）
+- 工作流编号连续化（1–11）
+- Editing Rules 去重；Final Check 改为引用式校验
+- hotel-selection.md 和 transportation.md 的证据标准统一引用 travel-sources.md
+
+### v0.3.0 (2026-04-19)
+
+- 插件版本升级
+- 新增语言自动检测，支持多语言输出
+- 修复插件安装：移除 manifest 中不支持的 agents 字段
+
+### v0.2.0 (2026-04-18)
+
+- 新增行前准备（签证、支付、SIM 卡、保险）
+- 预订规则与 J-person 严谨度
+- Mode-Specific Scope 表格
+- 酒店推荐具体性增强
+- Frontmatter 触发词
+- 跨文件交通规则去重
+- 全面的交通规划体系
+
+### v0.1.0 (2026-04-17)
+
+- 初始版本：按日行程工作流
+- Plugin-first 仓库结构
+- 支持 Claude Code 和 Codex 安装
 
 ## 参考文档
 

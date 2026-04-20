@@ -17,6 +17,8 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md): canonical intake, weather, transport, and deliverable rules
 - [`skills/travel-itinerary-redesign/references/hotel-selection.md`](./skills/travel-itinerary-redesign/references/hotel-selection.md): hotel evidence, tiering, and output rules
 - [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md): round-trip transport booking, timing, pricing, transfer planning, and arrival time rules
+- [`skills/travel-itinerary-redesign/references/local-specialties.md`](./skills/travel-itinerary-redesign/references/local-specialties.md): local souvenir and specialty recommendation rules (selection criteria, tiering, customs/transport constraints)
+- [`skills/travel-itinerary-redesign/references/travel-sources.md`](./skills/travel-itinerary-redesign/references/travel-sources.md): canonical travel information sources, cross-referencing rules, and citation format
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace
@@ -121,6 +123,7 @@ The `travel-itinerary-redesign` skill is designed for:
 - redesigning an itinerary page into a reusable, weather-aware guide
 - planning round-trip transport (flights, high-speed rail, trains, buses, shuttles, ferries, taxis) with booking windows, price ranges, recommended arrival times, and backup options
 - producing hotel recommendations and route-fit dining and shopping notes
+- recommending destination-specific souvenirs and local specialties with evidence-based tiering and customs/transport warnings
 
 Expected outputs:
 
@@ -138,6 +141,49 @@ Before publishing an update:
 3. Verify [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md) still matches the references
 4. Verify [`agents/openai.yaml`](./agents/openai.yaml) still matches the current skill behavior
 5. Test in Claude Code locally if possible
+
+## Changelog
+
+### v0.4.0 (2026-04-20)
+
+**New features:**
+- **Local specialties and souvenirs** — new reference file (`local-specialties.md`) with evidence-based selection criteria, 4-tier rating system (signature / recommended / niche / skip), customs and transport constraint warnings, and output card format. Embedded into daily itinerary cards near purchase locations.
+- **Travel information sources** — new reference file (`travel-sources.md`) defining canonical research platforms for China (Mafengwo, Ctrip, Qunar, Xiaohongshu, Dianping, Fliggy, 12306) and international (TripAdvisor, Klook, Lonely Planet, Trip.com, Condé Nast Traveler, Booking.com, Google Maps, etc.), with cross-referencing rules and citation format.
+- **Data traceability constraint** — every factual recommendation (prices, schedules, ratings, hotel names, shop names) must cite its source and research date. No fabricated specifics allowed.
+
+**Improvements (11 rounds of Darwin Skill optimization, score 86.0 → 93.15):**
+- Dominant-mode transport routes no longer block planning with unnecessary preference questions
+- Intake batching: when 3+ core inputs are missing, first 2–3 questions are batched; vague requests get destination inspiration
+- Budget overage checkpoint at 15% threshold before finalizing plans
+- Conflicting constraints fallback with explicit prioritization options
+- Last-minute trip (within 48h) fallback: skip booking windows, prioritize real-time channels
+- Buffer time criteria quantified: nearby (~1 km / 10-min walk) vs. cross-district (transit / >1 km) vs. with-luggage (+10–15 min)
+- Step 10 verification replaced vague "check screenshots" with concrete HTML validation criteria (375px viewport, broken anchors)
+- Workflow renumbered to continuous 1–11 sequence
+- Editing Rules deduplicated; Final Check refactored to reference canonical sources
+- Evidence standards in hotel-selection.md and transportation.md now cross-reference travel-sources.md
+
+### v0.3.0 (2026-04-19)
+
+- Plugin version bump
+- Language auto-detection for multilingual output
+- Fix plugin install: remove unsupported agents field from manifest
+
+### v0.2.0 (2026-04-18)
+
+- Comprehensive trip preparation (visa, payment, SIM, insurance)
+- Booking rules and J-person rigor
+- Mode-specific scope table
+- Enhanced hotel-selection specificity
+- Trigger words in frontmatter
+- De-duplicated transport rules across files
+- Comprehensive transportation planning
+
+### v0.1.0 (2026-04-17)
+
+- Initial skill with day-by-day itinerary workflow
+- Plugin-first repository layout
+- Claude Code and Codex installation support
 
 ## References
 

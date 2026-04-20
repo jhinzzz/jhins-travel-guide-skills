@@ -3,7 +3,8 @@
 ## Intake
 
 - Ask for missing trip inputs in this order: travel dates, destination, party size and companions, trip purpose, food preferences, budget, preferred transport mode.
-- Ask one missing item at a time when possible.
+- Ask one missing item at a time when possible. However, if three or more core inputs are missing (dates, destination, budget), batch the first two or three questions in one turn to avoid excessive back-and-forth. Always keep the question count per turn to three or fewer.
+- If the user's message implies they want destination inspiration (e.g., "有什么建议", "where should I go"), offer 2–3 brief destination ideas based on the season and any stated constraints before proceeding with the intake order.
 - Party size and companions come early because they affect transport tickets, room type, restaurant seating, and budget split.
 - If hotel suggestions are needed and room style is missing, ask that after the core inputs.
 - If the user has not mentioned transport preferences, ask after budget: "Do you have a preferred transport mode for getting there and back (flight, high-speed rail, rental car, etc.)?"
@@ -63,3 +64,11 @@ Time-sensitive prep items that must be surfaced before the trip — missing any 
 ## Hotels
 
 See [hotel-selection.md](hotel-selection.md) for hotel tiering, evidence, and output rules.
+
+## Local Specialties
+
+See [local-specialties.md](local-specialties.md) for souvenir and specialty selection criteria, tiering, and output format.
+
+## Research Sources
+
+See [travel-sources.md](travel-sources.md) for the canonical list of travel information sources, cross-referencing rules, and citation format. All factual claims must be traceable to sources listed there.

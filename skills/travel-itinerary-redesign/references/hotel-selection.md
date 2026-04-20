@@ -15,7 +15,9 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 
 ## Evidence Standard
 
-- Prefer hotels that appear repeatedly in mainstream travel guides or have strong ratings on Trip.com, Airbnb, Google Maps, and major OTAs.
+- Prefer hotels that appear repeatedly in mainstream travel guides or have strong ratings on major OTAs. See [travel-sources.md](travel-sources.md) for the canonical source list and which platforms to use for hotel research.
+- Cross-reference at least two independent sources for hotel recommendations (e.g., Booking.com + TripAdvisor, or Ctrip + Google Maps).
+- Cite the source and research date for every price and rating claim (e.g., "Booking.com, checked 2026-04").
 - Do not rely on a single source when the choice is important.
 - If the evidence is weak, label the hotel as avoid or omit it.
 

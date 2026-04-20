@@ -3,18 +3,30 @@
     "id": 1,
     "scenario": "happy-path",
     "prompt": "我想五一假期（5月1日-5月3日）和女朋友去杭州玩3天，预算5000元，我们从上海出发，喜欢吃本帮菜和杭帮菜",
-    "expected": "分类为 planning-only；先规划上海→杭州往返高铁（含购票时间、票价区间、到站时间）；天气感知的3天行程大纲；酒店方向建议；餐饮嵌入每日卡片"
+    "expected": "分类为 planning-only；先规划上海→杭州往返高铁（含购票时间、票价区间、到站时间）；天气感知的3天行程大纲；酒店方向建议；餐饮嵌入每日卡片；推荐杭州特产（龙井茶、丝绸等）并标注来源；所有价格和时刻表标注数据来源和查询日期"
   },
   {
     "id": 2,
     "scenario": "existing-content-refactor",
     "prompt": "我有一份去大阪5天的零散旅行笔记（含酒店预订截图、餐厅清单、景点收藏），帮我整理成一份完整的行程指南页面",
-    "expected": "分类为 existing-page-refactor；先盘点已有内容不删除；规划往返航班；按日重组内容；产出 markdown + HTML 双交付物；保留原始参考"
+    "expected": "分类为 existing-page-refactor；先盘点已有内容不删除；规划往返航班；按日重组内容；产出 markdown + HTML 双交付物；保留原始参考；推荐大阪特产（551蓬莱肉包、りくろーおじさん芝士蛋糕等）并标注来源和海关提示"
   },
   {
     "id": 3,
     "scenario": "incomplete-inputs",
     "prompt": "下个月想出去玩几天，有什么建议？",
     "expected": "触发 fallback 规则；按 intake 顺序逐一追问（日期→目的地→目的→口味→预算→交通偏好）；不编造具体内容；停留在 scaffold 模式"
+  },
+  {
+    "id": 4,
+    "scenario": "specialty-focused",
+    "prompt": "我下周去成都3天，想带点当地特产和手信回来送朋友，有什么推荐？顺便帮我规划下行程",
+    "expected": "分类为 planning-only；特产推荐作为核心输出之一（火锅底料、灯影牛肉、蜀绣、竹叶青茶等），每项标注 tier（signature/recommended/niche）、推荐购买地点、价格区间、来源（至少两个平台交叉验证）、运输注意事项；嵌入每日行程卡片中靠近对应购买地点；国内行程无需海关提示但需注意航空液体限制"
+  },
+  {
+    "id": 5,
+    "scenario": "international-with-traceability",
+    "prompt": "春节想带家人去东京玩5天，预算2万，从北京出发，帮我做个完整攻略",
+    "expected": "分类为 guide-redesign；所有航班价格标注来源（如携程/Skyscanner）和查询日期；酒店推荐标注来源（如 Booking.com/Trip.com）和查询日期；交通方案标注来源（如 Navitime/12306）；特产推荐（白色恋人、东京香蕉蛋糕、抹茶制品等）标注来源和海关限制；不出现任何无来源的价格或班次号"
   }
 ]

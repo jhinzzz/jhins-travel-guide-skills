@@ -19,6 +19,7 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md): round-trip transport booking, timing, pricing, transfer planning, and arrival time rules
 - [`skills/travel-itinerary-redesign/references/local-specialties.md`](./skills/travel-itinerary-redesign/references/local-specialties.md): local souvenir and specialty recommendation rules (selection criteria, tiering, customs/transport constraints)
 - [`skills/travel-itinerary-redesign/references/travel-sources.md`](./skills/travel-itinerary-redesign/references/travel-sources.md): canonical travel information sources, cross-referencing rules, and citation format
+- [`skills/travel-itinerary-redesign/references/dining-rules.md`](./skills/travel-itinerary-redesign/references/dining-rules.md): restaurant selection rules — cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, meal × cuisine × area intake, reservation channels, peak-season recheck, and swap cascades
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace
@@ -143,6 +144,24 @@ Before publishing an update:
 5. Test in Claude Code locally if possible
 
 ## Changelog
+
+### v0.5.0 (2026-04-21)
+
+Lessons from a real Japan Golden Week trip were distilled into **destination-agnostic** dining rules — Japan / Europe / US / China examples illustrate the same underlying patterns so the skill remains a general-purpose travel skill, not a Japan guide.
+
+**New features:**
+- **Dining rules reference** (`dining-rules.md`) — consolidated restaurant governance, destination-agnostic: cuisine-diversity matrix across the whole trip, operating-status verification in the destination's language (closure / on-hold / relocated / rebuilt notices, plus "Permanently closed" on Google Maps), target-date calendar checks (weekly closures + destination-specific peak closures), district/address consistency, meal × cuisine × area intake, reservation channels and lead times, and swap-cascade rules.
+- **Restaurant quantitative benchmarks** — platform-specific rating floors (Tabelog compressed scale ≥ 3.45/3.55/3.80; Dianping ≥ 4.5; TripAdvisor ≥ 4.0; Google Maps ≥ 4.3; local-authority alternates like TheFork / Yelp / OpenRice / Zomato). Per-person price tiers (Value / Mid / High) are always in **local currency** with destination-calibrated anchors, not a fixed JPY band.
+- **Parallel sub-agent verification protocol** — for any trip with 5+ venues, verification runs as a batch through 2–3 parallel sub-agents returning structured rows (operating status · address · closures · peak-season notes · reservation channel · source URL).
+- **Peak-period pre-trip recheck block** — trips overlapping destination-specific peaks (examples: Japan GW / O-Bon / New Year; China Spring Festival / National Day; European Christmas / Easter / August vacation; US Thanksgiving / Christmas; Ramadan in the Middle East) now carry a "3–5 days before departure" recheck block listing irregular-closure and holiday-closure-risk venues by name and target date.
+
+**Improvements:**
+- Data traceability tightened: explicit "do not trust restaurants from training data" rule — every restaurant must have its current status verified before appearing in the output.
+- Food preference intake now captures three binding elements: **meal slot × cuisine × area**. "X or Y" cuisine requests produce two main-line candidates, not a merged pick.
+- Swap cascade checkpoint added: after any restaurant / hotel / anchor swap, run the §9 cascade (daily card, detail section, pre-trip recheck block, nav anchors, cuisine matrix) and confirm with the user.
+- Restaurant card required fields: cuisine category · platform rating · walking time from anchor · per-person price band in local currency.
+- New web-verification fallback: if WebFetch stalls or a venue ID resolves to a relocated business, do not guess and do not drop silently — retry via a different source, or escalate to parallel sub-agents.
+- Test suite adds cases across Japan GW and European Christmas so the peak-period rigor is not only tested against Japan.
 
 ### v0.4.0 (2026-04-20)
 

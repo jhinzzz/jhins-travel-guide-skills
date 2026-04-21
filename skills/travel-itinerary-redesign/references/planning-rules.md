@@ -4,6 +4,7 @@
 
 - Ask for missing trip inputs in this order: travel dates, destination, party size and companions, trip purpose, food preferences, budget, preferred transport mode.
 - Ask one missing item at a time when possible. However, if three or more core inputs are missing (dates, destination, budget), batch the first two or three questions in one turn to avoid excessive back-and-forth. Always keep the question count per turn to three or fewer.
+- For **food preferences**, capture three elements whenever the user mentions specific meal intent: **meal slot** (which day / lunch or dinner), **cuisine** (ramen / sushi / izakaya / sashimi / local specialty, etc.), and **area** (station, neighborhood, or anchor). All three bind the recommendation per [dining-rules.md](dining-rules.md) §5 — do not discard the area constraint to get a better cuisine match or vice versa. When the user uses "or" between two cuisines ("izakaya or sashimi"), capture both and plan to offer two main-line candidates, not a merged pick.
 - If the user's message implies they want destination inspiration (e.g., "有什么建议", "where should I go"), offer 2–3 brief destination ideas based on the season and any stated constraints before proceeding with the intake order.
 - Party size and companions come early because they affect transport tickets, room type, restaurant seating, and budget split.
 - If hotel suggestions are needed and room style is missing, ask that after the core inputs.
@@ -64,6 +65,10 @@ Time-sensitive prep items that must be surfaced before the trip — missing any 
 ## Hotels
 
 See [hotel-selection.md](hotel-selection.md) for hotel tiering, evidence, and output rules.
+
+## Dining
+
+See [dining-rules.md](dining-rules.md) for restaurant selection — cuisine-diversity matrix (no category repeats across the trip), operating-status verification (destination-language closure / relocation notices, "Permanently closed" on Google Maps), target-date calendar checks (weekly closures plus destination-specific peak closures), district/address consistency, meal × cuisine × area intake, reservation channels and lead times, peak-period pre-trip recheck, and swap-cascade rules.
 
 ## Local Specialties
 

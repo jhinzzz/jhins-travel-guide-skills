@@ -19,6 +19,7 @@
 - [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
 - [`skills/travel-itinerary-redesign/references/local-specialties.md`](./skills/travel-itinerary-redesign/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）
 - [`skills/travel-itinerary-redesign/references/travel-sources.md`](./skills/travel-itinerary-redesign/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
+- [`skills/travel-itinerary-redesign/references/dining-rules.md`](./skills/travel-itinerary-redesign/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装
@@ -148,6 +149,24 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 5. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试
 
 ## 版本变动
+
+### v0.5.0 (2026-04-21)
+
+基于一次真实的日本黄金周行程规划过程中发现的问题，本次把经验沉淀为**与目的地无关的通用规则**，日本 / 欧洲 / 美国 / 中国相关内容仅作为同一原则下的举例，以确保 skill 仍是一个通用旅行技能，而不是日本专用指南。
+
+**新功能：**
+- **餐饮规则参考文件** (`dining-rules.md`) — 目的地无关的餐厅推荐规则：跨天跨餐的品类矩阵（全程品类去重）、运营状态核实（按目的地语言识别闭店 / 休业 / 搬迁 / 重建公告，Google Maps 的 "Permanently closed" 作为统一兜底）、目标日期日历（每周定休 + 目的地特有旺季闭店）、地址与区/街区一致性、餐次×品类×区域精确输入、预订渠道与提前量、替换后的级联更新。
+- **餐厅量化标准** — 按平台分别定义评分底线（Tabelog 的压缩标尺 ≥ 3.45/3.55/3.80；大众点评 ≥ 4.5；TripAdvisor ≥ 4.0；Google Maps ≥ 4.3；以及 TheFork / Yelp / OpenRice / Zomato 等本地权威平台的等效线）。人均价格档次（Value / Mid / High）始终使用**本地货币**，按目的地消费水平校准，而不是固定一套 JPY 区间。
+- **并行子 agent 验证协议** — 凡涉及 ≥5 家餐厅/酒店/景点的批量验证，默认起 2-3 个并行子 agent，每个返回结构化表格（营业状态 · 地址 · 定休日 · 旺季备注 · 预约方式 · 源 URL）。
+- **旺季出发前 3-5 天复查块** — 行程如与目的地特有旺季重合（示例：日本 GW / 盂兰盆 / 新年；中国春节 / 国庆 / 五一；欧洲圣诞 / 复活节 / 八月假期；美国感恩节 / 圣诞；中东斋月），文末固定输出"出发前复查清单"，按名字 + 目标日期列出所有不定休 / 定休日 / 可能旺季休業 风险餐厅。
+
+**优化：**
+- 数据可追溯强化：增加「不信任训练数据里的餐厅」硬约束 — 所有推荐餐厅必须核实当前运营状态。
+- 食物偏好 intake 精确化：餐次 × 品类 × 区域 三要素同时绑定。"X 或 Y" 的品类请求要产出两条主线候选，不做合并。
+- 新增替换级联检查点：任何餐厅 / 酒店 / 锚点景点替换后，执行 §9 级联（每日卡片 + 详情卡 + 出发前复查块 + 导航锚点 + 品类矩阵），并向用户确认。
+- 餐厅卡片四字段强制：品类 · 平台评分 · 距锚点步行时间 · 本地货币人均价位。
+- 新增 Web 验证 fallback：WebFetch 失败或餐厅 ID 指向搬迁店时，不猜测不静默丢弃 — 先换源重试，否则升级到并行子 agent 批量验证。
+- 测试集新增了覆盖日本 GW 与欧洲圣诞的双案例，避免旺季严谨度只在日本场景下被验证。
 
 ### v0.4.0 (2026-04-20)
 

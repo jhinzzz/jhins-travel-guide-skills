@@ -28,5 +28,23 @@
     "scenario": "international-with-traceability",
     "prompt": "春节想带家人去东京玩5天，预算2万，从北京出发，帮我做个完整攻略",
     "expected": "分类为 guide-redesign；所有航班价格标注来源（如携程/Skyscanner）和查询日期；酒店推荐标注来源（如 Booking.com/Trip.com）和查询日期；交通方案标注来源（如 Navitime/12306）；特产推荐（白色恋人、东京香蕉蛋糕、抹茶制品等）标注来源和海关限制；不出现任何无来源的价格或班次号"
+  },
+  {
+    "id": 6,
+    "scenario": "peak-season-dining-rigor-japan",
+    "prompt": "黄金周（5月1日-5月6日）两个人去东京6天，预算5万元，爱吃日料，帮我做行程，重点是每天的午晚餐",
+    "expected": "分类为 guide-redesign；触发并行子 agent 批量验证餐厅运营状态（Tabelog + 官网 + Google Maps 停业标识）；品类矩阵保证跨天不重复（寿司/涮涮锅/天妇罗/烧肉/鳗鱼饭/居酒屋/刺身 等最多各一次，除非用户明确要求重复）；每家餐厅核查 5/1-5/6 期间每一天是否营业（日祝休 + GW 特别休業 必查）；带行政区的餐厅（恵比寿/銀座/新宿 等）核验官网地址字段一致性；每家餐厅卡片含四字段：品类 · 平台评分（Tabelog 标尺） · 距站步行 · 人均价位（JPY）；晚餐所在区与当晚活动区一致（步行 10 分钟内）；预订渠道+提前量（米其林 2-4 周/GW+2 周，人气店 1-2 周/GW+1 周）；文档末尾含「出发前 3-5 天复查」块，列出所有不定休 / 日祝休 / 可能 GW 休業 的餐厅"
+  },
+  {
+    "id": 7,
+    "scenario": "peak-season-dining-rigor-europe",
+    "prompt": "圣诞节期间（12月22日-12月28日）和老婆去罗马7天，预算每人 15000 元人民币（机票之外），想吃地道的意面、披萨、海鲜，帮我做完整行程",
+    "expected": "分类为 guide-redesign；品类矩阵跨天去重（pasta / pizza / osteria / trattoria / seafood / risotto 等）；每家餐厅核查 12/22-12/28 期间每天是否营业（Sunday / Monday / 24 晚 / 25 全天 / 26 白天 闭店风险最高）；Trastevere / Monti / Testaccio 等片区名的餐厅要核对 via 字段在该区；每家卡片含四字段：品类 · TripAdvisor/Google Maps 评分 · 距酒店或地标步行 · 人均价位（EUR，Value/Mid/High 对应罗马本地线）；预订渠道 OpenTable / TheFork / 官网电话；文档末尾含「出发前 3-5 天复查」块：重点列出 Natale（25）/ Santo Stefano（26）特别营业的餐厅以及 24 晚预约状态"
+  },
+  {
+    "id": 8,
+    "scenario": "restaurant-swap-cascade",
+    "prompt": "我看了一下你推荐的 Day 3 晚餐「こんぶや 恵比寿」，好像永久停业了，请换一家，并检查其他日子的餐厅有没有类似问题",
+    "expected": "先验证所指餐厅停业状态（查本地平台页面 / 官网 / Google Maps）；替换时遵守品类矩阵不重复；新店的行政区与原名一致；执行 §9 级联更新（主视图 + 餐厅详情卡 + 出发前复查块 + 所有含该店名的标题/锚点 + 品类矩阵释放并重新占位）；顺便对其他日子所有餐厅起并行子 agent 核验运营状态，返回结构化汇总；最终告知用户具体改了几处、释放/占用了哪些品类"
   }
 ]

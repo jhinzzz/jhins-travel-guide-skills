@@ -11,7 +11,7 @@ description: >
 
 Turn a travel brief or fragmented plan into a reusable guide without losing content.
 
-Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, trip preparation (visa, payment, communication, insurance), weather handling, transport planning, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules (including check-in/out and luggage). Use [transportation.md](references/transportation.md) for round-trip transport booking, timing, pricing, and transfer planning. Use [local-specialties.md](references/local-specialties.md) for destination-specific souvenir and specialty recommendations. Use [travel-sources.md](references/travel-sources.md) as the canonical list of research sources and citation rules.
+Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, trip preparation (visa, payment, communication, insurance), weather handling, transport planning, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules (including check-in/out and luggage). Use [transportation.md](references/transportation.md) for round-trip transport booking, timing, pricing, and transfer planning. Use [local-specialties.md](references/local-specialties.md) for destination-specific souvenir and specialty recommendations. Use [dining-rules.md](references/dining-rules.md) for restaurant selection, cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, reservation channels, and swap-cascade rules. Use [travel-sources.md](references/travel-sources.md) as the canonical list of research sources and citation rules.
 
 ## Data Traceability Constraint
 
@@ -19,7 +19,9 @@ Every factual recommendation in the output — including itinerary items, hotel 
 
 - **Cite the source and research date** for every price, schedule, rating, or availability claim. Use the citation format defined in [travel-sources.md](references/travel-sources.md).
 - **Cross-reference at least two independent sources** for significant decisions (hotel selection, transport booking, specialty recommendations). See [travel-sources.md](references/travel-sources.md) for which sources to use for each information type.
-- **Never fabricate** specific flight numbers, train numbers, departure times, fares, hotel names, shop names, or product prices. If data is unavailable, state the typical range, mark it as approximate, and note why exact data was unavailable.
+- **Never fabricate** specific flight numbers, train numbers, departure times, fares, hotel names, shop names, restaurant names, or product prices. If data is unavailable, state the typical range, mark it as approximate, and note why exact data was unavailable.
+- **Do not trust restaurants from training data.** Small venues close, relocate, or rebuild on short notice. Every restaurant recommendation must have its current operating status verified online (closure / relocation / rebuild notices, Google Maps "Permanently closed", platform page integrity) per [dining-rules.md](references/dining-rules.md) §2 before it appears in the output.
+- **Verify against the target date, not the typical week.** Restaurants, attractions, and museum hours must be checked against the specific trip dates — regular weekly closures plus destination-specific peak closures (examples: Japan Golden Week / O-Bon / New Year; China Spring Festival / National Day; European Christmas / Easter / August vacation; US Thanksgiving / Christmas; Ramadan in the Middle East). See [dining-rules.md](references/dining-rules.md) §3.
 - **Mark the confidence level** when evidence is thin: use "approximate" for single-source data, "verified" for multi-source confirmed data, and "verify locally" when online data is insufficient.
 - **Research date freshness**: if data is older than 3 months, flag it. Travel prices, schedules, and availability change frequently.
 
@@ -85,6 +87,8 @@ Ask for confirmation before crossing these boundaries:
 - Treating missing dates, destination, or budget as permission to invent specifics
 - Dropping existing sections, venues, or notes instead of preserving them as backup or reference
 - Finalizing a plan where the estimated total exceeds the user's stated budget by more than 15% — present the overage, suggest which categories to trim, and get confirmation before proceeding
+- Swapping any restaurant, hotel, or anchor attraction after the first draft — run the cascade in [dining-rules.md](references/dining-rules.md) §9 (daily card, detail section, pre-trip recheck block, nav anchors, cuisine matrix) and confirm the full update with the user before closing the change
+- Publishing a trip that overlaps a destination-specific peak period (examples: Japan GW / O-Bon / New Year; China Spring Festival / National Day; European Christmas / Easter / August vacation; US Thanksgiving / Christmas) without the "3–5 days before departure" recheck block required by [dining-rules.md](references/dining-rules.md) §8
 
 ## Fallback Rules
 
@@ -143,6 +147,14 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Existing content is incomplete or contradictory
   - Preserve the source facts, flag the conflict briefly, and avoid silently resolving it by invention.
 
+- Web verification stalls (WebFetch fails, page ambiguous, a venue ID now resolves to a relocated business)
+  - Do not fall back to "please verify yourself" and move on. Do not invent. Do not drop the item silently.
+  - For a single venue: retry via a different source in [travel-sources.md](references/travel-sources.md) (official site → platform page → Google Maps status → editorial guide).
+  - For batches of 5 or more venues (typical when a trip has full meal, hotel, and attraction slates): spawn **2–3 parallel sub-agents**, each responsible for a bucket grouped by day, ward, or category. Each sub-agent returns a structured row per venue (operating status, address, regular closures, peak-season notes, reservation channel, source URL).
+  - The main conversation does synthesis and decisions — it does not run serial WebFetch calls over a long list.
+  - While sub-agents are running, give the user a short status line (e.g., "Dispatched 3 sub-agents for venue verification") so the pause is visible.
+  - Treat repeated WebFetch hits that return **different businesses for the same ID** as a strong signal the original venue closed or moved; do not recommend it.
+
 ## Core Workflow
 
 1. Inventory the current page or brief first.
@@ -165,8 +177,9 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 
 4. Embed local context into each day.
    - Surface restaurants, shops, attractions, and shopping targets inside the matching day card.
+   - For restaurants specifically, follow [dining-rules.md](references/dining-rules.md) — maintain the cuisine-diversity matrix (§1) across the whole trip, verify operating status (§2), check the target date against regular closures and holiday notices (§3), confirm ward consistency (§4), respect meal-slot × cuisine × area preferences (§5), keep dinner picks within 10-minute walk of the evening's anchor (§6), and state reservation channel + lead time (§7). Every restaurant card carries four required fields: cuisine category · platform rating · walking time from station · per-person price band.
    - Label each item as `main line`, `backup`, `walk-in`, `reservation required`, or `weather-only`.
-   - For `reservation required` restaurants, state the recommended booking lead time (e.g., "book 2–4 weeks ahead for kaiseki/Michelin; 3–7 days for popular local restaurants") and the booking channel (phone, online, Tabelog, OpenTable, Google Maps).
+   - For `reservation required` restaurants, state the recommended booking lead time (e.g., "2–4 weeks ahead for tasting-menu / Michelin-tier; 3–7 days for popular local restaurants") and the booking channel (phone, online, or the destination-appropriate platform — Tabelog / Dianping / OpenTable / Resy / TheFork / Google reservations, etc., per [dining-rules.md](references/dining-rules.md) §7).
    - For attractions that require advance tickets or timed entry, note the booking window and channel (e.g., "Forbidden City: book on WeChat mini-program, opens 7 days ahead, sells out within hours on holidays").
    - If a restaurant does not fit the route, hours, or booking constraints, move it to backup instead of forcing it into the day.
    - Keep the meal and shopping blocks inside the relevant day so the user does not need to jump across sections.
@@ -246,6 +259,8 @@ Verify each area against its canonical source — do not re-check rules already 
 - **Transport**: both legs present, each card passes the 9-field checklist in [transportation.md](references/transportation.md). Arrival day anchored to realistic "available in city" time; departure day works backward from hard cutoff.
 - **Budget**: breakdown by category present; compared against user's stated budget; if over 15%, confirmation checkpoint was triggered.
 - **Local context**: restaurants and attractions have booking lead times and channels where applicable; buffer times realistic (15–20 min nearby, 30–45 min cross-district); off-peak suggestions cite source or are omitted.
+- **Dining**: cuisine-diversity matrix holds (no category appears twice across lunch/dinner unless user asked); every restaurant verified against target date and operating status; district consistency holds; every card has the four required fields per [dining-rules.md](references/dining-rules.md) §5.
+- **Pre-trip recheck block**: for any trip overlapping a destination-specific peak period, the "3–5 days before departure" block is present and lists every irregular-closure / weekday-or-holiday-closed / possible special-closure restaurant by name and target date.
 - **Specialties**: if present, pass the card checklist in [local-specialties.md](references/local-specialties.md) (tiered, sourced, transport-flagged).
 - **Data traceability**: every factual claim cites source and research date per [travel-sources.md](references/travel-sources.md). No fabricated specifics anywhere.
 - **Content preservation**: existing source content preserved unless the user asked to remove it.
@@ -280,6 +295,7 @@ Use the smallest fitting structure for the chosen mode:
 - Local specialty and souvenir cards (with tiering, source, and transport notes per [local-specialties.md](references/local-specialties.md))
 - Embedded dining, shopping, and intra-city transport notes
 - All prices, schedules, and recommendations cite source and research date per [travel-sources.md](references/travel-sources.md)
+- Pre-trip recheck block (when the trip overlaps a destination-specific peak period): restaurants / reservations / crowd-sensitive items to re-confirm 3–5 days before departure per [dining-rules.md](references/dining-rules.md) §8
 - Reference appendix (including transport comparison if multiple modes were considered)
 
 ## Default Page Shape
@@ -296,4 +312,5 @@ Use the smallest fitting structure for the chosen mode:
 - Local specialty and souvenir recommendations (embedded in relevant day or as dedicated section)
 - Intra-city transport notes per day
 - Source citations on all factual claims
+- Pre-trip recheck block when the trip overlaps a destination-specific peak
 - Full reference appendices

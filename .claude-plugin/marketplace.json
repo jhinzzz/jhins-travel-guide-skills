@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Marketplace for travel itinerary planning and guide redesign plugins.",
-    "version": "0.3.0"
+    "version": "0.5.0"
   },
   "plugins": [
     {
       "name": "travel-itinerary-redesign",
       "source": "./",
       "description": "Weather-aware trip planning with round-trip transport booking, hotel recommendations, and route-fit dining and shopping notes.",
-      "version": "0.3.0",
+      "version": "0.5.0",
       "author": {
         "name": "jhinzzz"
       },

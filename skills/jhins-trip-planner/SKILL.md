@@ -89,6 +89,7 @@ Ask for confirmation before crossing these boundaries:
 - Finalizing a plan where the estimated total exceeds the user's stated budget by more than 15% — present the overage, suggest which categories to trim, and get confirmation before proceeding
 - Swapping any restaurant, hotel, or anchor attraction after the first draft — run the cascade in [dining-rules.md](references/dining-rules.md) §9 (daily card, detail section, pre-trip recheck block, nav anchors, cuisine matrix) and confirm the full update with the user before closing the change
 - Publishing a trip that overlaps a destination-specific peak period (examples: Japan GW / O-Bon / New Year; China Spring Festival / National Day; European Christmas / Easter / August vacation; US Thanksgiving / Christmas) without the "3–5 days before departure" recheck block required by [dining-rules.md](references/dining-rules.md) §8
+- Producing a self-drive day whose **total driving time, total distance, or longest single segment** would exceed the daily driving-time ceiling captured at intake ([planning-rules.md](references/planning-rules.md) §Intake) — surface the overage, propose a split (add one day / drop a stop / change lodging) and confirm with the user before finalizing
 
 ## Fallback Rules
 
@@ -127,6 +128,12 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 - Off-peak timing data unavailable
   - If no reliable crowd data exists (official hours, Google Maps popular times, published guides), omit the off-peak suggestion entirely.
   - Do not guess crowd patterns based on general assumptions.
+
+- Self-drive infeasible or risky
+  - **Licence not recognised at destination**: do not force self-drive. For mainland China specifically, foreign and international driving permits are not recognised — switch to public transport, private driver / chartered car, or suggest a companion who holds a valid local licence. For Japan, standard IDPs are not valid — require a JAF translation of the home licence; if unavailable, switch off self-drive.
+  - **Long stretches of low / no cellular signal** (e.g., Iceland Highlands / F-roads, US national parks, Australian outback, Tibetan plateau, remote coastal routes): **require offline-map download** to the pre-trip checklist; do not rely solely on live Google Maps / Amap. Also flag the fuel-station gap so the user refuels before the gap, not inside it.
+  - **First time driving on the opposite traffic side** (LHD traveller going to RHD country or vice versa): set the first day as a short adaptation leg (≤3 hours, daylight, simple route, no city rush hour), not the longest transfer of the trip. Recommend an airport-to-first-hotel route the user can study the night before.
+  - **Party includes elderly, young children, pregnant passengers, or pets, or route crosses high-altitude / mountain / unpaved roads**: lower the daily driving-time ceiling from the default 6 h to 4–5 h (3–4 h on high-altitude days), and add extra rest stops. Do not compress the itinerary to "fit more" by ignoring this.
 
 - Last-minute trip (departure within 48 hours)
   - Normal booking windows are irrelevant — skip advance-booking advice and focus on what is still available now.
@@ -184,6 +191,8 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
    - If a restaurant does not fit the route, hours, or booking constraints, move it to backup instead of forcing it into the day.
    - Keep the meal and shopping blocks inside the relevant day so the user does not need to jump across sections.
    - Include intra-city transport notes where relevant (metro lines, bus routes, taxi estimates, walking distances).
+   - For self-drive / rental-car days, state the route-book app on the day card: **Amap (高德地图)** for mainland China driving; **Google Maps** elsewhere (with a regional alternative — Yandex Maps / Naver / Kakao / Waze — where Google coverage is weak or blocked). Save each driving day as a named multi-stop route and download offline maps for low-signal areas. See [transportation.md](references/transportation.md) §Rental Car / Self-Drive.
+   - Every self-drive day card must carry three required fields (analogous to the four restaurant fields in [dining-rules.md](references/dining-rules.md) §5): **total distance (km) · total driving time · longest single uninterrupted driving segment**. All three must fit under the daily driving-time ceiling captured at intake ([planning-rules.md](references/planning-rules.md) §Intake); if they don't, split the day or drop a stop before showing the plan.
    - Add buffer time between activities based on transition type:
      - **Nearby** (15–20 min): next activity is within ~1 km or a 10-minute walk — same neighborhood, same commercial area, same station exit zone.
      - **Cross-district** (30–45 min): requires metro/bus/taxi, or walking distance exceeds 1 km. Includes time for wayfinding, platform transfers, and waiting.
@@ -260,6 +269,7 @@ Verify each area against its canonical source — do not re-check rules already 
 - **Budget**: breakdown by category present; compared against user's stated budget; if over 15%, confirmation checkpoint was triggered.
 - **Local context**: restaurants and attractions have booking lead times and channels where applicable; buffer times realistic (15–20 min nearby, 30–45 min cross-district); off-peak suggestions cite source or are omitted.
 - **Dining**: cuisine-diversity matrix holds (no category appears twice across lunch/dinner unless user asked); every restaurant verified against target date and operating status; district consistency holds; every card has the four required fields per [dining-rules.md](references/dining-rules.md) §5.
+- **Self-drive** (when self-drive days are in the plan): intake captured licence validity + driving side + daily driving-time ceiling; each driving day card shows the three required fields (distance / driving time / longest single segment) and fits within the ceiling; route-book app stated (Amap in mainland China; Google Maps elsewhere, with regional fallback if coverage is weak); offline-map download is on the pre-trip checklist for any low-signal segment.
 - **Pre-trip recheck block**: for any trip overlapping a destination-specific peak period, the "3–5 days before departure" block is present and lists every irregular-closure / weekday-or-holiday-closed / possible special-closure restaurant by name and target date.
 - **Specialties**: if present, pass the card checklist in [local-specialties.md](references/local-specialties.md) (tiered, sourced, transport-flagged).
 - **Data traceability**: every factual claim cites source and research date per [travel-sources.md](references/travel-sources.md). No fabricated specifics anywhere.
@@ -276,6 +286,7 @@ Use the smallest fitting structure for the chosen mode:
 - Trip preparation flags (visa, payment, SIM — for international trips)
 - Round-trip transport plan (mode, booking window, price range, timing)
 - Day-by-day outline with activity buffer times
+- For self-drive days: route-book app + driving-day three fields (distance · driving time · longest single segment)
 - Budget estimate by category
 - Hotel direction if requested
 - Local specialty highlights if relevant (signature items only, with source)
@@ -288,7 +299,7 @@ Use the smallest fitting structure for the chosen mode:
 - Trip preparation checklist (visa, payment, SIM, insurance — for international trips)
 - Round-trip transport cards (outbound and return with full details)
 - Prep or packing
-- Daily itinerary cards (arrival and departure days anchored to transport times, with buffer times between activities)
+- Daily itinerary cards (arrival and departure days anchored to transport times, with buffer times between activities; self-drive days carry the three required fields — distance · driving time · longest single segment — and name the route-book app)
 - Reservation and ticket booking deadlines (restaurants, attractions)
 - Hotel shortlist (with check-in/out times and luggage plan)
 - Budget breakdown by category
@@ -305,7 +316,7 @@ Use the smallest fitting structure for the chosen mode:
 - Round-trip transport plan
 - Packing essentials
 - Time-sensitive prep (ticket booking deadlines for transport, attractions, and restaurants)
-- Daily itinerary cards (with buffer times)
+- Daily itinerary cards (with buffer times; self-drive days include route-book app + distance · driving time · longest single segment)
 - Hotel shortlist by budget and quality tier (with check-in/out and luggage notes)
 - Budget breakdown by category
 - Embedded restaurant / shop / shopping blocks per day

@@ -9,6 +9,10 @@
 - Party size and companions come early because they affect transport tickets, room type, restaurant seating, and budget split.
 - If hotel suggestions are needed and room style is missing, ask that after the core inputs.
 - If the user has not mentioned transport preferences, ask after budget: "Do you have a preferred transport mode for getting there and back (flight, high-speed rail, rental car, etc.)?"
+- **If the user chooses self-drive / rental car**, capture three driver-readiness elements before planning daily routes (analogous to the meal × cuisine × area binding for dining):
+  1. **Licence validity at the destination** — mainland China does **not** recognize foreign or international driver's licences; Japan requires a JAF translation of the original licence (not a standard IDP); most other countries accept a valid home licence + IDP. Confirm the traveller's licence actually works at the destination — do not assume.
+  2. **Driving side** — LHD (left-hand drive / right-hand traffic) vs RHD (right-hand drive / left-hand traffic: UK / AU / NZ / Japan / HK / SG / Thailand / South Africa / Ireland / parts of Caribbean). If the user has never driven on the destination's side, flag it and recommend a short adaptation day as the first leg, not a long transfer.
+  3. **Daily driving-time comfort ceiling** — ask the max single-day driving time the user is comfortable with, and lower the default ceiling when the party includes **elderly, young children, pregnant passengers, pets**, or the route crosses **mountain passes / unpaved roads / >3,500 m altitude / night driving**. Typical ceilings: 6 h solo fit adult; 4–5 h with elderly/kids; 3–4 h on high-altitude or mountain days.
 - Do not start detailed planning until the trip brief is usable.
 
 ## Trip Preparation
@@ -35,6 +39,7 @@ Time-sensitive prep items that must be surfaced before the trip — missing any 
 - Recommend a connectivity plan: local SIM, eSIM, pocket WiFi, or roaming.
 - Note approximate cost and where to purchase (airport counter, online pre-order, convenience store).
 - Connectivity is critical — it enables maps, translation, ride-hailing, and emergency contact.
+- **Offline-map download** — for any trip segment crossing low / no cellular signal areas (remote self-drive, mountain / plateau routes, hiking, ferry crossings, border zones), add offline-map download to the pre-trip checklist: Amap offline pack for mainland China; Google Maps "Download offline maps" for other regions (and regional alternatives — Yandex / Naver / Kakao / Waze — per [transportation.md](transportation.md) §Rental Car / Self-Drive).
 
 ### Travel Insurance
 

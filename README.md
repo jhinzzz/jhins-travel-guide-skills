@@ -155,6 +155,23 @@ Before publishing an update:
 
 ## Changelog
 
+### v0.5.1 (2026-04-21)
+
+Self-drive planning hardening — destination-agnostic, aligned with the dining-rules rigor model.
+
+**New:**
+- **Route-book app per self-drive day** — `transportation.md` §Rental Car / Self-Drive now prescribes the on-the-ground navigation app: **Amap (高德地图)** as the route book for mainland China driving; **Google Maps** elsewhere, with regional fallbacks (Yandex Maps / Naver / Kakao / Waze) where Google coverage is weak or blocked. Each driving day is saved as a named multi-stop route; offline-map download is required for low-signal segments (Iceland Highlands / F-roads, US national parks, Australian outback, Tibetan plateau, remote coastal routes).
+- **Driver-readiness intake triad** — `planning-rules.md` §Intake now captures three driver-readiness elements whenever the user chooses self-drive: (1) **licence validity at destination** (mainland China does not recognise foreign/IDP; Japan requires JAF translation); (2) **driving side** (LHD vs RHD, with an adaptation-day recommendation for first-time side switchers); (3) **daily driving-time ceiling** (default 6 h solo fit adult; 4–5 h with elderly/kids/pregnant/pets; 3–4 h on high-altitude or mountain days).
+- **Self-drive fallback branches** — `SKILL.md` Fallback Rules add four self-drive edge cases: licence not recognised at destination; long stretches of low/no cellular signal (require offline-map download + fuel-gap flagging); first-time driving on the opposite traffic side (short adaptation first leg, not the longest transfer); vulnerable co-travellers or mountain/high-altitude routes (lower the daily ceiling).
+- **Self-drive day card three required fields** — each driving day carries **total distance (km) · total driving time · longest single uninterrupted driving segment**, analogous to the four restaurant fields in `dining-rules.md` §5. All three must fit under the intake ceiling; otherwise split the day or drop a stop.
+- **Confirmation checkpoint for self-drive overage** — finalising a driving day that exceeds the intake ceiling now triggers explicit user confirmation, alongside existing checkpoints (budget > 15%, restaurant swap cascade, peak-season recheck).
+- **Offline-map download in pre-trip checklist** — `planning-rules.md` §Communication adds offline-map download for any trip segment crossing low/no cellular signal areas.
+
+**Optimizations:**
+- Final Check now includes a `Self-drive` verification row (intake captured · day card three fields · app named · offline-map on checklist).
+- `Minimal Output Shape`, `guide-redesign` block, and `Default Page Shape` now list self-drive card fields so the output contract is explicit.
+- `test-prompts.json` adds two self-drive scenarios: id:9 (川西 domestic self-drive with elderly passengers) and id:10 (Iceland Ring Road international self-drive with LHD→RHD switch).
+
 ### v0.5.0 (2026-04-21)
 
 Lessons from a real Japan Golden Week trip were distilled into **destination-agnostic** dining rules — Japan / Europe / US / China examples illustrate the same underlying patterns so the skill remains a general-purpose travel skill, not a Japan guide.

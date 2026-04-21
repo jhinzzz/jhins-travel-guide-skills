@@ -71,6 +71,10 @@ Use these as default recommendations. Adjust for peak seasons, holidays, and loc
 - Check fuel type (petrol, diesel, EV charging network), road toll systems (ETC, vignette, toll-by-plate), and parking cost at the hotel.
 - For one-way rentals (pick up city A, drop off city B), flag the drop-off surcharge — it can be significant.
 - Return time is a hard deadline: late return typically incurs a full extra day charge.
+- **Navigation / route-book app** — recommend the navigation app that actually works on the ground, and build the day's driving leg as a named route in it (not ad-hoc search):
+  - **Mainland China**: use **Amap (高德地图)** as the route book. Google Maps driving data is unreliable in China. Amap handles local road names, live traffic, restricted-plate zones, and ETC lanes correctly. Recommend saving each driving day as a multi-stop route ("路书" / 收藏路线) so the user can replay it offline.
+  - **Outside mainland China**: use **Google Maps** as the route book (save each day as a multi-stop itinerary; download the region for offline use if signal is unreliable — e.g., Iceland Ring Road, US national parks, Australian outback). Where Google Maps coverage is weak or blocked, note the regional alternative (e.g., Yandex Maps in Russia, Naver/Kakao Map in South Korea, Waze where community traffic data is stronger).
+  - State the chosen app on each self-drive day card so the user knows which app to open at the wheel, and confirm offline-map download is part of the pre-trip checklist when the route crosses low-signal areas.
 
 ## Recommended Arrival Times
 

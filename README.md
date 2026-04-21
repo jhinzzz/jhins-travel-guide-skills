@@ -1,10 +1,20 @@
-# travel-itinerary-redesign
+# jhins-trip-planner
 
 [Chinese / README_CN](./README_CN.md)
 
-Travel itinerary redesign plugin and custom marketplace repository for Claude Code, plus standalone skill installation instructions for Codex.
+End-to-end trip-planning plugin and custom marketplace repository for Claude Code, plus standalone skill installation instructions for Codex.
 
-This repository now has a plugin-first layout. The Claude plugin lives at the repository root, and the actual skill payload is under [`./skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/).
+> **Renamed in 2026-04:** the skill was previously called `travel-itinerary-redesign`. The name was too narrow — redesign is only one of three output modes. If you already have the old plugin installed, run:
+>
+> ```text
+> /plugin uninstall travel-itinerary-redesign@jhins-travel-guide-skills
+> /plugin marketplace update jhins-travel-guide-skills
+> /plugin install jhins-trip-planner@jhins-travel-guide-skills
+> ```
+>
+> Standalone-skill users should remove the old `travel-itinerary-redesign/` folder from `~/.claude/skills/` or `.claude/skills/` and install the new `jhins-trip-planner/` folder.
+
+This repository now has a plugin-first layout. The Claude plugin lives at the repository root, and the actual skill payload is under [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/).
 
 The install and marketplace notes below were checked on 2026-04-19 against the current Codex and Claude Code documentation.
 
@@ -12,14 +22,14 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 
 - [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json): Claude plugin manifest
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json): custom Claude marketplace manifest for this repo
-- [`skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/): actual skill directory
-- [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md): main skill file
-- [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md): canonical intake, weather, transport, and deliverable rules
-- [`skills/travel-itinerary-redesign/references/hotel-selection.md`](./skills/travel-itinerary-redesign/references/hotel-selection.md): hotel evidence, tiering, and output rules
-- [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md): round-trip transport booking, timing, pricing, transfer planning, and arrival time rules
-- [`skills/travel-itinerary-redesign/references/local-specialties.md`](./skills/travel-itinerary-redesign/references/local-specialties.md): local souvenir and specialty recommendation rules (selection criteria, tiering, customs/transport constraints)
-- [`skills/travel-itinerary-redesign/references/travel-sources.md`](./skills/travel-itinerary-redesign/references/travel-sources.md): canonical travel information sources, cross-referencing rules, and citation format
-- [`skills/travel-itinerary-redesign/references/dining-rules.md`](./skills/travel-itinerary-redesign/references/dining-rules.md): restaurant selection rules — cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, meal × cuisine × area intake, reservation channels, peak-season recheck, and swap cascades
+- [`skills/jhins-trip-planner/`](./skills/jhins-trip-planner/): actual skill directory
+- [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md): main skill file
+- [`skills/jhins-trip-planner/references/planning-rules.md`](./skills/jhins-trip-planner/references/planning-rules.md): canonical intake, weather, transport, and deliverable rules
+- [`skills/jhins-trip-planner/references/hotel-selection.md`](./skills/jhins-trip-planner/references/hotel-selection.md): hotel evidence, tiering, and output rules
+- [`skills/jhins-trip-planner/references/transportation.md`](./skills/jhins-trip-planner/references/transportation.md): round-trip transport booking, timing, pricing, transfer planning, and arrival time rules
+- [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md): local souvenir and specialty recommendation rules (selection criteria, tiering, customs/transport constraints)
+- [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md): canonical travel information sources, cross-referencing rules, and citation format
+- [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md): restaurant selection rules — cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, meal × cuisine × area intake, reservation channels, peak-season recheck, and swap cascades
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace
@@ -30,14 +40,14 @@ Users can install it with these documented Claude Code commands:
 
 ```text
 /plugin marketplace add jhinzzz/jhins-travel-guide-skills
-/plugin install travel-itinerary-redesign@jhins-travel-guide-skills
+/plugin install jhins-trip-planner@jhins-travel-guide-skills
 ```
 
 Equivalent non-interactive CLI commands:
 
 ```bash
 claude plugin marketplace add jhinzzz/jhins-travel-guide-skills
-claude plugin install travel-itinerary-redesign@jhins-travel-guide-skills
+claude plugin install jhins-trip-planner@jhins-travel-guide-skills
 ```
 
 After installation, the skill is available through the plugin.
@@ -54,7 +64,7 @@ Then inside Claude Code:
 
 ```text
 /reload-plugins
-/travel-itinerary-redesign:travel-itinerary-redesign
+/jhins-trip-planner:jhins-trip-planner
 ```
 
 If you do not have the `claude` CLI installed locally, you can still review the plugin files and publish from GitHub, but you should test on a machine that has Claude Code available before asking users to install updates.
@@ -73,7 +83,7 @@ To make it installable from the official marketplace:
 4. After approval, users can install it from the official marketplace with:
 
 ```text
-/plugin install travel-itinerary-redesign@claude-plugins-official
+/plugin install jhins-trip-planner@claude-plugins-official
 ```
 
 Until that approval happens, the working install path is your custom marketplace command shown above.
@@ -87,7 +97,7 @@ That means Codex users do not need to manually download the skill if they are wi
 Prompt pattern inside Codex:
 
 ```text
-Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/travel-itinerary-redesign
+Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/jhins-trip-planner
 ```
 
 I did not find a separately documented package-manager-style shell command such as `codex skill install ...`. The documented path is to invoke `$skill-installer` from within Codex.
@@ -96,8 +106,8 @@ I did not find a separately documented package-manager-style shell command such 
 
 If the user does not want to use `$skill-installer`, install the skill manually by copying the nested skill directory:
 
-1. Copy or symlink [`./skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/) to one of Codex's documented skill locations.
-2. Make sure the installed directory ends with `travel-itinerary-redesign/SKILL.md`.
+1. Copy or symlink [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/) to one of Codex's documented skill locations.
+2. Make sure the installed directory ends with `jhins-trip-planner/SKILL.md`.
 3. Restart Codex if the skill does not appear automatically.
 
 Codex skill locations documented by OpenAI:
@@ -111,13 +121,13 @@ Claude Code also supports standalone skills outside the plugin marketplace.
 
 If a user wants to install just the raw skill instead of the plugin:
 
-1. Copy or symlink [`./skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/) to `~/.claude/skills/travel-itinerary-redesign/` for personal use, or `.claude/skills/travel-itinerary-redesign/` inside a project.
-2. Make sure the installed directory ends with `travel-itinerary-redesign/SKILL.md`.
+1. Copy or symlink [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/) to `~/.claude/skills/jhins-trip-planner/` for personal use, or `.claude/skills/jhins-trip-planner/` inside a project.
+2. Make sure the installed directory ends with `jhins-trip-planner/SKILL.md`.
 3. Restart Claude Code if the top-level `.claude/skills/` directory was created for the first time during the current session.
 
 ## What users get
 
-The `travel-itinerary-redesign` skill is designed for:
+The `jhins-trip-planner` skill is designed for:
 
 - planning a trip from a rough brief
 - restructuring fragmented travel notes
@@ -139,7 +149,7 @@ Before publishing an update:
 
 1. Update plugin version in [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json)
 2. Update marketplace version in [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
-3. Verify [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md) still matches the references
+3. Verify [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md) still matches the references
 4. Verify [`agents/openai.yaml`](./agents/openai.yaml) still matches the current skill behavior
 5. Test in Claude Code locally if possible
 

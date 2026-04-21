@@ -1,11 +1,11 @@
 ---
-name: travel-itinerary-redesign
+name: jhins-trip-planner
 description: >
-  Use when turning a trip brief, fragmented travel notes, or an existing itinerary page into a weather-aware guide with round-trip transport planning, day-by-day structure, hotel recommendations, local specialty souvenirs, and route-fit dining or shopping notes. Supports three modes: planning-only (conversational advice), guide-redesign (markdown + HTML deliverables), and existing-page-refactor (restructure fragmented content).
-  Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, 帮我规划旅行, 出行计划, 特产推荐, 手信, 伴手礼, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign, local souvenirs.
+  End-to-end trip planner. Use when a user wants pre-trip prep (visa, currency, SIM, insurance), round-trip transport with booking windows and transfers, evidence-tiered hotels with check-in/out and luggage notes, weather-aware day-by-day itineraries with buffer times, route-fit dining with cuisine-diversity matrix and operating-status verification, destination-specific local specialties and souvenirs, categorized budget with overage checkpoint, or source-traceable recommendations (every price / schedule / rating cited). Three output modes: planning-only advice, guide redesign (markdown + HTML), or existing-page refactor that preserves fragmented content.
+  Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, 餐厅推荐, 帮我规划旅行, 出行计划, 行前准备, 特产推荐, 手信, 伴手礼, 预算估算, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign, hotel recommendations, restaurant recommendations, local souvenirs, jhins-trip-planner.
 ---
 
-# Travel Itinerary Redesign
+# Jhins Trip Planner
 
 ## Goal
 

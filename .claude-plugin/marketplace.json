@@ -4,14 +4,14 @@
     "name": "jhinzzz"
   },
   "metadata": {
-    "description": "Marketplace for travel itinerary planning and guide redesign plugins.",
+    "description": "Marketplace for travel planning and guide redesign plugins.",
     "version": "0.5.0"
   },
   "plugins": [
     {
-      "name": "travel-itinerary-redesign",
+      "name": "jhins-trip-planner",
       "source": "./",
-      "description": "Weather-aware trip planning with round-trip transport booking, hotel recommendations, and route-fit dining and shopping notes.",
+      "description": "End-to-end trip planner covering pre-trip prep, round-trip transport with booking windows, evidence-tiered hotels, weather-aware day-by-day itineraries, route-fit dining with operating-status verification, destination-specific local specialties, categorized budget with overage checks, source-traceable recommendations, and three output modes (advice / guide redesign / page refactor).",
       "version": "0.5.0",
       "author": {
         "name": "jhinzzz"
@@ -23,7 +23,10 @@
         "itinerary",
         "planning",
         "transportation",
-        "hotel"
+        "hotel",
+        "dining",
+        "specialties",
+        "souvenirs"
       ]
     }
   ]

@@ -1,10 +1,20 @@
-# travel-itinerary-redesign
+# jhins-trip-planner
 
 [English / README](./README.md)
 
-这是一个面向 Claude Code 的旅行行程插件仓库，同时也保留了给 Codex 使用的独立 skill 安装方式。
+这是一个面向 Claude Code 的端到端旅行规划插件仓库，同时也保留了给 Codex 使用的独立 skill 安装方式。
 
-当前仓库已经改成 plugin-first 结构：Claude plugin 就在仓库根目录，真正的 skill 内容在 [`./skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/) 下。
+> **2026-04 重命名：**本 skill 原名 `travel-itinerary-redesign`，但「redesign」只是三种输出模式之一，名字覆盖不全当前能力。如果你已安装旧插件，请执行：
+>
+> ```text
+> /plugin uninstall travel-itinerary-redesign@jhins-travel-guide-skills
+> /plugin marketplace update jhins-travel-guide-skills
+> /plugin install jhins-trip-planner@jhins-travel-guide-skills
+> ```
+>
+> 如果是独立 skill 安装，请从 `~/.claude/skills/` 或 `.claude/skills/` 删除旧的 `travel-itinerary-redesign/` 目录，再安装新的 `jhins-trip-planner/` 目录。
+
+当前仓库已经改成 plugin-first 结构：Claude plugin 就在仓库根目录，真正的 skill 内容在 [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/) 下。
 
 以下安装与 marketplace 说明基于 2026-04-19 查阅的 Codex 与 Claude Code 官方文档整理。
 
@@ -12,14 +22,14 @@
 
 - [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json)：Claude plugin manifest
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)：当前仓库自己的 Claude marketplace 清单
-- [`skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/)：真正的 skill 目录
-- [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md)：主技能文件
-- [`skills/travel-itinerary-redesign/references/planning-rules.md`](./skills/travel-itinerary-redesign/references/planning-rules.md)：行程输入、天气处理、交通规划、交付形式的唯一规则来源
-- [`skills/travel-itinerary-redesign/references/hotel-selection.md`](./skills/travel-itinerary-redesign/references/hotel-selection.md)：酒店证据标准、分层与输出规则
-- [`skills/travel-itinerary-redesign/references/transportation.md`](./skills/travel-itinerary-redesign/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
-- [`skills/travel-itinerary-redesign/references/local-specialties.md`](./skills/travel-itinerary-redesign/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）
-- [`skills/travel-itinerary-redesign/references/travel-sources.md`](./skills/travel-itinerary-redesign/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
-- [`skills/travel-itinerary-redesign/references/dining-rules.md`](./skills/travel-itinerary-redesign/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
+- [`skills/jhins-trip-planner/`](./skills/jhins-trip-planner/)：真正的 skill 目录
+- [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md)：主技能文件
+- [`skills/jhins-trip-planner/references/planning-rules.md`](./skills/jhins-trip-planner/references/planning-rules.md)：行程输入、天气处理、交通规划、交付形式的唯一规则来源
+- [`skills/jhins-trip-planner/references/hotel-selection.md`](./skills/jhins-trip-planner/references/hotel-selection.md)：酒店证据标准、分层与输出规则
+- [`skills/jhins-trip-planner/references/transportation.md`](./skills/jhins-trip-planner/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
+- [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）
+- [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
+- [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装
@@ -35,14 +45,14 @@
 
 ```text
 /plugin marketplace add jhinzzz/jhins-travel-guide-skills
-/plugin install travel-itinerary-redesign@jhins-travel-guide-skills
+/plugin install jhins-trip-planner@jhins-travel-guide-skills
 ```
 
 对应的非交互 CLI 命令：
 
 ```bash
 claude plugin marketplace add jhinzzz/jhins-travel-guide-skills
-claude plugin install travel-itinerary-redesign@jhins-travel-guide-skills
+claude plugin install jhins-trip-planner@jhins-travel-guide-skills
 ```
 
 安装完成后，这个 skill 会通过 plugin 提供给 Claude Code。
@@ -59,7 +69,7 @@ claude --plugin-dir .
 
 ```text
 /reload-plugins
-/travel-itinerary-redesign:travel-itinerary-redesign
+/jhins-trip-planner:jhins-trip-planner
 ```
 
 如果你本机没有安装 `claude` CLI，那就无法在本机直接跑官方 plugin 验证流程。此时至少应在有 Claude Code 环境的机器上做一次真实测试，再让用户安装更新。
@@ -78,7 +88,7 @@ claude --plugin-dir .
 4. 审核通过后，用户可以使用：
 
 ```text
-/plugin install travel-itinerary-redesign@claude-plugins-official
+/plugin install jhins-trip-planner@claude-plugins-official
 ```
 
 在官方审核通过之前，当前真正可用的安装方式仍然是上面的自定义 marketplace 命令。
@@ -92,7 +102,7 @@ OpenAI 的 Codex skills 文档明确写到，`$skill-installer` 可以安装 cur
 在 Codex 里可以使用类似提示：
 
 ```text
-Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/travel-itinerary-redesign
+Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/jhins-trip-planner
 ```
 
 我没有查到一个单独文档化的 shell 子命令，类似 `codex skill install ...`。当前有文档依据的方式，是在 Codex 中调用 `$skill-installer`。
@@ -101,8 +111,8 @@ Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills
 
 如果用户不想使用 `$skill-installer`，就手动安装 skill：
 
-1. 将 [`./skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/) 复制或软链接到 Codex 的 skill 目录。
-2. 确认安装后目录以 `travel-itinerary-redesign/SKILL.md` 结尾。
+1. 将 [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/) 复制或软链接到 Codex 的 skill 目录。
+2. 确认安装后目录以 `jhins-trip-planner/SKILL.md` 结尾。
 3. 如果技能没有自动出现，重启 Codex。
 
 OpenAI 文档当前列出的 Codex skill 路径包括：
@@ -116,13 +126,13 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 
 如果用户只想安装 skill 本体，不想走 plugin：
 
-1. 将 [`./skills/travel-itinerary-redesign/`](./skills/travel-itinerary-redesign/) 复制或软链接到 `~/.claude/skills/travel-itinerary-redesign/`，供个人使用；或者放到项目内的 `.claude/skills/travel-itinerary-redesign/`。
-2. 确认安装后的目录以 `travel-itinerary-redesign/SKILL.md` 结尾。
+1. 将 [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/) 复制或软链接到 `~/.claude/skills/jhins-trip-planner/`，供个人使用；或者放到项目内的 `.claude/skills/jhins-trip-planner/`。
+2. 确认安装后的目录以 `jhins-trip-planner/SKILL.md` 结尾。
 3. 如果当前会话中第一次创建 `.claude/skills/` 顶层目录，重启 Claude Code。
 
 ## 用户安装后能做什么
 
-`travel-itinerary-redesign` 这个 skill 主要用于：
+`jhins-trip-planner` 这个 skill 主要用于：
 
 - 从粗略旅行需求开始做行程规划
 - 整理碎片化旅行笔记
@@ -144,7 +154,7 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 
 1. [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json) 里的版本号
 2. [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) 里的版本号
-3. [`skills/travel-itinerary-redesign/SKILL.md`](./skills/travel-itinerary-redesign/SKILL.md) 是否仍与 references 一致
+3. [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md) 是否仍与 references 一致
 4. [`agents/openai.yaml`](./agents/openai.yaml) 是否仍与当前 skill 行为一致
 5. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试
 

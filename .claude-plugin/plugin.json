@@ -1,6 +1,6 @@
 {
   "name": "jhins-trip-planner",
-  "description": "End-to-end trip planner: pre-trip prep (visa, currency, SIM, insurance), round-trip transport with booking windows and transfers, evidence-tiered hotels, weather-aware day-by-day itineraries with buffer times, route-fit dining with cuisine-diversity matrix and operating-status verification, destination-specific local specialties and souvenirs, categorized budget with 15% overage checkpoint, source-traceable recommendations (every price, schedule, rating cited), and three output modes (planning-only advice, guide redesign, or existing-page refactor with content preservation).",
+  "description": "End-to-end trip planner: pre-trip prep, round-trip transport, hotels, day-by-day itineraries with weather and buffer times, route-fit dining, local specialties, categorized budget, and source-traceable recommendations. Three modes: planning advice, guide redesign, or page refactor.",
   "version": "0.5.0",
   "author": {
     "name": "jhinzzz"

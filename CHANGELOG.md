@@ -6,6 +6,19 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.6.4] — 2026-04-22
+
+### Changed
+
+- SKILL.md §Confirmation Checkpoints 加 batching rule：intake 阶段多个 checkpoint 可合并问（最多 3 个，按 legal/safety > scheduling > preference 排优先级）；mid-flight checkpoint（预算超标、餐厅替换、pace/theme 冲突）仍必须**逐个**问。
+- dining-rules.md §3 peak list 补 Eid al-Fitr / al-Adha：`Middle East Ramadan (daytime closures) + Eid al-Fitr / al-Adha (2–4 day public holidays, date shifts by moon sighting, many venues closed or on special hours)`。原本只写了 Ramadan。
+
+### Why
+
+Case 13（迪拜 5 天 + 斋月 + 8 岁女儿）QA 模拟暴露：
+1. intake 时触发 3 个 checkpoint（斋月日期 / theme 冲突 / 儿童沙漠强度），规则说"stop and ask"但没说能不能合并。LLM 靠判断合并成一轮问——加 batching rule 让这合法化。
+2. Eid al-Fitr 紧跟斋月，是法定公假 2-4 天，很多场所闭店或特殊营业。原规则只提 Ramadan，没提 Eid。
+
 ## [0.6.3] — 2026-04-22
 
 ### Added

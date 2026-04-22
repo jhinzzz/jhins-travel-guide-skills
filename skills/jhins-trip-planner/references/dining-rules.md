@@ -54,7 +54,7 @@ Every restaurant must be checked against the **specific trip date**, not its "us
 
 - **Traditional / old-line establishments** — often closed on specific weekdays + national holidays. Examples: Japan old-school soba / unagi / kaiseki / oden on 日祝休 (overlaps Golden Week); European fine dining on Sunday/Monday; many European restaurants on August vacation (ferragosto in Italy, les vacances in France); US fine dining on Monday.
 - **Department-store / mall tenants** — follow the host property's calendar, not their own hours.
-- **Destination peaks that trigger closures or special hours** — Japan Golden Week (late April–early May) / O-Bon (mid-August) / New Year; China Spring Festival / National Day / May Day; Europe Christmas / New Year / Easter / August vacation; US Thanksgiving / Christmas; Middle East Ramadan (daytime closures). The trip window must be cross-referenced against every restaurant's holiday calendar, not just weekly closures.
+- **Destination peaks that trigger closures or special hours** — Japan Golden Week (late April–early May) / O-Bon (mid-August) / New Year; China Spring Festival / National Day / May Day; Europe Christmas / New Year / Easter / August vacation; US Thanksgiving / Christmas; Middle East Ramadan (daytime closures) + Eid al-Fitr / al-Adha (2–4 day public holidays, date shifts by moon sighting, many venues closed or on special hours). The trip window must be cross-referenced against every restaurant's holiday calendar, not just weekly closures.
 
 ### What to record per restaurant
 

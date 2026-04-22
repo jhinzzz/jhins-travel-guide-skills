@@ -7,6 +7,8 @@ description: >
 
 # Jhins Trip Planner
 
+Version: **0.6.2** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions.
+
 ## North Star
 
 The goal is a trip the user will actually enjoy and remember. The rules below exist to prevent fabrication and preserve real constraints — not to generate rule-satisfying reports. When a rule and the user's experience conflict, surface the conflict rather than silently satisfying the rule.

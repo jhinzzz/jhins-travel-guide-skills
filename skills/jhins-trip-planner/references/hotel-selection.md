@@ -77,3 +77,13 @@ Put the recommended first pick at the top of each budget group.
 - Keep hotel recommendations short and scannable.
 - Put the best option first in each budget group.
 - Keep only a few strong options per tier — 2-3 per budget group is enough.
+
+## Parallel Verification for Hotel Shortlists
+
+When the shortlist exceeds **4 candidates** (typical when the trip spans multiple cities, or when the user wants options across 3 budget tiers), verification runs as a batch — not serial WebFetch calls in the main conversation.
+
+- Spawn **2–3 parallel sub-agents**, each covering a slice of the shortlist (by city, by budget tier, or by platform).
+- Each sub-agent returns a structured row per hotel: **current nightly rate range · rating on two platforms · transit time to main hub · check-in / check-out policy · luggage storage availability · refund policy · source URL · research date**.
+- The main conversation synthesizes the rows into the comparison table and decides first-pick / backup / niche / avoid.
+
+This follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.

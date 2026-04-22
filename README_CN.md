@@ -30,6 +30,7 @@
 - [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）
 - [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
 - [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
+- [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md)：安全与应急规则 — 目的地紧急号码、医疗就近、领事支持、保险理赔路径、失窃/丢失响应、目的地特定风险
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装
@@ -159,6 +160,30 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 5. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试
 
 ## 版本变动
+
+### v0.5.2 (2026-04-22)
+
+安全、礼仪、多国行前准备严谨度加固 — 目的地无关，并打通 intake 到输出的追溯链路。
+
+**新功能：**
+- **安全与应急参考文件**（`safety-and-emergency.md`）— 每趟行程的统一安全板块：目的地特有紧急号码（警察 / 消防 / 救护 / 旅游警察）、每座城市至少一家游客友好医院、本国驻该城使领馆 + 非工作时间应急热线、保险理赔路径（不只是购买）、护照 / 卡 / 手机 / 行李丢失的分步应对、目的地特定风险改写为**风险 → 具体触发点 → 具体操作**。
+- **电话号码禁残缺** — 使领馆和医院电话必须完整已核实，或者留空并附显式「→ 出发前到官方网站核实：{URL}」。禁止 `+81-3-xxxx-xxxx` 这类看起来像真号码的骨架占位，否则紧张时容易被误读。
+- **更安全场所选择的权威平台规则** — 风险缓解涉及挑餐厅 / 挑运营商 / 挑出租车点时，必须引用目的地权威平台（迪拜用 DTCM 认证名单；罗马餐饮用 Gambero Rosso / TheFork / Dissapore；东京用 Tabelog；中国内地用大众点评），不能无差别默认 TripAdvisor。
+- **当地礼仪与文化规范进入 intake** — `planning-rules.md` §Trip Preparation 新增：着装（清真寺 / 寺庙 / 米其林）、按区域的小费规范、脱鞋规则、拍照禁令（京都祇园 / 宗教场所室内 / 中东机场与军事区）、公共场合行为红线（PDA / 公共饮酒 / 头 / 脚 / 左手）、讨价还价礼仪、节庆敏感度（斋月 / 安息日 / 泰国佛诞节）。每条都改写为**场景 → 具体动作**。
+- **pace / 主题 / 可变节日 新增 Confirmation Checkpoint** — `SKILL.md` 新增 4 个 intake 阶段确认点：pace 与每日密度不符；多主题冲突；pace × adventure 子强度正交冲突（例：`leisurely` + 日出登山必须按日拆分）；斋月 / 可变宗教节日窗口重叠（起草餐饮 / 礼仪前先核实该年的具体日期）。
+- **adventure 子强度 intake** — 用户选 `adventure & outdoor` 时，必须捕获单日强度上限（日出登山 / 全日徒步 / 开放水域潜水 / 多段攀岩 / 白水漂流），因为它们会覆盖名义 pace，不可互换。
+- **慢性病药物 intake** — 长期处方药在 intake 阶段就以**通用名**（非品牌名）捕获，并传递给 Trip Preparation 并行行 schema，让各国合法性标识（日本 / 阿联酋 伪麻黄素受限；日本 ADHD 兴奋剂非法；阿联酋 / 新加坡 可待因 / 曲马多受限）在起草前就浮现 — 安全板块绝不再次追问。
+- **未成年人跨境** — `planning-rules.md` §Visa and Entry 捕获单亲 / 非亲属陪同未成年人的公证同意书 / 翻译出生证 / 领事认证要求（高敏感目的地：阿联酋 / 沙特 / 南非 / 墨西哥 / 部分欧盟成员国），在 intake 阶段提出而不是到机场才发现。
+- **多国 / 多城的并行验证** — 凡行程跨 ≥ 2 国，自动按国分 spawn 2 个并行子 agent，返回结构化行（签证 + 办理时长 · 入境要求 · 主要货币 + 主流支付 · SIM / eSIM 建议 · 礼仪红线 · 慢性药合法性标识 · 未成年人文件标识 · 源 URL · 研究日期）。凡跨 ≥ 2 城，安全板块按城 spawn 2–3 个子 agent。酒店候选 > 4 家、特产候选 > 5 项也进入并行验证。
+- **可变宗教节日日历权威源** — `travel-sources.md` 新增阿联酋月相委员会、沙特 Umm al-Qura 日历、以色列宗教事务部、泰国佛诞节日历作为年份特定的权威源（月相宣布可能最后一刻 ±1 天）。
+- **DTCM 认证导游 / 运营商名单** — `travel-sources.md` 新增迪拜经济与旅游部认证名单，作为迪拜沙漠越野 / 导游团选择的主源。
+
+**优化：**
+- Final Check 新增 intake-carry-forward 审计（慢性药通用名 → Trip Prep 行 → Safety §2；未成年人文件在 intake 提出；斋月 / 可变节日日期起草前已从官方源核实）。
+- Final Check 新增 Pace & theme 检查项（每日密度与 pace 一致；主题冲突起草前已解决；adventure 子强度按日已协调）。
+- 旺季复查块统一在 `dining-rules.md` §3 单点维护，其他文件只引用（不再在多处重复列旺季清单）。
+- Fallback Rules 把 Web 验证阈值统一合并为一张表（餐厅 / 酒店 / 特产 / 交通 / 安全领事）。
+- `test-prompts.json` 新增 3 条 v0.5.2 场景：id:11（巴厘岛 adventure + wellness pace-theme 冲突）、id:12（日韩泰春节多国 + 慢性病）、id:13（迪拜斋月 + 8 岁女儿）。
 
 ### v0.5.1 (2026-04-21)
 

@@ -50,9 +50,11 @@ Define the canonical set of travel information sources used for research, cross-
 |---|---|---|
 | Airline official sites | airchina.com, ana.co.jp, etc. | Final fare verification, baggage rules, schedule confirmation |
 | National rail sites | 12306.cn, jreast.co.jp, sncf.com, bahn.de | Schedule and pricing authority |
-| Government tourism boards | japan.travel, visitkorea.or.kr, etc. | Visa requirements, entry rules, official event calendars |
+| Government tourism boards | japan.travel, visitkorea.or.kr, visitdubai.com, etc. | Visa requirements, entry rules, official event calendars, licensed-operator whitelists |
 | Embassy / consulate sites | — | Visa processing times, entry requirements |
 | Weather services | weather.com, jma.go.jp, weather.com.cn | Forecast and seasonal data |
+| UAE licensed tour operators | visitdubai.com (DTCM / Dubai Department of Economy and Tourism certified list) | Desert safari / guided tour operator vetting in Dubai — use this in place of generic TripAdvisor floors |
+| Moveable religious-festival calendars | UAE Moon Sighting Committee, Saudi Umm al-Qura calendar, Israel Ministry of Religious Services, Thailand Buddhist Lent calendar | Year-specific dates for Ramadan, Eid al-Fitr / al-Adha, Sabbath observance windows, Vassa (Buddhist Lent) — dates shift by year and sometimes by ±1 day at last-minute moon sighting |
 
 ## Source Selection Rules
 

@@ -11,7 +11,7 @@ description: >
 
 Turn a travel brief or fragmented plan into a reusable guide without losing content.
 
-Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, trip preparation (visa, payment, communication, insurance), weather handling, transport planning, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules (including check-in/out and luggage). Use [transportation.md](references/transportation.md) for round-trip transport booking, timing, pricing, and transfer planning. Use [local-specialties.md](references/local-specialties.md) for destination-specific souvenir and specialty recommendations. Use [dining-rules.md](references/dining-rules.md) for restaurant selection, cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, reservation channels, and swap-cascade rules. Use [travel-sources.md](references/travel-sources.md) as the canonical list of research sources and citation rules.
+Use [planning-rules.md](references/planning-rules.md) as the canonical source for intake order, trip preparation (visa, payment, communication, insurance, local etiquette), weather handling, transport planning, and deliverable selection. Use [hotel-selection.md](references/hotel-selection.md) for hotel selection rules (including check-in/out and luggage). Use [transportation.md](references/transportation.md) for round-trip transport booking, timing, pricing, and transfer planning. Use [local-specialties.md](references/local-specialties.md) for destination-specific souvenir and specialty recommendations. Use [dining-rules.md](references/dining-rules.md) for restaurant selection, cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, reservation channels, and swap-cascade rules. Use [safety-and-emergency.md](references/safety-and-emergency.md) for emergency numbers, medical access, consular support, insurance claim path, theft/loss response, and destination-specific risk notes. Use [travel-sources.md](references/travel-sources.md) as the canonical list of research sources and citation rules.
 
 ## Data Traceability Constraint
 
@@ -21,9 +21,8 @@ Every factual recommendation in the output — including itinerary items, hotel 
 - **Cross-reference at least two independent sources** for significant decisions (hotel selection, transport booking, specialty recommendations). See [travel-sources.md](references/travel-sources.md) for which sources to use for each information type.
 - **Never fabricate** specific flight numbers, train numbers, departure times, fares, hotel names, shop names, restaurant names, or product prices. If data is unavailable, state the typical range, mark it as approximate, and note why exact data was unavailable.
 - **Do not trust restaurants from training data.** Small venues close, relocate, or rebuild on short notice. Every restaurant recommendation must have its current operating status verified online (closure / relocation / rebuild notices, Google Maps "Permanently closed", platform page integrity) per [dining-rules.md](references/dining-rules.md) §2 before it appears in the output.
-- **Verify against the target date, not the typical week.** Restaurants, attractions, and museum hours must be checked against the specific trip dates — regular weekly closures plus destination-specific peak closures (examples: Japan Golden Week / O-Bon / New Year; China Spring Festival / National Day; European Christmas / Easter / August vacation; US Thanksgiving / Christmas; Ramadan in the Middle East). See [dining-rules.md](references/dining-rules.md) §3.
-- **Mark the confidence level** when evidence is thin: use "approximate" for single-source data, "verified" for multi-source confirmed data, and "verify locally" when online data is insufficient.
-- **Research date freshness**: if data is older than 3 months, flag it. Travel prices, schedules, and availability change frequently.
+- **Verify against the target date, not the typical week.** Check restaurants, attractions, and museum hours against the specific trip dates — regular weekly closures plus destination-specific peak closures. See [dining-rules.md](references/dining-rules.md) §3 for the canonical peak-period list.
+- **Confidence and freshness labels**: mark single-source data as "approximate", multi-source confirmed as "verified", and insufficient online data as "verify locally". Flag any data older than 3 months — prices, schedules, and availability change fast.
 
 ## Classify The Task First
 
@@ -50,7 +49,8 @@ Not every mode needs every workflow step. Use the lightest path that fits:
 
 | Step | `planning-only` | `guide-redesign` / `existing-page-refactor` |
 |---|---|---|
-| Trip prep (visa, payment, SIM, insurance) | Flag critical items (visa deadline, SIM) | Full prep checklist per [planning-rules.md](references/planning-rules.md) |
+| Trip prep (visa, payment, SIM, insurance, etiquette) | Flag critical items (visa deadline, SIM, etiquette red flags like Ramadan / mosque dress) | Full prep checklist per [planning-rules.md](references/planning-rules.md) |
+| Safety & emergency | Short block (emergency numbers + insurer hotline + embassy one-liner) | Full section per [safety-and-emergency.md](references/safety-and-emergency.md) |
 | 1. Inventory | Brief and constraints only | Full page map |
 | 2. Transport | Summary (mode, booking window, price range, timing) — no full cards | Full transport cards per [transportation.md](references/transportation.md) |
 | 3. Timeline + budget | Day-by-day outline with budget estimate | Full daily cards with category-level budget breakdown |
@@ -88,8 +88,12 @@ Ask for confirmation before crossing these boundaries:
 - Dropping existing sections, venues, or notes instead of preserving them as backup or reference
 - Finalizing a plan where the estimated total exceeds the user's stated budget by more than 15% — present the overage, suggest which categories to trim, and get confirmation before proceeding
 - Swapping any restaurant, hotel, or anchor attraction after the first draft — run the cascade in [dining-rules.md](references/dining-rules.md) §9 (daily card, detail section, pre-trip recheck block, nav anchors, cuisine matrix) and confirm the full update with the user before closing the change
-- Publishing a trip that overlaps a destination-specific peak period (examples: Japan GW / O-Bon / New Year; China Spring Festival / National Day; European Christmas / Easter / August vacation; US Thanksgiving / Christmas) without the "3–5 days before departure" recheck block required by [dining-rules.md](references/dining-rules.md) §8
+- Publishing a trip that overlaps a destination-specific peak period (see [dining-rules.md](references/dining-rules.md) §3 for the list) without the "3–5 days before departure" recheck block required by [dining-rules.md](references/dining-rules.md) §8
 - Producing a self-drive day whose **total driving time, total distance, or longest single segment** would exceed the daily driving-time ceiling captured at intake ([planning-rules.md](references/planning-rules.md) §Intake) — surface the overage, propose a split (add one day / drop a stop / change lodging) and confirm with the user before finalizing
+- Producing a daily schedule whose density conflicts with the user's stated pace preference — e.g., 6 anchors/day when the user picked `leisurely`, or only 1 anchor/day when they picked `tight`. Surface the conflict and propose the realistic density before continuing
+- Themes the user picked imply conflicting paces or day shapes (e.g., `adventure` + `wellness`, `photography` + `family with young kids`) — flag the conflict and ask which theme wins for which day before drafting
+- `pace=leisurely` combined with any high-intensity adventure sub-activity captured at intake (sunrise-hike, pre-dawn start, full-day trek >5 h, open-water dive, multi-pitch climb, whitewater rafting) — pace and sub-intensity are orthogonal, so finalise the day shape only after the user confirms which one yields on that day
+- Scheduling a trip whose window overlaps **Ramadan / a moveable religious festival** without first reconfirming the exact dates for that year (moon-sighting announcement shifts Ramadan by ±1 day and redraws Iftar timing, daytime dining closures, and dress expectations) — verify the year's calendar from an official source before drafting etiquette and dining plans
 
 ## Fallback Rules
 
@@ -156,11 +160,18 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
 
 - Web verification stalls (WebFetch fails, page ambiguous, a venue ID now resolves to a relocated business)
   - Do not fall back to "please verify yourself" and move on. Do not invent. Do not drop the item silently.
-  - For a single venue: retry via a different source in [travel-sources.md](references/travel-sources.md) (official site → platform page → Google Maps status → editorial guide).
-  - For batches of 5 or more venues (typical when a trip has full meal, hotel, and attraction slates): spawn **2–3 parallel sub-agents**, each responsible for a bucket grouped by day, ward, or category. Each sub-agent returns a structured row per venue (operating status, address, regular closures, peak-season notes, reservation channel, source URL).
-  - The main conversation does synthesis and decisions — it does not run serial WebFetch calls over a long list.
-  - While sub-agents are running, give the user a short status line (e.g., "Dispatched 3 sub-agents for venue verification") so the pause is visible.
+  - For a single item: retry via a different source in [travel-sources.md](references/travel-sources.md) (official site → platform page → Google Maps / editorial guide).
   - Treat repeated WebFetch hits that return **different businesses for the same ID** as a strong signal the original venue closed or moved; do not recommend it.
+
+- Batch verification (general rule — applies to any research category)
+  - Trigger the parallel sub-agent pattern whenever the batch crosses the per-category threshold below. Main conversation handles synthesis only — never run serial WebFetch over a long list.
+  - Each sub-agent returns a structured-row report per item; give the user a short status line ("Dispatched N sub-agents for {category} verification").
+  - Category thresholds and row schemas are defined in:
+    - Dining ≥5 venues → [dining-rules.md](references/dining-rules.md) §10
+    - Hotels >4 candidates → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification
+    - Specialties >5 items → [local-specialties.md](references/local-specialties.md) §Parallel Verification
+    - Safety & emergency ≥2 cities / countries → [safety-and-emergency.md](references/safety-and-emergency.md) §9
+    - Trip prep ≥2 countries → [planning-rules.md](references/planning-rules.md) §Trip Preparation → Parallel Verification
 
 ## Core Workflow
 
@@ -191,8 +202,7 @@ When critical inputs or evidence are incomplete, degrade gracefully instead of i
    - If a restaurant does not fit the route, hours, or booking constraints, move it to backup instead of forcing it into the day.
    - Keep the meal and shopping blocks inside the relevant day so the user does not need to jump across sections.
    - Include intra-city transport notes where relevant (metro lines, bus routes, taxi estimates, walking distances).
-   - For self-drive / rental-car days, state the route-book app on the day card: **Amap (高德地图)** for mainland China driving; **Google Maps** elsewhere (with a regional alternative — Yandex Maps / Naver / Kakao / Waze — where Google coverage is weak or blocked). Save each driving day as a named multi-stop route and download offline maps for low-signal areas. See [transportation.md](references/transportation.md) §Rental Car / Self-Drive.
-   - Every self-drive day card must carry three required fields (analogous to the four restaurant fields in [dining-rules.md](references/dining-rules.md) §5): **total distance (km) · total driving time · longest single uninterrupted driving segment**. All three must fit under the daily driving-time ceiling captured at intake ([planning-rules.md](references/planning-rules.md) §Intake); if they don't, split the day or drop a stop before showing the plan.
+   - For self-drive / rental-car days, follow [transportation.md](references/transportation.md) §Rental Car / Self-Drive — each day card names the route-book app (Amap for mainland China; Google Maps elsewhere with regional fallback) and carries three required fields: **total distance (km) · total driving time · longest single uninterrupted driving segment**. All three must fit under the intake-captured ceiling ([planning-rules.md](references/planning-rules.md) §Intake); otherwise split the day or drop a stop before showing the plan.
    - Add buffer time between activities based on transition type:
      - **Nearby** (15–20 min): next activity is within ~1 km or a 10-minute walk — same neighborhood, same commercial area, same station exit zone.
      - **Cross-district** (30–45 min): requires metro/bus/taxi, or walking distance exceeds 1 km. Includes time for wayfinding, platform transfers, and waiting.
@@ -260,19 +270,23 @@ These rules supplement the Core Workflow and Non-Goals — they apply specifical
 
 Verify each area against its canonical source — do not re-check rules already defined in reference files; instead confirm the output passes the reference's own checklist.
 
-- Output mode matches the request type.
-- **Trip prep**: international trips surface visa, payment, SIM, insurance per [planning-rules.md](references/planning-rules.md).
-- **Weather**: assumptions visible and practical per [planning-rules.md](references/planning-rules.md).
+- **Output mode** matches the request type.
+- **Trip prep**: international trips pass the checklist in [planning-rules.md](references/planning-rules.md) §Trip Preparation (visa · payment · SIM · insurance · etiquette).
+- **Weather**: assumptions visible and practical per [planning-rules.md](references/planning-rules.md) §Weather.
 - **Fallback labels**: visible where evidence or inputs were incomplete (see Fallback Rules above).
-- **Hotels**: pass the output card checklist in [hotel-selection.md](references/hotel-selection.md), including check-in/out and luggage plan.
-- **Transport**: both legs present, each card passes the 9-field checklist in [transportation.md](references/transportation.md). Arrival day anchored to realistic "available in city" time; departure day works backward from hard cutoff.
-- **Budget**: breakdown by category present; compared against user's stated budget; if over 15%, confirmation checkpoint was triggered.
-- **Local context**: restaurants and attractions have booking lead times and channels where applicable; buffer times realistic (15–20 min nearby, 30–45 min cross-district); off-peak suggestions cite source or are omitted.
-- **Dining**: cuisine-diversity matrix holds (no category appears twice across lunch/dinner unless user asked); every restaurant verified against target date and operating status; district consistency holds; every card has the four required fields per [dining-rules.md](references/dining-rules.md) §5.
-- **Self-drive** (when self-drive days are in the plan): intake captured licence validity + driving side + daily driving-time ceiling; each driving day card shows the three required fields (distance / driving time / longest single segment) and fits within the ceiling; route-book app stated (Amap in mainland China; Google Maps elsewhere, with regional fallback if coverage is weak); offline-map download is on the pre-trip checklist for any low-signal segment.
-- **Pre-trip recheck block**: for any trip overlapping a destination-specific peak period, the "3–5 days before departure" block is present and lists every irregular-closure / weekday-or-holiday-closed / possible special-closure restaurant by name and target date.
-- **Specialties**: if present, pass the card checklist in [local-specialties.md](references/local-specialties.md) (tiered, sourced, transport-flagged).
-- **Data traceability**: every factual claim cites source and research date per [travel-sources.md](references/travel-sources.md). No fabricated specifics anywhere.
+- **Hotels**: pass the card checklist in [hotel-selection.md](references/hotel-selection.md) (incl. check-in/out and luggage plan).
+- **Transport**: both legs present; each card passes the 9-field checklist in [transportation.md](references/transportation.md); arrival / departure anchored correctly.
+- **Budget**: category breakdown present; >15% overage triggered the confirmation checkpoint.
+- **Local context**: booking lead times stated where needed; buffer times follow Step 4 tiers; off-peak suggestions cited or omitted.
+- **Dining**: passes [dining-rules.md](references/dining-rules.md) §§1-9 (matrix · operating status · target-date · ward · 4 fields · route · reservations · cascade).
+- **Self-drive** (when applicable): passes [transportation.md](references/transportation.md) §Rental Car / Self-Drive + intake triad from [planning-rules.md](references/planning-rules.md) §Intake — day cards show the three required fields, fit the ceiling, name the route-book app, and offline-map is on the pre-trip checklist for low-signal segments.
+- **Pace & theme**: daily density matches the chosen pace; theme conflicts resolved before drafting; any high-intensity adventure sub-activity is reconciled with pace on a per-day basis.
+- **Intake carry-forward**: chronic-medication generics captured at intake (if any) flow into the Trip Preparation parallel rows as per-country legality flags; minors-with-one-parent documents raised where the destination enforces them; for Ramadan / moveable-festival overlap, the year-specific calendar is verified from an official source before etiquette and dining blocks are drafted.
+- **Local etiquette**: destination-triggered items present, each phrased as *situation → specific action* per [planning-rules.md](references/planning-rules.md) §Local Etiquette.
+- **Safety & emergency**: passes the section checklist in [safety-and-emergency.md](references/safety-and-emergency.md) — numbers · hospital · embassy (incl. after-hours) · insurer claim path · theft/loss numbered steps · risk items with §6 phrasing.
+- **Pre-trip recheck block**: present whenever the trip overlaps a peak period; lists every at-risk venue by name and target date per [dining-rules.md](references/dining-rules.md) §8.
+- **Specialties** (if present): pass the card checklist in [local-specialties.md](references/local-specialties.md).
+- **Data traceability**: every factual claim cites source and research date per [travel-sources.md](references/travel-sources.md).
 - **Content preservation**: existing source content preserved unless the user asked to remove it.
 
 ## Minimal Output Shape
@@ -281,25 +295,27 @@ Use the smallest fitting structure for the chosen mode:
 
 ### `planning-only`
 
-- Trip summary
+- Trip summary (theme + pace stated explicitly)
 - Assumptions or missing inputs
-- Trip preparation flags (visa, payment, SIM — for international trips)
+- Trip preparation flags (visa, payment, SIM, top etiquette red flags — for international trips)
 - Round-trip transport plan (mode, booking window, price range, timing)
-- Day-by-day outline with activity buffer times
+- Day-by-day outline with activity buffer times, calibrated to the chosen pace
 - For self-drive days: route-book app + driving-day three fields (distance · driving time · longest single segment)
 - Budget estimate by category
 - Hotel direction if requested
 - Local specialty highlights if relevant (signature items only, with source)
 - Packing or weather notes
+- Short safety & emergency block (emergency numbers + insurer hotline + embassy one-liner)
 - All prices, schedules, and recommendations cite source and research date
 
 ### `guide-redesign`
 
-- Hero summary
+- Hero summary (theme + pace stated explicitly)
 - Trip preparation checklist (visa, payment, SIM, insurance — for international trips)
+- Local etiquette & cultural norms (destination-triggered rules only — dress code / tipping / shoes-off / photo restrictions / public behaviour as applicable)
 - Round-trip transport cards (outbound and return with full details)
 - Prep or packing
-- Daily itinerary cards (arrival and departure days anchored to transport times, with buffer times between activities; self-drive days carry the three required fields — distance · driving time · longest single segment — and name the route-book app)
+- Daily itinerary cards (arrival and departure days anchored to transport times, with buffer times between activities calibrated to the chosen pace; self-drive days carry the three required fields — distance · driving time · longest single segment — and name the route-book app)
 - Reservation and ticket booking deadlines (restaurants, attractions)
 - Hotel shortlist (with check-in/out times and luggage plan)
 - Budget breakdown by category
@@ -307,21 +323,9 @@ Use the smallest fitting structure for the chosen mode:
 - Embedded dining, shopping, and intra-city transport notes
 - All prices, schedules, and recommendations cite source and research date per [travel-sources.md](references/travel-sources.md)
 - Pre-trip recheck block (when the trip overlaps a destination-specific peak period): restaurants / reservations / crowd-sensitive items to re-confirm 3–5 days before departure per [dining-rules.md](references/dining-rules.md) §8
+- Safety & emergency section (emergency numbers, medical access, embassy / consulate contact, insurance claim path, theft / loss / passport response, destination-specific risks) per [safety-and-emergency.md](references/safety-and-emergency.md)
 - Reference appendix (including transport comparison if multiple modes were considered)
 
 ## Default Page Shape
 
-- Hero summary
-- Trip preparation checklist (visa, currency, SIM, insurance)
-- Round-trip transport plan
-- Packing essentials
-- Time-sensitive prep (ticket booking deadlines for transport, attractions, and restaurants)
-- Daily itinerary cards (with buffer times; self-drive days include route-book app + distance · driving time · longest single segment)
-- Hotel shortlist by budget and quality tier (with check-in/out and luggage notes)
-- Budget breakdown by category
-- Embedded restaurant / shop / shopping blocks per day
-- Local specialty and souvenir recommendations (embedded in relevant day or as dedicated section)
-- Intra-city transport notes per day
-- Source citations on all factual claims
-- Pre-trip recheck block when the trip overlaps a destination-specific peak
-- Full reference appendices
+Use the `guide-redesign` shape above as the default page skeleton. The two shapes are identical except where the user has asked for a reduced page — in which case drop the reference appendix first, then the pre-trip recheck block (only if the trip does not overlap a peak period). Never drop safety & emergency, transport legs, or budget breakdown.

@@ -58,5 +58,23 @@
     "scenario": "self-drive-international-iceland",
     "prompt": "9月中旬从雷克雅未克出发自驾冰岛环岛 8 天，夫妻两人，帮我做完整攻略",
     "expected": "分类为 guide-redesign；租车预订窗口 4–6 周（Ring Road 旺季）；驾照要求：有效国内驾照 + IDP；保险选项（CDW + gravel + sand & ash）在租车预算中明示；路书 APP 明确为 **Google Maps**，每日分段为多停留点路线，并**强制离线地图下载**（东部峡湾 / 高地 F-roads 信号弱）；Waze 作为实时堵车补充；每日驾驶时长上限建议 4–5 小时留出观光缓冲；加油站密度低的区段（高地 / 东峡湾）标注；航班 / 酒店 / 餐厅推荐全部标注来源和查询日期；海关与液体限制不适用（欧盟内），但冰岛 → 中国/美国返程携带 skyr / 羊毛制品的过境规则需标注"
+  },
+  {
+    "id": 11,
+    "scenario": "pace-theme-conflict",
+    "prompt": "10月想和老婆去巴厘岛玩7天，我们既想体验潜水冲浪火山徒步这种冒险活动，也想有spa泡汤懒躺海边这种放松度假，预算3万",
+    "expected": "intake 识别 adventure + wellness 两个主题冲突 + pace 未明示；触发 Confirmation Checkpoint（theme-conflict）要求用户定边界（哪几天 adventure / 哪几天 wellness，或 per-day 切分）；pace 追问 tight / balanced / leisurely；不未经确认就产出混合 7 天行程；输出 hero 区明示 theme + pace 两项，每日卡密度与 pace 一致（leisurely = 1–2 anchors/day，不能塞满）；印尼入境 + 签证（中国公民免签落地 30 天）+ 支付 + SIM + 礼仪（印度教寺庙着装 / 遮肩膝；左手禁忌；公共场合 PDA 限制）；安全块含当地紧急号码（110 警察 / 118 救护 / 113 消防）、一家游客友好医院（如 BIMC Hospital Kuta）、中国驻登巴萨总领馆（含 24h 应急线）、保险理赔热线、海洋活动风险具体写法（"8–10 月西海岸浪涌，Padang Padang 中午高潮危险，潜水只用 PADI 5-star 认证中心"）"
+  },
+  {
+    "id": 12,
+    "scenario": "multi-country-safety-parallel",
+    "prompt": "明年春节（2月10日-2月22日）全家四口（父母+我+我老婆）去日韩泰三国串联：东京4天+首尔4天+曼谷4天，从北京出发，预算8万元，爸爸有高血压在吃药",
+    "expected": "触发 §Trip Preparation Parallel Verification（≥2 国自动 spawn 2 sub-agents 按国分）+ §Safety §9（≥2 城 spawn 2–3 sub-agents）；春节触发 dining 品类矩阵跨城跨天去重 + 出发前 3–5 天复查块 + 春节海外出行溢价预警；每国独立列：签证（日本个人旅游 5-7 工作日；韩国免签 15 天；泰国免签 30 天）、主要货币 + 支付方式、eSIM 推荐、紧急号码（日本 110/119；韩国 112/119；泰国 191/1669/1155 tourist police）、至少一家 foreigner-friendly 医院 + 中国驻该城总领馆 + 保险理赔热线；爸爸高血压药物：东京+首尔 OK；泰国需确认具体药物成分，伪麻黄素在日本受限要检查；礼仪红线 per 国（日本 tatami 脱鞋 / 泡汤纹身；韩国 年长者先 / 敬酒；泰国 不摸头 / 不指脚 / 王室图像尊重）；每段城际机票/高铁标源 + 研究日期；8万预算对四口人可能偏紧，触发 budget >15% 确认"
+  },
+  {
+    "id": 13,
+    "scenario": "ramadan-etiquette-rigor",
+    "prompt": "3月下旬（斋月期间）带 8 岁女儿去迪拜 5 天玩，预算 4 万，想看哈利法塔 + 沙漠越野 + 购物",
+    "expected": "intake 必问 pace（带小孩更倾向 balanced / leisurely）；斋月日历核对：3 月下旬 2026 年可能在斋月期间（需 WebFetch 核实具体日期）；礼仪红线必出且是「situation → specific action」格式：白天公共场所不吃喝抽烟（连水也不行），着装 modest（女士肩膝遮盖），斋月开斋 Iftar 约日落 18:30-19:00 所有餐厅排长队须提前订，酒吧仅持牌酒店内营业；每日 itinerary 避免白天户外长时间活动（与 8 岁小孩 + 40°C+ 气温双重叠加）、沙漠越野建议 Platinum Heritage / Arabian Adventures 等 DTCM 认证运营商（不能默认 TripAdvisor > 4.0）、哈利法塔改为傍晚场（日落+夜景，避开白天高温 + 与开斋时段错峰）；安全块：警察 999 / 急救 998 / 医院名（American Hospital Dubai 或 Mediclinic）、中国驻迪拜总领馆 —— §3 缺号禁令：电话字段留空 + 「→ Fetch from official site before departure: http://dubai.china-consulate.gov.cn/」；女童独立入境阿联酋海关可能询问父母关系，建议携带出生证明 + 母亲同行委托书；斋月出租车司机可能 iftar 时段短暂停运，预留缓冲"
   }
 ]

@@ -30,6 +30,7 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md): local souvenir and specialty recommendation rules (selection criteria, tiering, customs/transport constraints)
 - [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md): canonical travel information sources, cross-referencing rules, and citation format
 - [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md): restaurant selection rules — cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, meal × cuisine × area intake, reservation channels, peak-season recheck, and swap cascades
+- [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md): safety and emergency rules — destination-specific emergency numbers, medical access, consular support, insurance claim path, theft / loss response, and destination-specific risk notes
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace
@@ -154,6 +155,30 @@ Before publishing an update:
 5. Test in Claude Code locally if possible
 
 ## Changelog
+
+### v0.5.2 (2026-04-22)
+
+Safety, etiquette, and multi-country preparation rigor — destination-agnostic, with tighter intake-to-output traceability.
+
+**New:**
+- **Safety & emergency reference** (`safety-and-emergency.md`) — consolidated per-trip safety block: destination-specific emergency numbers (police / fire / ambulance / tourist police), one foreigner-friendly hospital per city, home-country embassy / consulate with after-hours line, insurer claim-path (not just purchase), theft / loss step-by-step response (passport, cards, phone, luggage), destination-specific risk notes phrased as **risk → specific trigger → specific action**.
+- **Partial-number ban** — consular and hospital phone numbers must be complete and verified, or left empty with an explicit "→ Fetch from official site before departure: {URL}" pointer. No skeleton placeholders like `+81-3-xxxx-xxxx`, which look real under stress.
+- **Authoritative-platform rule for safer-venue selection** — when risk mitigation tells the traveller how to pick a restaurant / operator / taxi stand, recommendations must cite the destination-authoritative platform (DTCM-certified list for Dubai tour operators, Gambero Rosso / TheFork / Dissapore for Rome dining, Tabelog for Tokyo, 大众点评 for mainland China) rather than defaulting to TripAdvisor globally.
+- **Local etiquette & cultural norms at intake** — `planning-rules.md` §Trip Preparation now includes dress codes (mosques / temples / Michelin), tipping norms per region, shoes-off rules, photography restrictions (Kyoto Gion, religious interiors, Middle East airports / military), public-behaviour lines (PDA / drinking-in-public / head / feet / left-hand), bargaining etiquette, and festival sensitivities (Ramadan / Sabbath / Buddhist Lent). Every item is phrased as **situation → specific action**.
+- **Confirmation checkpoints for pace, theme, and moveable-festival overlap** — `SKILL.md` now flags four new intake-time checkpoints: pace ≠ density mismatch, multi-theme conflict, pace × adventure-sub-intensity orthogonal conflict (e.g., `leisurely` + sunrise-hike must be resolved per-day), and Ramadan / moveable religious-festival overlap (reconfirm the year's exact dates from an official source before drafting dining / etiquette).
+- **Adventure sub-intensity at intake** — when the user picks `adventure & outdoor`, the skill now captures the single-day intensity ceiling (sunrise-hike / full-day trek / open-water dive / multi-pitch climb / whitewater rafting) because these override the nominal pace and are not interchangeable.
+- **Chronic medication at intake** — long-term prescription medication is captured at intake as a **generic drug name** (not brand) and carried forward into the Trip Preparation parallel row schema, so per-country legality flags (e.g., pseudoephedrine restricted in Japan / UAE, ADHD stimulants illegal in Japan, strong codeine / tramadol restricted in UAE / Singapore) are surfaced before drafting — never re-asked at the safety section.
+- **Minors crossing borders** — `planning-rules.md` §Visa and Entry captures notarised-consent / translated-birth-certificate / apostille requirements for minors travelling with only one parent (high-enforcement destinations: UAE, Saudi Arabia, South Africa, Mexico, several EU members), raised at intake rather than at the airport.
+- **Parallel verification for multi-country / multi-city trips** — any trip crossing ≥ 2 countries spawns 2 parallel sub-agents by country returning a structured row (visa + processing time · entry requirements · primary currency + dominant payment methods · recommended SIM / eSIM · destination-specific etiquette red flags · chronic-medication legality flag · minors-documents flag · source URLs · research date). Any trip crossing ≥ 2 cities spawns 2–3 sub-agents for the full safety block per city. Hotel shortlists > 4 candidates and specialty shortlists > 5 candidates also gain parallel verification.
+- **Moveable-festival calendar sources** — `travel-sources.md` adds UAE Moon Sighting Committee, Saudi Umm al-Qura calendar, Israel Ministry of Religious Services, Thailand Buddhist Lent calendar as authoritative year-specific sources (±1 day last-minute moon-sighting shift).
+- **DTCM certified tour-operator list** — `travel-sources.md` adds the Dubai Department of Economy and Tourism certified list as the primary source for desert safari / guided-tour vetting in Dubai.
+
+**Optimizations:**
+- Final Check now audits the intake-carry-forward chain (chronic-medication generics → Trip Preparation row → Safety §2; minors documents raised at intake; Ramadan / moveable-festival date verified from official source before drafting).
+- Final Check adds a Pace & theme row (daily density matches chosen pace; theme conflicts resolved before drafting; adventure sub-intensity reconciled per day).
+- Peak-period recheck block is now single-sourced in `dining-rules.md` §3 and referenced elsewhere (no more duplicated peak-list inventory).
+- Fallback Rules unify web-verification thresholds (restaurants / hotels / specialties / transport / consular-safety) into a single batch table.
+- `test-prompts.json` adds three v0.5.2 scenarios: id:11 (Bali adventure + wellness pace-theme conflict), id:12 (Japan-Korea-Thailand spring-festival multi-country with chronic medication), id:13 (Dubai with 8-year-old during Ramadan).
 
 ### v0.5.1 (2026-04-21)
 

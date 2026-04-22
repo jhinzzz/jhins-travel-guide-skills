@@ -86,6 +86,16 @@ When presenting multiple specialties for a destination:
 - For departure day, flag any last-minute purchase opportunities near the hotel or station.
 - Do not create a separate "shopping day" unless the user requests it — weave purchases into the natural flow.
 
+## Parallel Verification for Specialty Shortlists
+
+When the shortlist exceeds **5 candidate specialties** (typical when the destination has multiple well-known categories — tea + silk + crafts + snacks, etc.), verification runs as a batch.
+
+- Spawn **2–3 parallel sub-agents**, each covering a category or sub-region.
+- Each sub-agent returns a structured row per item: **tier · shop or outlet · address · current price range · customs / transport flag · source URLs · research date**.
+- The main conversation synthesizes the rows into the recommended / signature / niche / skip buckets and embeds them into the relevant day cards.
+
+This follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.
+
 ## Non-Goals
 
 - Do not recommend items without evidence from reputable travel sources.

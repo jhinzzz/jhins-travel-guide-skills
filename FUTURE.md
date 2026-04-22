@@ -15,6 +15,8 @@
 - Judge-level assertion 用 LLM 验证 LLM，信号/噪声比不高，会被漂移。
 - 现在规则改动用"我自己拿 1-2 case 手测 + PR review"更划算。
 
+**注意**：`test-prompts.json` 里每个 case 的 `rule_refs` 字段（如 `"intake.md §6"`）是**给人看的注释**，帮助读测试用例的人追到规则来源。**不是机器可校验的 assertion** —— `check-links.sh` 不扫 JSON 文件，这些引用可以静默漂移。未来真做自动化 harness 时，第一步就是让脚本扫 test-prompts.json 的 `rule_refs` 也做锚点验证。
+
 **什么时候值得做**：
 - skill 被 10+ 个人常用，或用于商业产品
 - 某次回归引入明显 bad output 让人真的痛（到那时 test harness 的价值就明显）

@@ -6,6 +6,17 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.6.3] — 2026-04-22
+
+### Added
+
+- `.gitignore` — 显式声明 `session-learnings-*.md`（个人会话笔记）和 `.omc/`（工具生成目录）不进 git。取代"靠遗忘不 track"的软约束。
+- `FUTURE.md` 第 1 条补一句说明：`test-prompts.json` 的 `rule_refs` 字段是"给人看的注释"而非机器 assertion，`check-links.sh` 不扫 JSON。避免未来把这些引用误当成 harness 依赖。
+
+### Why
+
+来自 v0.6.0-v0.6.2 的 `/review` pre-landing 审查发现的 3 条 informational — mechanical fix，一并 bump。
+
 ## [0.6.2] — 2026-04-22
 
 ### Added

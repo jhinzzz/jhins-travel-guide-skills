@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.6.2** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions.
+Version: **0.6.3** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions.
 
 ## North Star
 

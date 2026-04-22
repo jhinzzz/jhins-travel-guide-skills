@@ -147,6 +147,26 @@ When a trip involves connections (e.g., flight → metro → hotel, or train →
 - Provide a backup plan for the riskiest link (e.g., "if the shuttle is missed, taxi costs approximately ¥XX and takes YY minutes").
 - Account for luggage: transfers with heavy bags need more time than the map suggests.
 
+## Multi-Carrier Luggage Conflicts
+
+When the itinerary chains two or more flights booked on **separate tickets** (self-connection, LCC + full-service combo, or mixed alliances), baggage rules do not automatically match across carriers. Three failure modes — all common:
+
+- **Piece vs weight regime mismatch** — US/UK long-haul carriers run a "piece concept" (e.g., 2 × 23 kg). Many European LCCs and Asian regional carriers run a "weight concept" (e.g., 20 kg total checked regardless of pieces). A 2 × 23 kg booked bag is legal on the first leg and immediately illegal as a 46 kg total on a weight-concept second leg.
+- **Size + cabin-bag conflict** — Ryanair / easyJet / Jetstar / AirAsia have smaller cabin-bag allowances (e.g., Ryanair 40×20×25 cm free tier) than full-service carriers' 56×36×23 cm standard. A bag that flew as cabin on the first leg gets charged gate-check on the second.
+- **Carry-on liquid re-screening** — at most self-connection airports, passengers must re-clear security between flights. Any duty-free liquids purchased airside on leg 1 will be confiscated unless packed in an ICAO-approved STEB bag with receipt inside, and even then the second screening may reject it (notably at LHR, ICN, HKG for certain transfers).
+
+### Rule
+
+- When the plan proposes two or more separate tickets on different carriers, **list per-leg baggage allowance** (piece count, per-piece weight, cabin bag size, personal item) on the transport card. Do not show "2 × 23 kg" as a trip-wide property.
+- Flag the **narrowest allowance** as the effective trip-wide limit for the checked bag, or recommend paying the higher-allowance carrier's bag fee at booking time (usually cheaper online than at the airport).
+- If the connection involves **self-transfer** (not a through-checked booking — the passenger must collect and re-check bags), add a minimum 90-minute transfer buffer (120 minutes international) on top of the base transfer time in [Transfer Planning](#transfer-planning), and flag the self-transfer explicitly on the card. Baggage handling between unlinked PNRs is the passenger's responsibility — no MCT (minimum connection time) guarantee applies.
+- If the user's booking channel claims "through-checked" baggage, verify it matches reality: alliance membership is not sufficient — the actual ticket/PNR structure decides. Note at the booking stage that LCC-to-full-service combinations are almost never through-checked.
+- Duty-free liquids bought airside at leg 1 should be discouraged when leg 2 re-screens. State this on the transport card rather than expecting the user to remember.
+
+### Evidence standard
+
+Each per-carrier allowance must cite the carrier's official baggage policy page with a research date. Do not rely on third-party OTA summaries — those are frequently out of date after carrier fare-class reshuffles.
+
 ## Return Trip Planning
 
 - Plan the return trip with the same rigor as the outbound trip.

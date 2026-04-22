@@ -49,11 +49,22 @@ For every destination city, name **at least one hospital** the user can realisti
 - **One foreigner-friendly / international hospital** (English-speaking or traveller-clinic capable) with address and distance from the typical tourist zone.
 - **After-hours pharmacy** or 24-hour drugstore for minor issues (common in Japan 24h 调剂薬局 / US CVS 24h / Hong Kong Mannings / Singapore Guardian).
 - **Common-drug name translation** for top traveller ailments where the destination uses non-English branding — e.g., in Japan パブロン (cold), ロキソニン (ibuprofen analog), 正露丸 (anti-diarrhoea).
-- **Chronic-medication rule**: chronic medication is captured at intake per [planning-rules.md](planning-rules.md) §Intake (generic name, not brand). By the time planning reaches this section, the Trip Preparation parallel sub-agents have already attached a per-country legality flag for each generic. Use those flags here — if any generic is restricted or illegal at a destination (pseudoephedrine in Japan / UAE, ADHD stimulants in Japan, strong codeine / tramadol in UAE / Singapore), surface the specific drug, the specific country, and the specific alternative (carry a doctor's letter + original prescription + import-permit application window, or substitute with a permitted formulation). Do not re-ask the user for the chronic condition at this stage.
+- **Chronic-medication rule**: chronic medication is captured at intake per [intake.md](intake.md) §5 (generic name, not brand). By the time planning reaches this section, the Trip Preparation parallel sub-agents have already attached a per-country legality flag for each generic. Use those flags here — if any generic is restricted or illegal at a destination (pseudoephedrine in Japan / UAE, ADHD stimulants in Japan, strong codeine / tramadol in UAE / Singapore), surface the specific drug, the specific country, and the specific alternative (carry a doctor's letter + original prescription + import-permit application window, or substitute with a permitted formulation). Do not re-ask the user for the chronic condition at this stage.
+
+### Accessibility & special medical needs (carry-forward from intake)
+
+When the intake captured accessibility or special medical needs per [intake.md](intake.md) §6, the safety block must resolve them by name — do not re-ask, do not defer to "find one locally":
+
+- **Dialysis**: name the booked center + address + confirmation number + session day/time. If unbooked at the time of planning, surface as a blocker (not a to-do) with the typical lead time (4–8 weeks; longer for Maldives / small Greek islands / rural Iceland).
+- **Cabin oxygen**: carrier-specific medical clearance status (requested / approved / denied) + POC model if user-owned. If the carrier does not supply onboard O₂, flag carrier-change as a trip-feasibility issue.
+- **Severe food allergy**: include the allergen card translated into the destination's language (not a phrase-book snippet — a literal card the user can hand to a server). Example Japanese: 「私は落花生アレルギーがあります。摂取するとアナフィラキシーを起こします。調理に落花生・落花生油を一切使わないでください。」Cite the translator or official allergy-association source.
+- **Service animal**: destination-authority paperwork status (quarantine lead time cleared? vaccination/titer dates logged?). If paperwork is incomplete at the time of planning, this is a trip-feasibility blocker, not a safety note.
+- **Sensory sensitivities**: note which planned attractions offer quiet hours / sensory-friendly sessions + how to book them.
 
 ### Rule
 
 - Do not fabricate hospital names. If evidence is thin, fall back to the district-level guidance: "Shibuya has X hospital 24/7 ER — verify current ER hours on their website." Cite source and research date.
+- Accessibility/medical carry-forward items above are **blockers, not notes**. A trip whose dialysis center isn't booked is not a trip waiting on a reminder — it is a trip that cannot proceed in its current shape.
 
 ## 3. Consular / Embassy Support
 
@@ -140,6 +151,24 @@ Include only the risks that are actually significant at the destination, at the 
 
 - Every risk item must be phrased as: **Risk → specific trigger → what the traveller actually does**. Not "watch out for pickpockets" but "On Rome Metro Line A between Termini and Vatican, pickpockets work in teams at rush hour — keep phone in inner zipped pocket, no exceptions."
 - When the risk mitigation tells the traveller how to pick a safer venue (e.g., avoiding tourist-trap restaurants in Trevi / Navona, picking a trustworthy taxi stand, choosing a certified tour operator), **name the destination-authoritative platform** per [travel-sources.md](travel-sources.md) rather than the first rating platform that comes to mind. For Rome restaurants that means Gambero Rosso / TheFork / Dissapore alongside Google Maps and TripAdvisor; for Tokyo dining it means Tabelog; for mainland China 大众点评; for UAE tour operators the DTCM-certified list. Do not default to "TripAdvisor > X.X stars" globally.
+
+### Ethical / responsible-tourism guardrails
+
+Some popular activities at a destination are not safe for the animals, communities, or traveller's own legal exposure — even when Instagram makes them look fine. Flag and redirect rather than recommend by default. Every item: *what to avoid → why → what to recommend instead*.
+
+- **Captive-wildlife contact and rides** — avoid elephant rides / elephant "bathing" / tiger-temple photos / ocean-animal selfies / dolphin-kiss programs / captive-orca shows. Why: routinely correlated with welfare harm (elephants are broken with phajaan; tiger cubs are sedated); and many destinations now fine tourists for contact with protected species. Recommend: observation-only sanctuaries accredited by Global Federation of Animal Sanctuaries (GFAS) or World Cetacean Alliance; in Thailand specifically, redirect to Elephant Nature Park / Boon Lott's rather than ride camps.
+- **Indigenous / ethnic-village "long-neck" photo tours** — Karen / Padaung / hill-tribe photo-stop itineraries in northern Thailand / Myanmar / Laos often route tourism revenue away from the communities themselves. Why: structural exploitation + dignity concerns + some villages are effectively refugee camps operated as attractions. Recommend: community-owned homestays vetted by reputable NGOs (e.g., via Village Life Experience, Fair Trade Tourism certified operators), or skip.
+- **Marine animal interactions** — no-touch rule for sea turtles (skin slime protects them from bacteria), no flash photography near turtle nesting beaches, no whale-shark grabbing or chasing, no chumming for sharks where it alters feeding behaviour. Why: direct biological harm + many destinations impose fines (Maldives, Galapagos, Philippines). Recommend: operators certified by destination marine authority (PADI Green Star + local MPA permit), and refuse any operator that guarantees contact.
+- **Orphanage / children's-home visits** — "voluntourism" short-stay orphanage tours in Cambodia / Nepal / Haiti etc. are now widely documented as harmful (attachment disruption for children, and perversely an incentive to recruit non-orphan children into orphanages). Why: UNICEF and Lumos have both flagged this. Recommend: do not schedule. If the user wants meaningful impact, redirect to community-program donations from home or structured multi-week placements with reputable NGOs.
+- **Unregulated wildlife consumption / "cultural" products** — refuse to include restaurants / markets selling wildlife meat (pangolin, shark fin, bushmeat), ivory / tortoiseshell / coral souvenirs, or "traditional medicine" products from endangered species. Why: CITES customs seizure at return leg is non-trivial, plus destination law in many places. If local cuisine has a problematic item (shark fin soup in Chinese banquet menus, whale meat in parts of Japan, bushmeat in parts of West/Central Africa), note it and recommend the alternative item from the same venue.
+- **Drug tourism** — do not recommend bhang lassi in India, mushroom / ayahuasca / coca products even where culturally tolerated, cannabis "coffee shops" in jurisdictions where legal status is recent or conditional (some US states restrict tourist purchase IDs). Why: legal status can differ for foreigners vs. locals, and return-country drug-test consequences persist. State the legal gap rather than describing the activity.
+- **Disaster / poverty tourism** — refugee-camp tours, active war zones, favela-tour operators not invited by residents, recent-disaster "voyeur" tours (e.g., Chernobyl exclusion zone during active conflict, Fukushima exclusion zone without proper permit). Why: community-consent issues + active safety risk + some operators run outside legal tourism frameworks. If the user's goal is understanding, recommend museums / memorials / community-led walking tours instead.
+
+### Rule (ethical guardrails)
+
+- When the user's request includes any of the above by name (e.g., "elephant ride Chiang Mai", "orphanage visit Cambodia"), **redirect proactively** — do not silently drop the item. Phrase it as *"[X] is widely flagged for [reason] — recommend [Y] instead because [reason]"*. Let the user override if they still want it, but the default is redirect.
+- When the itinerary would naturally include a red-flag item (e.g., Tiger Kingdom in Chiang Mai, SeaWorld orca show, long-neck village day-trip), flag it at the draft stage, not at the final-check stage.
+- Do not moralise at length. One-line phrasing + one redirect alternative. The goal is a different itinerary item, not a lecture.
 
 ## 7. Output Placement
 

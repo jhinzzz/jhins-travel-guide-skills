@@ -3,78 +3,472 @@
     "id": 1,
     "scenario": "happy-path",
     "prompt": "我想五一假期（5月1日-5月3日）和女朋友去杭州玩3天，预算5000元，我们从上海出发，喜欢吃本帮菜和杭帮菜",
-    "expected": "分类为 planning-only；先规划上海→杭州往返高铁（含购票时间、票价区间、到站时间）；天气感知的3天行程大纲；酒店方向建议；餐饮嵌入每日卡片；推荐杭州特产（龙井茶、丝绸等）并标注来源；所有价格和时刻表标注数据来源和查询日期"
+    "assertions": {
+      "mode": "planning-only",
+      "must_contain": [
+        "往返高铁",
+        "龙井"
+      ],
+      "must_cite_source_for": [
+        "high-speed rail price range",
+        "high-speed rail schedule window",
+        "Longjing tea shop recommendation"
+      ],
+      "must_have_section": [
+        "round-trip transport",
+        "day-by-day outline",
+        "budget estimate",
+        "hotel direction",
+        "specialty highlights"
+      ],
+      "must_not_contain_literal": [
+        "G7501",
+        "G7503",
+        "¥675"
+      ],
+      "rule_refs": [
+        "weather-and-output.md §2",
+        "transportation.md §Evidence Standard",
+        "dining-rules.md §1",
+        "local-specialties.md §Evidence Standard"
+      ],
+      "notes": "五一触发国内 peak period — dining calendar check required; pre-trip recheck block optional for planning-only."
+    }
   },
   {
     "id": 2,
     "scenario": "existing-content-refactor",
     "prompt": "我有一份去大阪5天的零散旅行笔记（含酒店预订截图、餐厅清单、景点收藏），帮我整理成一份完整的行程指南页面",
-    "expected": "分类为 existing-page-refactor；先盘点已有内容不删除；规划往返航班；按日重组内容；产出 markdown + HTML 双交付物；保留原始参考；推荐大阪特产（551蓬莱肉包、りくろーおじさん芝士蛋糕等）并标注来源和海关提示"
+    "assertions": {
+      "mode": "existing-page-refactor",
+      "must_contain": [
+        "inventory",
+        "往返航班",
+        "海关"
+      ],
+      "must_have_section": [
+        "existing-content inventory before edits",
+        "markdown deliverable",
+        "HTML deliverable",
+        "specialty cards with customs flags",
+        "pre-trip recheck block or justification if not peak"
+      ],
+      "must_preserve": [
+        "all user-provided hotel bookings",
+        "all user-provided restaurant names",
+        "all user-provided attraction saves"
+      ],
+      "must_not_drop_existing_content": true,
+      "rule_refs": [
+        "SKILL.md §Classify The Task First",
+        "weather-and-output.md §2",
+        "local-specialties.md §Customs and Transport Constraints"
+      ]
+    }
   },
   {
     "id": 3,
     "scenario": "incomplete-inputs",
     "prompt": "下个月想出去玩几天，有什么建议？",
-    "expected": "触发 fallback 规则；按 intake 顺序逐一追问（日期→目的地→目的→口味→预算→交通偏好）；不编造具体内容；停留在 scaffold 模式"
+    "assertions": {
+      "mode": "scaffold / inspiration first, then planning-only",
+      "must_offer_destination_inspiration": 2,
+      "must_offer_destination_inspiration_max": 3,
+      "intake_order_followed": [
+        "dates",
+        "destination",
+        "purpose/theme",
+        "food preferences",
+        "budget",
+        "transport preference"
+      ],
+      "must_not_contain": [
+        "specific flight number",
+        "specific hotel name without user destination",
+        "specific fare"
+      ],
+      "must_ask_one_at_a_time_or_batch_up_to_three": true,
+      "rule_refs": [
+        "intake.md",
+        "SKILL.md §Fallback Rules (Missing dates/destination)"
+      ]
+    }
   },
   {
     "id": 4,
     "scenario": "specialty-focused",
     "prompt": "我下周去成都3天，想带点当地特产和手信回来送朋友，有什么推荐？顺便帮我规划下行程",
-    "expected": "分类为 planning-only；特产推荐作为核心输出之一（火锅底料、灯影牛肉、蜀绣、竹叶青茶等），每项标注 tier（signature/recommended/niche）、推荐购买地点、价格区间、来源（至少两个平台交叉验证）、运输注意事项；嵌入每日行程卡片中靠近对应购买地点；国内行程无需海关提示但需注意航空液体限制"
+    "assertions": {
+      "mode": "planning-only",
+      "specialty_recommendations_required": true,
+      "specialty_card_fields_per_item": [
+        "tier (signature/recommended/niche/skip)",
+        "recommended shop or outlet",
+        "price range in CNY",
+        "source (≥2 cross-referenced)",
+        "transport notes (liquid limit / fragility / shelf life)"
+      ],
+      "must_include_candidate_items": [
+        "火锅底料",
+        "灯影牛肉",
+        "蜀绣",
+        "竹叶青茶"
+      ],
+      "must_embed_specialty_shops_in_matching_day_card": true,
+      "must_include_airline_liquid_limit_note": true,
+      "must_not_include_customs_note": "domestic trip — no border customs",
+      "rule_refs": [
+        "local-specialties.md §Selection Criteria",
+        "local-specialties.md §Integration with Daily Itinerary"
+      ]
+    }
   },
   {
     "id": 5,
     "scenario": "international-with-traceability",
     "prompt": "春节想带家人去东京玩5天，预算2万，从北京出发，帮我做个完整攻略",
-    "expected": "分类为 guide-redesign；所有航班价格标注来源（如携程/Skyscanner）和查询日期；酒店推荐标注来源（如 Booking.com/Trip.com）和查询日期；交通方案标注来源（如 Navitime/12306）；特产推荐（白色恋人、东京香蕉蛋糕、抹茶制品等）标注来源和海关限制；不出现任何无来源的价格或班次号"
+    "assertions": {
+      "mode": "guide-redesign",
+      "must_cite_source_for": [
+        "every flight price",
+        "every hotel rate",
+        "every transport schedule",
+        "every specialty price"
+      ],
+      "must_not_contain_fabricated": [
+        "specific flight number",
+        "specific train number",
+        "exact departure time without source"
+      ],
+      "must_have_section": [
+        "trip preparation checklist (visa/payment/SIM/insurance/etiquette)",
+        "safety & emergency full section",
+        "pre-trip recheck block (Spring Festival overlap)",
+        "specialty cards with Japan customs + airline liquid flags"
+      ],
+      "must_trigger_parallel_verification": [
+        "trip-prep (single country ≥2 — not applicable here; single country OK)",
+        "dining if ≥5 picks",
+        "hotels if >4 candidates"
+      ],
+      "rule_refs": [
+        "SKILL.md §Data Traceability",
+        "trip-prep.md",
+        "dining-rules.md §3 (Spring Festival / New Year peak)",
+        "safety-and-emergency.md"
+      ]
+    }
   },
   {
     "id": 6,
     "scenario": "peak-season-dining-rigor-japan",
     "prompt": "黄金周（5月1日-5月6日）两个人去东京6天，预算5万元，爱吃日料，帮我做行程，重点是每天的午晚餐",
-    "expected": "分类为 guide-redesign；触发并行子 agent 批量验证餐厅运营状态（Tabelog + 官网 + Google Maps 停业标识）；品类矩阵保证跨天不重复（寿司/涮涮锅/天妇罗/烧肉/鳗鱼饭/居酒屋/刺身 等最多各一次，除非用户明确要求重复）；每家餐厅核查 5/1-5/6 期间每一天是否营业（日祝休 + GW 特别休業 必查）；带行政区的餐厅（恵比寿/銀座/新宿 等）核验官网地址字段一致性；每家餐厅卡片含四字段：品类 · 平台评分（Tabelog 标尺） · 距站步行 · 人均价位（JPY）；晚餐所在区与当晚活动区一致（步行 10 分钟内）；预订渠道+提前量（米其林 2-4 周/GW+2 周，人气店 1-2 周/GW+1 周）；文档末尾含「出发前 3-5 天复查」块，列出所有不定休 / 日祝休 / 可能 GW 休業 的餐厅"
+    "assertions": {
+      "mode": "guide-redesign",
+      "must_trigger_parallel_sub_agents_for": "dining verification (≥5 venues)",
+      "must_include_status_line": "Dispatched N sub-agents for venue verification",
+      "cuisine_matrix_no_repeats": true,
+      "cuisine_matrix_candidate_categories": [
+        "sushi",
+        "shabu-shabu",
+        "tempura",
+        "yakiniku",
+        "unagi",
+        "izakaya",
+        "sashimi",
+        "ramen",
+        "soba"
+      ],
+      "per_restaurant_card_required_fields": [
+        "cuisine category",
+        "Tabelog rating",
+        "walking minutes from station",
+        "per-person price band (JPY)"
+      ],
+      "tabelog_rating_floor": {
+        "casual": 3.45,
+        "sushi_sashimi_highend": 3.55,
+        "michelin_adjacent": 3.8
+      },
+      "must_check_target_date_for_each_restaurant": [
+        "regular 日祝休",
+        "GW-specific 特別休業"
+      ],
+      "ward_consistency_check": "restaurant name district must match official address district",
+      "reservation_lead_time_shown": {
+        "michelin_tier": "2–4 weeks + GW +2 weeks",
+        "popular": "1–2 weeks + GW +1 week"
+      },
+      "must_have_section": [
+        "pre-trip recheck block (3–5 days before departure)"
+      ],
+      "rule_refs": [
+        "dining-rules.md §§1-10"
+      ]
+    }
   },
   {
     "id": 7,
     "scenario": "peak-season-dining-rigor-europe",
     "prompt": "圣诞节期间（12月22日-12月28日）和老婆去罗马7天，预算每人 15000 元人民币（机票之外），想吃地道的意面、披萨、海鲜，帮我做完整行程",
-    "expected": "分类为 guide-redesign；品类矩阵跨天去重（pasta / pizza / osteria / trattoria / seafood / risotto 等）；每家餐厅核查 12/22-12/28 期间每天是否营业（Sunday / Monday / 24 晚 / 25 全天 / 26 白天 闭店风险最高）；Trastevere / Monti / Testaccio 等片区名的餐厅要核对 via 字段在该区；每家卡片含四字段：品类 · TripAdvisor/Google Maps 评分 · 距酒店或地标步行 · 人均价位（EUR，Value/Mid/High 对应罗马本地线）；预订渠道 OpenTable / TheFork / 官网电话；文档末尾含「出发前 3-5 天复查」块：重点列出 Natale（25）/ Santo Stefano（26）特别营业的餐厅以及 24 晚预约状态"
+    "assertions": {
+      "mode": "guide-redesign",
+      "cuisine_matrix_no_repeats": true,
+      "cuisine_matrix_candidate_categories": [
+        "pasta",
+        "pizza",
+        "osteria",
+        "trattoria",
+        "seafood",
+        "risotto"
+      ],
+      "must_check_target_date_for_each_restaurant": [
+        "Sunday closures",
+        "Monday closures",
+        "Natale 25 closures",
+        "Santo Stefano 26 closures",
+        "Dec 24 evening reservation windows"
+      ],
+      "ward_consistency_check": "restaurant name district (Trastevere / Monti / Testaccio) must match via address",
+      "per_restaurant_card_required_fields": [
+        "cuisine category",
+        "TripAdvisor or Google Maps rating",
+        "walking minutes from hotel or anchor",
+        "per-person price band (EUR, Value/Mid/High calibrated to Rome)"
+      ],
+      "reservation_channels_allowed": [
+        "OpenTable",
+        "TheFork",
+        "official site",
+        "phone"
+      ],
+      "must_have_section": [
+        "pre-trip recheck block listing Natale/Santo Stefano special hours + Dec 24 reservation status"
+      ],
+      "rule_refs": [
+        "dining-rules.md §§1-10",
+        "travel-sources.md §Per-Person Price Tiers"
+      ]
+    }
   },
   {
     "id": 8,
     "scenario": "restaurant-swap-cascade",
     "prompt": "我看了一下你推荐的 Day 3 晚餐「こんぶや 恵比寿」，好像永久停业了，请换一家，并检查其他日子的餐厅有没有类似问题",
-    "expected": "先验证所指餐厅停业状态（查本地平台页面 / 官网 / Google Maps）；替换时遵守品类矩阵不重复；新店的行政区与原名一致；执行 §9 级联更新（主视图 + 餐厅详情卡 + 出发前复查块 + 所有含该店名的标题/锚点 + 品类矩阵释放并重新占位）；顺便对其他日子所有餐厅起并行子 agent 核验运营状态，返回结构化汇总；最终告知用户具体改了几处、释放/占用了哪些品类"
+    "assertions": {
+      "must_verify_closure_before_replacing": [
+        "Tabelog page status",
+        "official site",
+        "Google Maps 'Permanently closed'"
+      ],
+      "replacement_must_satisfy": [
+        "cuisine matrix (no repeat with already-selected)",
+        "ward consistency (same as original Ebisu)"
+      ],
+      "must_execute_cascade_updates_in": [
+        "day-3 meal line",
+        "restaurant detail card",
+        "pre-trip recheck block",
+        "all headings/anchors referencing old name",
+        "cuisine matrix (free old / occupy new)"
+      ],
+      "must_dispatch_parallel_sub_agents_for": "remaining days' restaurants operating-status recheck",
+      "must_report_to_user": [
+        "list of updated locations",
+        "categories freed/occupied"
+      ],
+      "rule_refs": [
+        "dining-rules.md §2",
+        "dining-rules.md §9",
+        "dining-rules.md §10"
+      ]
+    }
   },
   {
     "id": 9,
     "scenario": "self-drive-domestic-china",
     "prompt": "6月下旬从成都出发自驾川西小环线 5 天，带父母，帮我规划",
-    "expected": "分类为 planning-only 或 guide-redesign（按用户后续回复）；每个驾驶日明确起终点 + 分段公里数 + 预计驾驶时长（含海拔 / 烂路缓冲）；路书 APP 明确为**高德地图（Amap）**，并建议每天的驾驶段存为多点收藏路线（路书）；高海拔 / 信号弱区段（折多山 / 海子山 / 色达）要求预下载离线地图；国内驾照本地直接适用，**无需 IDP**，不要错误触发 JAF 或国际驾照规则；油费 / 过路费 / 停车估算进入预算分类；每日餐饮遵守品类矩阵不重复（川菜 / 藏餐 / 卤味 / 酥油茶馆 / 面食 等按日轮换）；所有事实标注来源和查询日期"
+    "assertions": {
+      "driving_licence_rule": "domestic Chinese licence applies directly — MUST NOT trigger IDP or JAF translation rule",
+      "daily_driving_ceiling_lowered_because": "elderly parents + potential high-altitude segments",
+      "daily_driving_ceiling_max_hours": 5,
+      "high_altitude_segments_flag_required": [
+        "折多山",
+        "海子山",
+        "色达"
+      ],
+      "offline_maps_required": true,
+      "route_book_app_named": "高德地图 (Amap)",
+      "route_book_app_not": "Google Maps",
+      "per_driving_day_fields": [
+        "total distance (km)",
+        "total driving time",
+        "longest single uninterrupted segment"
+      ],
+      "cuisine_matrix_no_repeats_candidate_categories": [
+        "川菜",
+        "藏餐",
+        "卤味",
+        "酥油茶",
+        "面食"
+      ],
+      "budget_must_include": [
+        "fuel",
+        "toll",
+        "parking"
+      ],
+      "rule_refs": [
+        "transportation.md §Rental Car / Self-Drive",
+        "intake.md §8"
+      ]
+    }
   },
   {
     "id": 10,
     "scenario": "self-drive-international-iceland",
     "prompt": "9月中旬从雷克雅未克出发自驾冰岛环岛 8 天，夫妻两人，帮我做完整攻略",
-    "expected": "分类为 guide-redesign；租车预订窗口 4–6 周（Ring Road 旺季）；驾照要求：有效国内驾照 + IDP；保险选项（CDW + gravel + sand & ash）在租车预算中明示；路书 APP 明确为 **Google Maps**，每日分段为多停留点路线，并**强制离线地图下载**（东部峡湾 / 高地 F-roads 信号弱）；Waze 作为实时堵车补充；每日驾驶时长上限建议 4–5 小时留出观光缓冲；加油站密度低的区段（高地 / 东峡湾）标注；航班 / 酒店 / 餐厅推荐全部标注来源和查询日期；海关与液体限制不适用（欧盟内），但冰岛 → 中国/美国返程携带 skyr / 羊毛制品的过境规则需标注"
+    "assertions": {
+      "mode": "guide-redesign",
+      "rental_booking_window_weeks": "4–6",
+      "driving_licence_required": "valid home licence + IDP",
+      "insurance_options_in_budget": [
+        "CDW",
+        "gravel",
+        "sand & ash"
+      ],
+      "route_book_app_named": "Google Maps",
+      "waze_as_traffic_supplement": true,
+      "offline_maps_required": true,
+      "daily_driving_ceiling_hours": "4–5",
+      "low_fuel_station_segments_flagged": [
+        "Highlands",
+        "Eastfjords"
+      ],
+      "customs_flags_for_return_leg": [
+        "skyr",
+        "wool products (CN/US customs)"
+      ],
+      "must_cite_source_for": [
+        "rental rates",
+        "hotel rates",
+        "flight prices"
+      ],
+      "rule_refs": [
+        "transportation.md §Rental Car / Self-Drive",
+        "local-specialties.md §Customs and Transport Constraints"
+      ]
+    }
   },
   {
     "id": 11,
     "scenario": "pace-theme-conflict",
     "prompt": "10月想和老婆去巴厘岛玩7天，我们既想体验潜水冲浪火山徒步这种冒险活动，也想有spa泡汤懒躺海边这种放松度假，预算3万",
-    "expected": "intake 识别 adventure + wellness 两个主题冲突 + pace 未明示；触发 Confirmation Checkpoint（theme-conflict）要求用户定边界（哪几天 adventure / 哪几天 wellness，或 per-day 切分）；pace 追问 tight / balanced / leisurely；不未经确认就产出混合 7 天行程；输出 hero 区明示 theme + pace 两项，每日卡密度与 pace 一致（leisurely = 1–2 anchors/day，不能塞满）；印尼入境 + 签证（中国公民免签落地 30 天）+ 支付 + SIM + 礼仪（印度教寺庙着装 / 遮肩膝；左手禁忌；公共场合 PDA 限制）；安全块含当地紧急号码（110 警察 / 118 救护 / 113 消防）、一家游客友好医院（如 BIMC Hospital Kuta）、中国驻登巴萨总领馆（含 24h 应急线）、保险理赔热线、海洋活动风险具体写法（"8–10 月西海岸浪涌，Padang Padang 中午高潮危险，潜水只用 PADI 5-star 认证中心"）"
+    "assertions": {
+      "must_trigger_confirmation_checkpoint": [
+        "theme conflict (adventure + wellness)",
+        "pace missing"
+      ],
+      "must_not_draft_itinerary_before_user_resolves": true,
+      "hero_must_state": [
+        "theme",
+        "pace"
+      ],
+      "daily_density_must_match_pace": true,
+      "must_have_trip_prep": [
+        "Indonesia visa (China passport visa-on-arrival 30 days)",
+        "payment methods",
+        "SIM recommendation",
+        "etiquette (Hindu temple dress, left-hand taboo, PDA limits)"
+      ],
+      "must_have_safety_block": {
+        "emergency_numbers": ["110", "118", "113"],
+        "foreigner_hospital_example": "BIMC Hospital Kuta",
+        "consulate": "Chinese Consulate Denpasar with after-hours line",
+        "ocean_risk_phrasing": "Aug–Oct west coast swell; midday Padang Padang high-tide hazard; dive only with PADI 5-star operators"
+      },
+      "rule_refs": [
+        "intake.md §3, §4",
+        "SKILL.md §Confirmation Checkpoints",
+        "safety-and-emergency.md §6"
+      ]
+    }
   },
   {
     "id": 12,
     "scenario": "multi-country-safety-parallel",
     "prompt": "明年春节（2月10日-2月22日）全家四口（父母+我+我老婆）去日韩泰三国串联：东京4天+首尔4天+曼谷4天，从北京出发，预算8万元，爸爸有高血压在吃药",
-    "expected": "触发 §Trip Preparation Parallel Verification（≥2 国自动 spawn 2 sub-agents 按国分）+ §Safety §9（≥2 城 spawn 2–3 sub-agents）；春节触发 dining 品类矩阵跨城跨天去重 + 出发前 3–5 天复查块 + 春节海外出行溢价预警；每国独立列：签证（日本个人旅游 5-7 工作日；韩国免签 15 天；泰国免签 30 天）、主要货币 + 支付方式、eSIM 推荐、紧急号码（日本 110/119；韩国 112/119；泰国 191/1669/1155 tourist police）、至少一家 foreigner-friendly 医院 + 中国驻该城总领馆 + 保险理赔热线；爸爸高血压药物：东京+首尔 OK；泰国需确认具体药物成分，伪麻黄素在日本受限要检查；礼仪红线 per 国（日本 tatami 脱鞋 / 泡汤纹身；韩国 年长者先 / 敬酒；泰国 不摸头 / 不指脚 / 王室图像尊重）；每段城际机票/高铁标源 + 研究日期；8万预算对四口人可能偏紧，触发 budget >15% 确认"
+    "assertions": {
+      "must_trigger_parallel_sub_agents": [
+        "trip-prep (≥2 countries → 2 sub-agents by country)",
+        "safety (≥2 cities → 2–3 sub-agents)"
+      ],
+      "must_trigger_budget_overage_check": "8万 for 4 pax across 3 countries — likely >15% over; confirm",
+      "chronic_medication_legality_per_country": {
+        "Japan": "hypertension meds OK; verify exact drug",
+        "Korea": "likely OK; verify",
+        "Thailand": "verify pseudoephedrine-like combinations"
+      },
+      "per_country_required_rows": [
+        "visa",
+        "primary currency + payment",
+        "eSIM",
+        "emergency numbers",
+        "foreigner hospital",
+        "Chinese consulate + after-hours",
+        "insurer claim hotline"
+      ],
+      "expected_emergency_numbers": {
+        "Japan": ["110", "119"],
+        "Korea": ["112", "119"],
+        "Thailand": ["191", "1669", "1155"]
+      },
+      "must_cite_source_for": [
+        "every intercity flight/train fare",
+        "every hotel rate"
+      ],
+      "spring_festival_pretrip_recheck_block_required": true,
+      "cuisine_matrix_spans_all_three_cities": true,
+      "rule_refs": [
+        "trip-prep.md §1",
+        "safety-and-emergency.md §9"
+      ]
+    }
   },
   {
     "id": 13,
     "scenario": "ramadan-etiquette-rigor",
     "prompt": "3月下旬（斋月期间）带 8 岁女儿去迪拜 5 天玩，预算 4 万，想看哈利法塔 + 沙漠越野 + 购物",
-    "expected": "intake 必问 pace（带小孩更倾向 balanced / leisurely）；斋月日历核对：3 月下旬 2026 年可能在斋月期间（需 WebFetch 核实具体日期）；礼仪红线必出且是「situation → specific action」格式：白天公共场所不吃喝抽烟（连水也不行），着装 modest（女士肩膝遮盖），斋月开斋 Iftar 约日落 18:30-19:00 所有餐厅排长队须提前订，酒吧仅持牌酒店内营业；每日 itinerary 避免白天户外长时间活动（与 8 岁小孩 + 40°C+ 气温双重叠加）、沙漠越野建议 Platinum Heritage / Arabian Adventures 等 DTCM 认证运营商（不能默认 TripAdvisor > 4.0）、哈利法塔改为傍晚场（日落+夜景，避开白天高温 + 与开斋时段错峰）；安全块：警察 999 / 急救 998 / 医院名（American Hospital Dubai 或 Mediclinic）、中国驻迪拜总领馆 —— §3 缺号禁令：电话字段留空 + 「→ Fetch from official site before departure: http://dubai.china-consulate.gov.cn/」；女童独立入境阿联酋海关可能询问父母关系，建议携带出生证明 + 母亲同行委托书；斋月出租车司机可能 iftar 时段短暂停运，预留缓冲"
+    "assertions": {
+      "must_verify_ramadan_exact_dates_for_year": true,
+      "must_ask_pace_with_child": "balanced or leisurely preferred",
+      "etiquette_phrasing_format": "situation → specific action",
+      "must_have_etiquette_items": [
+        "no daytime eating/drinking/smoking in public (including water)",
+        "modest dress (shoulders + knees covered for women)",
+        "Iftar sunset window — restaurant queues; book ahead",
+        "alcohol only inside licensed hotels"
+      ],
+      "itinerary_adaptation": [
+        "Burj Khalifa moved to evening (sunset/night, avoid midday + clash with Iftar)",
+        "desert safari in cooler window",
+        "no long daytime outdoor activity with child in 40°C+"
+      ],
+      "tour_operator_vetting_source": "DTCM / visitdubai.com certified list — NOT generic TripAdvisor floor",
+      "safety_block_required": {
+        "emergency_numbers": ["999", "998", "997"],
+        "foreigner_hospital_example": ["American Hospital Dubai", "Mediclinic"],
+        "consulate_phone_rule": "if exact number unverifiable — leave phone blank + '→ Fetch from http://dubai.china-consulate.gov.cn/' per §3 partial-number ban"
+      },
+      "minor_entry_documents": [
+        "birth certificate",
+        "mother consent letter if single-parent accompanying"
+      ],
+      "rule_refs": [
+        "SKILL.md §Confirmation Checkpoints (Ramadan)",
+        "safety-and-emergency.md §3 (partial number ban)",
+        "safety-and-emergency.md §6 (DTCM vetting)",
+        "trip-prep.md §6"
+      ]
+    }
   }
 ]

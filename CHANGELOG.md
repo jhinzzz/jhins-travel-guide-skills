@@ -1,5 +1,7 @@
 # Changelog
 
+[English / CHANGELOG_EN.md](./CHANGELOG_EN.md)
+
 记录 jhins-trip-planner 这个 skill 的迭代轨迹。每个版本回答两个问题：**改了什么**、**为什么改**。最新版本在最上面。
 
 版本号遵循 semver 的精神：
@@ -23,12 +25,12 @@ Case 13（迪拜 5 天 + 斋月 + 8 岁女儿）QA 模拟暴露：
 
 ### Added
 
-- `.gitignore` — 显式声明 `session-learnings-*.md`（个人会话笔记）和 `.omc/`（工具生成目录）不进 git。取代"靠遗忘不 track"的软约束。
+- `.gitignore` — 显式声明 `session-learnings-*.md`（个人会话笔记）和本地生成的缓存目录不进 git。取代"靠遗忘不 track"的软约束。
 - `FUTURE.md` 第 1 条补一句说明：`test-prompts.json` 的 `rule_refs` 字段是"给人看的注释"而非机器 assertion，`check-links.sh` 不扫 JSON。避免未来把这些引用误当成 harness 依赖。
 
 ### Why
 
-来自 v0.6.0-v0.6.2 的 `/review` pre-landing 审查发现的 3 条 informational — mechanical fix，一并 bump。
+来自 v0.6.0-v0.6.2 的内部 pre-landing review 发现的 3 条 informational — mechanical fix，一并 bump。
 
 ## [0.6.2] — 2026-04-22
 
@@ -113,12 +115,46 @@ Case 13（迪拜 5 天 + 斋月 + 8 岁女儿）QA 模拟暴露：
 - **Travel sources** — `travel-sources.md`：canonical 数据源清单（平台 × 用途对应表）+ 引用格式 + 评分门槛。
 - **Data traceability hard constraint** — 所有价格 / 时刻 / 评分 / 可用性必须 cite source + research date，never 编造具体航班号 / 车次 / 店名。
 
-## [0.3.0] — 2026-04-20
+### Changed
+
+- 11 轮内部 skill 质量迭代后的一批综合优化（下列条目）：
+  - 明显路线（上海→杭州高铁这类）不再阻塞询问交通偏好，直接给主要方式 + 替代。
+  - Intake 批量化：缺 3 个以上核心输入时批量提问；模糊请求自动提供目的地灵感。
+  - 预算超标 15% 触发确认检查点。
+  - 约束冲突时显式暴露 + 提供优先级选项。
+  - 临时出行（48h 内）fallback：跳过订票窗口，优先实时渠道。
+  - 缓冲时间量化：附近（~1 km / 10 min）vs 跨区（>1 km / 换乘）vs 带行李（+10-15 min）。
+  - 输出验证从"检查截图"改为具体 HTML 验证标准（375px 视口、断链）。
+  - 工作流编号连续化（1-11）。
+  - Editing Rules 去重；Final Check 改为引用式校验。
+  - `hotel-selection.md` 和 `transportation.md` 的证据标准统一引用 `travel-sources.md`。
+
+## [0.3.0] — 2026-04-19
 
 ### Added
 
 - 首个版本号化 release。前面的内容包括：intake 顺序、hotel selection、transport 基础规则、mode-specific scope 表、多语言自动检测。
 - 开源协议改为 MIT（之前短暂用过 CC BY-SA 4.0）。
+
+## [0.2.0] — 2026-04-18
+
+### Added
+
+- 完整行前准备（签证 / 支付 / SIM / 保险）。
+- 预订规则与 J-person 严谨度。
+- Mode-Specific Scope 表格。
+- 酒店推荐具体性增强。
+- Frontmatter 触发词。
+- 跨文件交通规则去重。
+- 完整的交通规划体系。
+
+## [0.1.0] — 2026-04-17
+
+### Added
+
+- 初始 skill：按日行程工作流。
+- Plugin-first 仓库结构。
+- 支持 Claude Code 和 Codex 安装。
 
 ## 更早（无版本号）— 2026-04-19 至 2026-04-20
 

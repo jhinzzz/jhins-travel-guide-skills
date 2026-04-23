@@ -8,7 +8,23 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
-## [0.7.0] — 2026-04-23
+## [0.7.1] — 2026-04-23
+
+### Fixed
+
+- **Plugin 元数据版本漂移** — `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.json`（两处）原本还停留在 `0.5.2`，本版统一到 `0.7.1`。之前的 `/plugin install` 流程会读到陈旧元数据。
+
+### Added
+
+- **Release hygiene 三件套** —— 四个 check 形成完整守门员：
+  - `scripts/check-version.sh` — VERSION 与 SKILL.md、plugin.json、marketplace.json 的版本号必须一致，漂移即退 1。
+  - `scripts/check-size.sh` — SKILL.md > 250 行 → error；reference/*.md > 220 行 → warn，> 260 行 → error。阈值对齐 v0.6.0 "规则疲劳"的历史教训（当时 SKILL.md 从 331 行砍到 190）。
+  - `scripts/check-all.sh` — 聚合跑 `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh`，一键替代手动 checklist。
+- README / README_CN 的 Release checklist 指向 `scripts/check-all.sh`。
+
+### Why
+
+上一个版本（v0.7.0）的 commit summary 里明说过 plugin.json / marketplace.json 的 0.5.2 漂移"不属于本 PR 范围" —— 这是借口。这版把它修掉，顺便把"发版前人工跑一遍"变成"一条命令跑四个正交 check"的机器契约。FUTURE §3 的 "SKILL.md 再长回去"风险现在也堵住了。
 
 ### Added
 

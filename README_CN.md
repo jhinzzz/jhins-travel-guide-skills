@@ -33,6 +33,9 @@
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md)：安全与应急规则 — 目的地紧急号码、医疗就近、领事支持、保险理赔路径、失窃/丢失响应、目的地特定风险
 - [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md)：反向索引 — 每条规则 heading 被 test-prompts.json 的哪些 case 覆盖
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh)：校验 `test-prompts.json` 里每个 `rule_refs` 锚点指向的 heading 真实存在
+- [`scripts/check-version.sh`](./scripts/check-version.sh)：`VERSION` 必须和 `SKILL.md` / `plugin.json` / `marketplace.json` 对齐
+- [`scripts/check-size.sh`](./scripts/check-size.sh)：`SKILL.md` 和 reference 文件必须落在规则疲劳阈值之下
+- [`scripts/check-all.sh`](./scripts/check-all.sh)：聚合脚本 — 一条命令跑上面四个 check
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装
@@ -153,13 +156,12 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 
 ## 发布检查清单
 
-每次更新前，至少检查：
+每次更新前：
 
-1. [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json) 里的版本号
-2. [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json) 里的版本号
-3. [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md) 是否仍与 references 一致
-4. [`agents/openai.yaml`](./agents/openai.yaml) 是否仍与当前 skill 行为一致
-5. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试
+1. 先 bump `VERSION`，然后跑 [`scripts/check-all.sh`](./scripts/check-all.sh) —— 它会依次跑 `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh`，任何一项回归（跨文件引用断链、test_refs 锚点漂移、版本号不对齐、规则疲劳膨胀）都会退出 1。
+2. 核对 [`agents/openai.yaml`](./agents/openai.yaml) 是否仍与当前 skill 行为一致。
+3. 在 [`CHANGELOG.md`](./CHANGELOG.md) + [`CHANGELOG_EN.md`](./CHANGELOG_EN.md) 里加新版本条目（改了什么、为什么）。
+4. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试。
 
 ## 版本变动
 

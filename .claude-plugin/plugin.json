@@ -1,7 +1,7 @@
 {
   "name": "jhins-trip-planner",
   "description": "End-to-end trip planner: pre-trip prep, round-trip transport, hotels, day-by-day itineraries with weather and buffer times, route-fit dining, local specialties, categorized budget, and source-traceable recommendations. Three modes: planning advice, guide redesign, or page refactor.",
-  "version": "0.5.2",
+  "version": "0.7.1",
   "author": {
     "name": "jhinzzz"
   },

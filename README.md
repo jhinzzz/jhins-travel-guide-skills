@@ -33,6 +33,9 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md): safety and emergency rules — destination-specific emergency numbers, medical access, consular support, insurance claim path, theft / loss response, and destination-specific risk notes
 - [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md): reverse index — which test-prompts.json case covers which rule heading
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh): validates every `rule_refs` anchor in `test-prompts.json` resolves to a real heading
+- [`scripts/check-version.sh`](./scripts/check-version.sh): `VERSION` must match `SKILL.md` / `plugin.json` / `marketplace.json`
+- [`scripts/check-size.sh`](./scripts/check-size.sh): `SKILL.md` and reference files must stay under the rule-fatigue thresholds
+- [`scripts/check-all.sh`](./scripts/check-all.sh): aggregator — runs all four checks above in one command
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace
@@ -150,11 +153,10 @@ Expected outputs:
 
 Before publishing an update:
 
-1. Update plugin version in [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json)
-2. Update marketplace version in [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)
-3. Verify [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md) still matches the references
-4. Verify [`agents/openai.yaml`](./agents/openai.yaml) still matches the current skill behavior
-5. Test in Claude Code locally if possible
+1. Bump `VERSION`, then run [`scripts/check-all.sh`](./scripts/check-all.sh) — this runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` and fails if any of them flag a regression (stale anchors, version drift, rule-fatigue bloat, broken cross-file references).
+2. Verify [`agents/openai.yaml`](./agents/openai.yaml) still matches the current skill behavior.
+3. Add a [`CHANGELOG.md`](./CHANGELOG.md) + [`CHANGELOG_EN.md`](./CHANGELOG_EN.md) entry for the new version (what changed, why).
+4. Test in Claude Code locally if possible.
 
 ## Changelog
 

@@ -8,7 +8,23 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
-## [0.7.0] — 2026-04-23
+## [0.7.1] — 2026-04-23
+
+### Fixed
+
+- **Plugin metadata version drift** — `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (two places) were still pinned at `0.5.2`. Bumped to `0.7.1`. Prior `/plugin install` flows were reading stale metadata.
+
+### Added
+
+- **Release hygiene pack** — four checks now form a full gate:
+  - `scripts/check-version.sh` — VERSION must agree with SKILL.md, plugin.json, marketplace.json; any drift exits 1.
+  - `scripts/check-size.sh` — SKILL.md > 250 lines → error; `reference/*.md` > 220 warn / > 260 error. Thresholds aligned with the v0.6.0 "rule fatigue" lesson (SKILL.md was trimmed from 331 → 190 lines).
+  - `scripts/check-all.sh` — aggregator runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` in one command, replacing the manual release checklist.
+- README / README_CN Release checklist now points to `scripts/check-all.sh`.
+
+### Why
+
+The v0.7.0 commit summary explicitly called the 0.5.2 drift in plugin.json / marketplace.json "out of scope" — that was an excuse. This release fixes it and promotes the manual pre-release checklist into a machine contract: one command runs four orthogonal checks. Also closes the FUTURE §3 risk that SKILL.md could quietly re-grow past the rule-fatigue threshold.
 
 ### Added
 

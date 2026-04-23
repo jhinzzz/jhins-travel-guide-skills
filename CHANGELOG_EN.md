@@ -8,6 +8,22 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.7.0] — 2026-04-23
+
+### Added
+
+- **Rule Provenance mechanism** — makes "why does this rule exist" machine-verifiable and reverse-queryable.
+  - `scripts/check-provenance.sh` — verifies that every `rule_refs` anchor in `test-prompts.json` actually points to a heading in the target rule file. Zero dependencies (pure bash + POSIX awk), with a jq fast path when available. Passes 34/34 on positive cases; returns exit code 1 on injected bad refs.
+  - `skills/jhins-trip-planner/references/provenance.md` — reverse index (rule → cases that cover it). Before changing a rule, check who's testing it. Un-referenced headings are a signal to add tests, not delete rules.
+  - SKILL.md top meta line adds a pointer to provenance.md — Navigation table stays clean.
+  - FUTURE.md §1 (test automation) updated: ground truth is now structured and ready; when the harness ships, no corpus needs to be built.
+
+### Why
+
+The skill now has 9 rule files, 1400+ lines. Marginal cost of adding more coverage is low, but the reasoning behind each rule is leaking (`session-learnings-*.md` files are prose, not bound to rules). Without this mechanism, changing `dining-rules.md §5` has no way to surface that cases 6/7/8 depend on it. Now provenance.md makes it visible at a glance and check-provenance.sh blocks anchor drift at commit time.
+
+No existing rule file content was edited. Rule files stay clean — provenance lives in `test-prompts.json`'s `rule_refs` plus a single index file, zero inline annotation.
+
 ## [0.6.4] — 2026-04-22
 
 ### Changed

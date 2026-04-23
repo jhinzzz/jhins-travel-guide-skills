@@ -31,6 +31,8 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md): canonical travel information sources, cross-referencing rules, and citation format
 - [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md): restaurant selection rules — cuisine-diversity matrix, operating-status verification, target-date calendar checks, ward consistency, meal × cuisine × area intake, reservation channels, peak-season recheck, and swap cascades
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md): safety and emergency rules — destination-specific emergency numbers, medical access, consular support, insurance claim path, theft / loss response, and destination-specific risk notes
+- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md): reverse index — which test-prompts.json case covers which rule heading
+- [`scripts/check-provenance.sh`](./scripts/check-provenance.sh): validates every `rule_refs` anchor in `test-prompts.json` resolves to a real heading
 - [`agents/openai.yaml`](./agents/openai.yaml): optional OpenAI/Codex-facing metadata
 
 ## Claude Code: install from marketplace

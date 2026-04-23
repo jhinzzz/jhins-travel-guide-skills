@@ -8,6 +8,22 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.7.0] — 2026-04-23
+
+### Added
+
+- **规则溯源机制（Rule Provenance）** — 让"规则为什么存在"可机器校验、可反向查询。
+  - `scripts/check-provenance.sh` — 校验 `test-prompts.json` 里每个 case 的 `rule_refs` 锚点真实指向规则文件里的 heading。零依赖（pure bash + POSIX awk），有 jq 时走 jq 快路径。正用例 34/34 通过，负用例（故意注入坏 ref）正确退出码 1。
+  - `skills/jhins-trip-planner/references/provenance.md` — 反向索引（rule → 覆盖它的 cases）。规则改动前可查"谁在测它"，未被引用的 heading 是加测试的信号。
+  - SKILL.md 顶部 meta 行加 provenance.md 指针，不污染 Navigation 表。
+  - FUTURE.md §1（自动化测试）更新：ground truth 已结构化就绪，harness 真做时不用再建语料库。
+
+### Why
+
+规则文件已经 9 份 · 1400+ 行。继续加覆盖面的边际成本低，但"为什么当初加这条规则" 的知识正在流失（`session-learnings-*.md` 是散文，不和规则绑定）。没有机制之前，改 `dining-rules.md §5` 不知道会打破 case 6/7/8；现在 provenance.md 一眼看清，check-provenance.sh 把锚点漂移挡在 commit 前。
+
+不改任何现有规则文件内容。Rule files 保持干净 —— provenance 靠 test-prompts.json 的 `rule_refs` + 单独的 index 文件维护，inline 注释零污染。
+
 ## [0.6.4] — 2026-04-22
 
 ### Changed

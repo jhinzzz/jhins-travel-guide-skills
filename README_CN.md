@@ -31,6 +31,8 @@
 - [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
 - [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md)：安全与应急规则 — 目的地紧急号码、医疗就近、领事支持、保险理赔路径、失窃/丢失响应、目的地特定风险
+- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md)：反向索引 — 每条规则 heading 被 test-prompts.json 的哪些 case 覆盖
+- [`scripts/check-provenance.sh`](./scripts/check-provenance.sh)：校验 `test-prompts.json` 里每个 `rule_refs` 锚点指向的 heading 真实存在
 - [`agents/openai.yaml`](./agents/openai.yaml)：可选的 OpenAI/Codex 元数据
 
 ## Claude Code：通过 marketplace 安装

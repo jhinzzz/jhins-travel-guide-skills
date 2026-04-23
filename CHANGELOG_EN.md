@@ -8,6 +8,30 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.8.0] — 2026-04-23
+
+### Changed
+
+- **Main reference files slimmed down** — the three heaviest files cut by -45%:
+  - `budget.md`: 88 → 52 lines (-40%)
+  - `dining-rules.md`: 190 → 110 lines (-42%)
+  - `safety-and-emergency.md`: 205 → 104 lines (-49%)
+  - All anchors preserved (§1-§10 / §3 / §6 / §9 etc.); provenance still 40/40; no existing rule_refs break.
+- **Introduced `references/deep/` opt-in subdirectory** — the trimmed-out extended content (tables, destination-specific examples, swap-cascade detail, 6-class ethical guardrails, partial-number-ban rationale, allergen-card template, etc.) all migrated to `references/deep/{budget,dining-rules,safety-and-emergency}.md`. LLM does not read these by default; only when a main reference's pointer explicitly triggers a depth threshold.
+- **SKILL.md adds a "Deep references (opt-in)" note** (3 lines, after Navigation) stating the read rule.
+- `scripts/check-size.sh` now also checks `deep/` with relaxed thresholds (> 400 warn / > 500 error — deep files are supposed to be larger).
+- **`FUTURE.md` rewritten** — from "5 conditionally-triggered technical directions" to a **strategic positioning + ecosystem roadmap**: the main skill stays broad and general; domain specialists (pet travel / business / LGBTQ safety / cross-strait / destination-specific) land as **separate skills routed by trigger words**, not as new sections inside this skill.
+
+### Why
+
+The user's intent for this skill is "broad and general-purpose; never a deep specialist in any one domain unless a trigger routes to a dedicated skill." The last 4 iterations went the wrong direction: v0.7.0 added infra, v0.7.1 added checks, v0.7.2 added a new reference. Each pass made the main skill fatter. A local dry-run (Taiwan GW case, `session-learnings-*`) found 16 gaps — continuing the old path would have spawned 3-4 more reference files.
+
+This release reverses direction: **no new content, only relocation**. Deep material stays available (zero information loss), but the LLM's default context window reads -217 fewer lines. Future specialist domains → separate skills, not new references. Jobs's subtraction default, applied.
+
+### Structure guarantee
+
+Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four checks (links / provenance / version / size) remain green.
+
 ## [0.7.2] — 2026-04-23
 
 ### Added

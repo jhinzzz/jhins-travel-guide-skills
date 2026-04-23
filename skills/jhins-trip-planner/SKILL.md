@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.7.2** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.8.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -31,6 +31,8 @@ Read references lazily, based on what the request actually needs:
 | Which platform to use for which info type, rating floors, citation format | [travel-sources.md](references/travel-sources.md) |
 
 If a rule is in a reference, do not restate it here — follow the pointer.
+
+**Deep references (opt-in)**: the `references/deep/` subdirectory holds extended tables, examples, and destination-specific detail for reference files that have a deep counterpart (`budget.md`, `dining-rules.md`, `safety-and-emergency.md` so far). Do **not** read deep files by default. Open only when the main reference explicitly points there, or when the request crosses a depth trigger stated in the main reference (e.g., 5+ restaurants → dining deep, cross-currency + tight budget → budget deep, multi-city international → safety deep).
 
 ## Data Traceability (Hard Constraint)
 

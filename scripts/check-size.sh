@@ -18,6 +18,9 @@ cd "$ROOT"
 SKILL_MAX=250
 REF_WARN=220
 REF_ERROR=260
+# Deep reference files are opt-in and expected to be larger.
+DEEP_WARN=400
+DEEP_ERROR=500
 
 red()    { printf '\033[0;31m%s\033[0m' "$1"; }
 yellow() { printf '\033[0;33m%s\033[0m' "$1"; }
@@ -26,8 +29,8 @@ green()  { printf '\033[0;32m%s\033[0m' "$1"; }
 errors=0
 warnings=0
 
-printf 'Thresholds:  SKILL.md > %d lines = ERROR · reference > %d warn / > %d error\n\n' \
-  "$SKILL_MAX" "$REF_WARN" "$REF_ERROR"
+printf 'Thresholds:  SKILL.md > %d = ERROR · reference > %d warn / > %d error · deep > %d warn / > %d error\n\n' \
+  "$SKILL_MAX" "$REF_WARN" "$REF_ERROR" "$DEEP_WARN" "$DEEP_ERROR"
 
 check_file() {
   local path="$1"
@@ -58,6 +61,13 @@ for sd in skills/*/; do
     for ref in "${sd}references"/*.md; do
       [ -f "$ref" ] || continue
       check_file "$ref" "$REF_WARN" "$REF_ERROR"
+    done
+  fi
+
+  if [ -d "${sd}references/deep" ]; then
+    for ref in "${sd}references/deep"/*.md; do
+      [ -f "$ref" ] || continue
+      check_file "$ref" "$DEEP_WARN" "$DEEP_ERROR"
     done
   fi
 done

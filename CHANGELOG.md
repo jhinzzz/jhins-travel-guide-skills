@@ -8,6 +8,30 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.8.0] — 2026-04-23
+
+### Changed
+
+- **主 reference 文件瘦身** — 三个最胖的文件压缩 -45%：
+  - `budget.md`: 88 → 52 行（-40%）
+  - `dining-rules.md`: 190 → 110 行（-42%）
+  - `safety-and-emergency.md`: 205 → 104 行（-49%）
+  - 所有 anchor（§1-§10 / §3 / §6 / §9 等）保留，provenance 40/40 仍通过，不破坏任何现有 rule_refs。
+- **引入 `references/deep/` opt-in 子目录** — 被瘦身掉的深度内容（表格、destination-specific 示例、swap cascade 细节、ethical guardrails 6 类、partial-number ban 论证、allergen card 模板等）全部迁到 `references/deep/{budget,dining-rules,safety-and-emergency}.md`。LLM 默认不读；只在主 reference 显式 pointer 命中 depth trigger 时才 read。
+- **SKILL.md 增加 "Deep references (opt-in)" 说明段**（3 行，放在 Navigation 后），明确 deep/ 的读取规则。
+- `scripts/check-size.sh` 增加 deep/ 子目录检查 + 放宽阈值（> 400 warn / > 500 error，因为 deep 就是该胖的地方）。
+- `FUTURE.md` 重写 —— 从"5 条条件触发的技术未来"改为**战略定位 + 生态 roadmap**：主 skill 保持大而全 + 通用；专精领域（宠物 / 商务 / LGBTQ safety / cross-strait / destination-specific）未来通过**独立 skill + trigger 词路由**实现，而不是继续往主 skill 里塞内容。
+
+### Why
+
+主 skill 用户意图是"大而全 + 通用，不在某方面特别精通（除非触发词命中专精 skill）"。之前 4 轮迭代走反了方向：v0.7.0 加 infra，v0.7.1 加 check，v0.7.2 加 budget.md 新 reference，每轮都让主 skill 变胖。dry-run trace（台湾 GW 案例，本地 session-learnings）发现 16 个 gap，继续沿旧路径会再触发 3-4 个新 reference 文件。
+
+这一版反向：**不加内容，只搬**。深度材料原地留存（zero information loss），但 LLM 默认上下文窗口里少读 -217 行。专精领域未来 → 独立 skill，不是新 reference。Jobs 的 subtraction default 落地。
+
+### Structure guarantee
+
+零规则内容删除。零 anchor 改名。零 rule_refs 失效。所有 check（links / provenance / version / size）保持 4/4 全绿。
+
 ## [0.7.2] — 2026-04-23
 
 ### Added

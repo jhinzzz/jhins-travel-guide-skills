@@ -46,17 +46,7 @@ When intake captured any of the following, the safety block must resolve them by
 
 Accessibility/medical carry-forward items are **blockers, not notes**.
 
-## 3. Partial-Number Ban (rationale)
-
-Do not fabricate hospital names or consular phone numbers. If evidence is thin, fall back to district-level guidance: "Shibuya has X hospital 24/7 ER — verify current ER hours on their website."
-
-**Partial numbers are worse than no number.** Do not write a phone-number skeleton like `+971-50-xxx` or `+81-3-xxxx-xxxx` even with a "verify" tag — a partial number looks real and can be misread under stress. If the exact number cannot be confirmed, write:
-
-> "→ Fetch from the consulate official site before departure: {canonical site URL}"
-
-and leave the number field empty. Same rule for street addresses containing an unverified number. Consulates and hospitals are the two highest-stakes categories.
-
-## 4. Consular / Embassy Support — Extended
+## 3. Consular / Embassy Support — Extended
 
 Record per destination city:
 
@@ -67,7 +57,17 @@ Record per destination city:
 
 Identify the traveller's home country from intake. Do not assume. Verify on the embassy's official site and cite research date.
 
-## 5. Insurance Claim Path — Extended
+### Partial-Number Ban (rationale)
+
+Do not fabricate hospital names or consular phone numbers. If evidence is thin, fall back to district-level guidance: "Shibuya has X hospital 24/7 ER — verify current ER hours on their website."
+
+**Partial numbers are worse than no number.** Do not write a phone-number skeleton like `+971-50-xxx` or `+81-3-xxxx-xxxx` even with a "verify" tag — a partial number looks real and can be misread under stress. If the exact number cannot be confirmed, write:
+
+> "→ Fetch from the consulate official site before departure: {canonical site URL}"
+
+and leave the number field empty. Same rule for street addresses containing an unverified number. Consulates and hospitals are the two highest-stakes categories.
+
+## 4. Travel Insurance — Claim Path Extended
 
 - **Policy details before departure**: claim hotline (usually 24/7, often a local-access number per country), policy number, claim email — stored in phone + printed.
 - **Accept-what evidence**:
@@ -78,12 +78,12 @@ Identify the traveller's home country from intake. Do not assume. Verify on the 
 
 Output should state: "Call insurer BEFORE incurring a large medical cost if possible — many policies require pre-approval for hospitalisation." If not yet purchased, flag it; if purchased, don't re-recommend purchase — focus on claim path.
 
-## 6. Theft / Loss Response — Full Steps
+## 5. Theft / Loss Response — Full Steps
 
 ### Passport lost or stolen
 
 1. File a local police report (get the case number and stamped copy — most insurers and your embassy require this).
-2. Contact home-country embassy / consulate (§4 number) — they issue emergency travel documents.
+2. Contact home-country embassy / consulate (§3 number) — they issue emergency travel documents.
 3. Notify the airline if the return flight is soon — they can hold the seat while documents are reissued.
 4. Typical turnaround for emergency travel documents: 1–5 working days; longer if the embassy is in a different city.
 
@@ -109,7 +109,7 @@ Output should state: "Call insurer BEFORE incurring a large medical cost if poss
 
 Format rule: short numbered lists in the output, not prose. People panicking cannot read paragraphs. Include a one-line "stay-calm" directive: "Step 1 before anything else: go to a well-lit public place and breathe."
 
-## 7. Destination-Specific Risk — Phrasing Template
+## 6. Destination-Specific Risk — Phrasing Template
 
 Format: **risk → specific trigger → specific action**. Not "watch out for pickpockets" but:
 
@@ -119,7 +119,7 @@ Common categories: theft / pickpocket hotspots · traffic and road safety · nat
 
 When risk mitigation tells the traveller how to pick a safer venue / operator / taxi, **name the destination-authoritative platform** per [travel-sources.md](../travel-sources.md). For Rome restaurants: Gambero Rosso / TheFork / Dissapore + Google Maps + TripAdvisor. For Tokyo: Tabelog. For mainland China: 大众点评. For UAE tour operators: DTCM-certified list. Do not default to "TripAdvisor > X.X stars" globally.
 
-## 8. Ethical / Responsible-Tourism Guardrails — Full List
+## 7. Ethical / Responsible-Tourism Guardrails — Full List
 
 Some popular activities are not safe for animals, communities, or the traveller's own legal exposure. Flag and redirect rather than recommend by default. Every item: *what to avoid → why → what to recommend instead*.
 
@@ -137,11 +137,11 @@ Some popular activities are not safe for animals, communities, or the traveller'
 - When itinerary would naturally include a red-flag (Tiger Kingdom Chiang Mai, SeaWorld orca show, long-neck village day-trip), flag at draft stage, not final-check stage.
 - Do not moralise at length. One-line phrasing + one redirect alternative. Goal is a different item, not a lecture.
 
-## 9. Parallel Verification for Multi-City / Multi-Country — Extended
+## 8. Parallel Verification for Multi-City / Multi-Country — Extended
 
 A multi-city international trip easily generates 15+ independent research tasks (per city: emergency numbers × medical facility × consulate × insurer hotline × destination-specific risks).
 
-When trip crosses ≥ 2 cities or ≥ 2 countries, spawn 2–3 parallel sub-agents. Each returns a structured row per destination: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination-specific risks with §7 phrasing · source URLs · research date.
+When trip crosses ≥ 2 cities or ≥ 2 countries, spawn 2–3 parallel sub-agents. Each returns a structured row per destination: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination-specific risks with §6 phrasing · source URLs · research date.
 
 Main conversation: synthesis + de-duplication across cities + final placement. Give user a status line: "Dispatched 3 sub-agents for safety verification."
 

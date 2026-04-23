@@ -46,7 +46,7 @@ The SKILL.md already recommends purchasing insurance. This section is about what
 - Cashless vs reimbursement — destination-specific (Thailand / Singapore direct-billing; US / Europe reimburse-only).
 - Output rule: "Call insurer BEFORE incurring large medical cost — many policies require pre-approval for hospitalisation."
 
-Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §5.
+Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §4.
 
 ## 5. Theft / Loss Response
 
@@ -56,7 +56,7 @@ Concrete step order for: passport · wallet / cards · phone · luggage at airpo
 
 Key windows: passport via embassy 1–5 working days · card freeze **before** police report · airport PIR **before leaving arrival area**.
 
-Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §6.
+Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §5.
 
 ## 6. Destination-Specific Risk Notes
 
@@ -74,7 +74,7 @@ Flag and redirect red-flag items proactively, not silently drop. Categories: cap
 
 One-line phrasing + one redirect alternative. Do not moralise.
 
-Trigger: destination has material risk, or user request / itinerary touches a red-flag item. Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §7 + §8.
+Trigger: destination has material risk, or user request / itinerary touches a red-flag item. Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §6 + §7.
 
 ## 7. Output Placement
 
@@ -94,7 +94,7 @@ Trip crosses ≥ 2 cities or ≥ 2 countries → spawn 2–3 parallel sub-agents
 
 Each sub-agent returns: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination risks with §6 phrasing · source URLs · research date.
 
-Same batch pattern as [dining-rules.md](dining-rules.md) §10. Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §9.
+Same batch pattern as [dining-rules.md](dining-rules.md) §10. Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §8.
 
 ## Non-Goals
 

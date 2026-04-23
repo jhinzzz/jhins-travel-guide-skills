@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.7.1** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.7.2** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -23,6 +23,7 @@ Read references lazily, based on what the request actually needs:
 | Visa + transit visa, payment, SIM, insurance, etiquette, religious / festival overlap, multi-country parallel verification | [trip-prep.md](references/trip-prep.md) |
 | Weather (incl. climate-shift risk), output format (markdown / HTML), independent-travel-vs-guided decision | [weather-and-output.md](references/weather-and-output.md) |
 | Round-trip transport, booking windows, arrival times, transfers, self-drive route-book, multi-carrier luggage | [transportation.md](references/transportation.md) |
+| Budget category split by region, hidden costs, refundable-vs-not, FX / payment timing | [budget.md](references/budget.md) |
 | Hotel tiering, evidence, check-in/out, luggage | [hotel-selection.md](references/hotel-selection.md) |
 | Restaurant selection, cuisine matrix, operating-status, reservation, swap cascade | [dining-rules.md](references/dining-rules.md) |
 | Souvenirs, 特产, 手信 | [local-specialties.md](references/local-specialties.md) |
@@ -132,7 +133,7 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 
 1. **Inventory** the page or brief. Preserve all facts; move, don't delete. For `planning-only`, inventory brief + constraints rather than inventing page structure.
 2. **Plan round-trip transport first** per [transportation.md](references/transportation.md). Anchor arrival day forward from realistic "available in the city" time; anchor departure day backward from the hard cutoff (hotel check-out + luggage per [hotel-selection.md](references/hotel-selection.md)).
-3. **Rebuild around a generic trip timeline** (day archetypes: arrival, city, day-trip, weather-buffer, food-day, departure). Keep day-by-day as the spine; appendices for full reference. Produce a budget breakdown by category; compare to the user's stated budget.
+3. **Rebuild around a generic trip timeline** (day archetypes: arrival, city, day-trip, weather-buffer, food-day, departure). Keep day-by-day as the spine; appendices for full reference. Produce a budget breakdown by category per [budget.md](references/budget.md) §1 (apply the region band, adjust by theme, surface hidden costs per §2); compare to the user's stated budget.
 4. **Embed local context into each day** — dining per [dining-rules.md](references/dining-rules.md) (matrix · operating status · target-date · ward · 4 required fields · route · reservations); attractions with booking windows; intra-city transport notes; self-drive day cards carry distance · driving time · longest single segment + route-book app per [transportation.md](references/transportation.md) §Rental Car / Self-Drive. Buffers between activities:
    - **Nearby** (15–20 min): within ~1 km / 10-min walk.
    - **Cross-district** (30–45 min): metro/bus/taxi or >1 km walk.
@@ -166,7 +167,7 @@ Verify each area against its canonical checklist — do not re-check rules in re
 - **Fallback labels**: visible where evidence or inputs were incomplete.
 - **Hotels**: pass [hotel-selection.md](references/hotel-selection.md) card checklist (incl. check-in/out + luggage).
 - **Transport**: both legs present; each card passes the 9-field checklist in [transportation.md](references/transportation.md); arrival/departure correctly anchored.
-- **Budget**: category breakdown present; >15% overage triggered the checkpoint.
+- **Budget**: category split cites a region band per [budget.md](references/budget.md) §1 (theme adjustment stated if applied); hidden costs from §2 surfaced where triggered; refundable-vs-non decisions stated per §3 when the party mix triggers it; FX assumption + rate date stated for cross-currency trips per §4; >15% overage triggered the checkpoint.
 - **Local context**: booking lead times stated; buffer times follow the tier above; off-peak suggestions cited or omitted.
 - **Dining**: passes [dining-rules.md](references/dining-rules.md) §§1-9.
 - **Self-drive** (when applicable): passes [transportation.md](references/transportation.md) §Rental Car / Self-Drive + intake triad.

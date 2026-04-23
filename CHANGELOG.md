@@ -8,6 +8,24 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.7.2] — 2026-04-23
+
+### Added
+
+- **`references/budget.md`** — 4 节填补 skill 最高频盲区（每次规划都经过预算，但之前只有"15% 超标提醒"一条规则）。
+  - §1 按 region band 的类目占比默认表（东亚 / 中国+SEA / 西欧 / 北欧冰岛 / 美国 / 中东 / 南亚SEA 乡村，7 档本币占比），每档 6 个类目（交通/住宿/餐饮/景点/购物/buffer）。
+  - §2 Hidden costs 清单 situation→line item 格式：入境离境税、小费层、IC 押金、FX 手续费、DCC 陷阱、免税液体、自驾隐藏成本、旺季溢价、归国关税。
+  - §3 Refundable vs non-refundable 决策：7 个买 refundable 触发（老人 / 孕晚期 / 低龄娃 / 风险窗 / 待签 / 窄连接 / 商务）+ 4 个跳过场景（单人 / 短低风险 / 本身灵活多段 / 溢价超 20% 时买保险更划算）。
+  - §4 FX & payment timing：锁汇 / 持币不换 / 卡走网络汇 / 付现 / 拒绝 DCC 五档决策，按目的地稳定性分。
+- SKILL.md Navigation 加一行；Core Workflow §3 改为引用 budget.md §1；Final Check 的 budget 行从"present"升级为四项审计（band · hidden costs · refundable · FX）。
+- `test-prompts.json` 新增 case 14（阿根廷 10 天 + 预算紧 + FX 敏感），同时覆盖 budget.md 4 节。`provenance.md` 同步加 budget.md 段 + case 14 的 trip-prep §3 和 Fallback Rules 引用。
+
+### Why
+
+Skill 有 9 个规则文件，但"budget"只在 intake（一个数字）+ SKILL.md（15% 超标）+ trip-prep.md（支付摩擦）三处片段出现。真实后果：预算超支的 90% 来自**没人告诉用户**"东亚住宿占 35% / 北欧交通占 20% 是正常的"，或"阿根廷必须持 USD 现金，不要 CNY→ARS 提前换"。这版把散落的预算知识聚成一份 reference，和 15% checkpoint 形成配对（checkpoint 是触发器，budget.md 是证据）。
+
+不动现有规则文件的 §Budget 内容（零污染）。SKILL.md 195 行（194→195），离 250 阈值仍有 55 行余量。
+
 ## [0.7.1] — 2026-04-23
 
 ### Fixed

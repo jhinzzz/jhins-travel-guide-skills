@@ -470,5 +470,51 @@
         "trip-prep.md §6"
       ]
     }
+  },
+  {
+    "id": 14,
+    "scenario": "budget-rigor-fx-sensitive",
+    "prompt": "10 月底和老婆去阿根廷玩 10 天（布宜诺斯艾利斯 + 门多萨 + 巴塔哥尼亚 El Calafate），从北京出发，总预算 5 万人民币（不含国际机票），我们预算比较紧",
+    "assertions": {
+      "mode": "guide-redesign",
+      "budget_category_split_required": true,
+      "must_declare_region_band_fit": "South America not listed directly — must pick closest band (mainland China + SEA cities or South / SE Asia) and state the approximation explicitly, not silently",
+      "must_state_theme_adjustment_or_none": true,
+      "budget_buffer_nonzero": true,
+      "must_surface_hidden_costs": [
+        "foreign-transaction fee impact on card spend",
+        "Argentina FX rate picture (official vs blue vs dólar tarjeta vs MEP)",
+        "capital controls — USD cash import limits",
+        "self-drive day costs if any Patagonia driving segment"
+      ],
+      "refundable_decision_stated": {
+        "flights": "non-refundable acceptable — low-risk party mix",
+        "lodging": "at least arrival-day refundable given 30+ hour travel time from Beijing + potential delay",
+        "trigger_invoked": "narrow connection buffer (BJS → Argentina typically 2 legs ≥ 30h total)"
+      },
+      "fx_timing_rule": {
+        "primary_guidance": "bring USD cash — do not convert CNY → ARS in advance",
+        "rationale_cited": "Argentina blue / MEP / official rate divergence 30-80% per trip-prep.md §3",
+        "dcc_warning_required": true,
+        "rate_assumption_line_required": "output must state assumed USD→ARS rate + research date + FX buffer location"
+      },
+      "must_cite_source_for": [
+        "international flight price range",
+        "every intercity flight / long-distance bus fare",
+        "hotel nightly rate"
+      ],
+      "must_not_recommend_product_by_name": [
+        "specific credit card brand",
+        "specific travel card / FX app by product name without 'verify current terms'"
+      ],
+      "rule_refs": [
+        "budget.md §1",
+        "budget.md §2",
+        "budget.md §3",
+        "budget.md §4",
+        "trip-prep.md §3",
+        "SKILL.md §Fallback Rules (Missing dates/destination)"
+      ]
+    }
   }
 ]

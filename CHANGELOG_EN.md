@@ -8,6 +8,24 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.7.2] — 2026-04-23
+
+### Added
+
+- **`references/budget.md`** — 4-section reference filling the skill's highest-frequency blind spot. Budget is touched on every trip, but until now only a single rule existed ("15% overage confirmation checkpoint"). This file supplies the structure that checkpoint draws from.
+  - §1 Category split defaults by region band (East Asia / mainland China+SEA / Western Europe / Nordics-Iceland / US / Middle East / South+SEA rural — 7 tiers, each with 6 category percentages in local currency).
+  - §2 Hidden-cost checklist in "situation → specific line item" format: entry/departure taxes, tipping layers, IC-card deposits, FX fees, DCC traps, duty-free liquid limits, self-drive hidden charges, peak surcharges, return-country customs.
+  - §3 Refundable vs non-refundable decision: 7 triggers to spend the premium (age 70+, pregnancy 28w+, young kids, risk-window overlap, pending visa, narrow connection, business) + 4 scenarios to skip (solo flexible, short low-risk, already-flexible multi-leg, premium > 20% of lodging total).
+  - §4 FX and payment timing: lock-rate / hold-currency / pay-by-card / pay-cash / refuse-DCC decisions, ordered by destination stability.
+- SKILL.md Navigation gets a new row; Core Workflow §3 now references budget.md §1; Final Check upgrades its budget line from "present" to a 4-point audit (band · hidden costs · refundable · FX).
+- `test-prompts.json` adds case 14 (Argentina 10 days, tight budget, FX-sensitive) — exercises all 4 budget.md sections. `provenance.md` adds the budget.md section plus case 14's trip-prep §3 and Fallback Rules references.
+
+### Why
+
+The skill already had 9 rule files, but "budget" only appeared as fragments across intake (a single number), SKILL.md (15% overage checkpoint), and trip-prep.md (payment friction). The real-world result: 90% of budget overruns come from **nobody telling the user** that "35% lodging in East Asia or 20% transport in the Nordics is normal," or that "Argentina requires carrying USD cash — do not pre-convert CNY → ARS." This release consolidates scattered budget knowledge into one reference and pairs it with the 15% checkpoint (checkpoint = trigger, budget.md = evidence).
+
+No existing rule file content was touched (zero pollution). SKILL.md is 195 lines (was 194), leaving 55 lines of headroom against the 250-line threshold.
+
 ## [0.7.1] — 2026-04-23
 
 ### Fixed

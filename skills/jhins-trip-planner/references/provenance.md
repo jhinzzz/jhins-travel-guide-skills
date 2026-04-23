@@ -24,7 +24,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Confirmation Checkpoints | 11 |
 | §Confirmation Checkpoints (Ramadan) | 13 |
 | §Data Traceability | 5 |
-| §Fallback Rules (Missing dates/destination) | 3 |
+| §Fallback Rules (Missing dates/destination) | 3, 14 |
 
 ### intake.md
 
@@ -40,6 +40,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 |---|---|
 | (whole file) | 5 |
 | §1 | 12 |
+| §3 | 14 |
 | §6 | 13 |
 
 ### weather-and-output.md
@@ -65,6 +66,15 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §9 | 8 |
 | §10 | 8 |
 | §§1-10 | 6, 7 |
+
+### budget.md
+
+| Anchor | Cases |
+|---|---|
+| §1 | 14 |
+| §2 | 14 |
+| §3 | 14 |
+| §4 | 14 |
 
 ### hotel-selection.md
 

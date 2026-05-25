@@ -472,6 +472,44 @@
     }
   },
   {
+    "id": 15,
+    "scenario": "hotel-selection-multi-tier",
+    "prompt": "下周末和闺蜜去京都3天2晚，预算3000元住宿，想住祇園或河原町附近，最好能步行到花见小路和鸭川，有推荐的酒店吗？",
+    "assertions": {
+      "mode": "planning-only",
+      "must_have_hotel_card_fields": [
+        "name and tier (mass-market / recommended / niche / avoid)",
+        "area / neighborhood",
+        "transit convenience (minutes to station + key attractions)",
+        "nightly rate range (JPY, with source + research date)",
+        "budget fit (within / stretch / over)",
+        "why this tier (one sentence)",
+        "verdict (first pick / backup / niche / avoid)"
+      ],
+      "must_cross_reference_sources": "≥2 independent sources (e.g., Booking.com + TripAdvisor, or Trip.com + Google Maps)",
+      "must_include_check_in_out": "standard times + luggage storage note for early arrival or late departure",
+      "must_present_comparison_table": true,
+      "must_have_options_across_tiers": [
+        "recommended (best fit)",
+        "mass-market (backup / budget-friendly)"
+      ],
+      "must_calculate_total_stay_cost": "nightly rate × 2 nights vs ¥3000 budget",
+      "must_state_currency": "JPY for rates, CNY for budget comparison",
+      "must_not_contain": [
+        "hotel name without source citation",
+        "exact rate without research date"
+      ],
+      "proximity_constraint_respected": "walking distance to 花見小路 + 鴨川 stated per hotel",
+      "rule_refs": [
+        "hotel-selection.md §Evidence Standard",
+        "hotel-selection.md §Tiering",
+        "hotel-selection.md §Output Card Format",
+        "hotel-selection.md §Check-In / Check-Out and Luggage",
+        "hotel-selection.md §Comparison Format"
+      ]
+    }
+  },
+  {
     "id": 14,
     "scenario": "budget-rigor-fx-sensitive",
     "prompt": "10 月底和老婆去阿根廷玩 10 天（布宜诺斯艾利斯 + 门多萨 + 巴塔哥尼亚 El Calafate），从北京出发，总预算 5 万人民币（不含国际机票），我们预算比较紧",

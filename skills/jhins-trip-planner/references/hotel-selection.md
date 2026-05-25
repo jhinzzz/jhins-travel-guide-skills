@@ -28,7 +28,7 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 - `niche`: good but only for a specific use case
 - `avoid`: weak rating, bad location, poor value, or booking friction
 
-## Check-In, Check-Out, and Luggage
+## Check-In / Check-Out and Luggage
 
 - Standard check-in: 14:00–15:00. Standard check-out: 10:00–12:00. Varies by hotel — always verify.
 - Early arrival (before check-in): note whether the hotel offers luggage storage at the front desk so the user can explore before the room is ready.

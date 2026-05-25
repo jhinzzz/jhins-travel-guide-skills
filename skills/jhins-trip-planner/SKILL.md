@@ -1,13 +1,13 @@
 ---
 name: planner
 description: >
-  End-to-end trip planner: pre-trip prep, round-trip transport, hotels, day-by-day itineraries with weather and buffer times, route-fit dining, local specialties, categorized budget, and source-traceable recommendations. Three modes: planning advice, guide redesign (markdown + HTML), or existing-page refactor.
+  Use when the user asks to plan a trip, organize travel notes into a guide, refactor an existing itinerary page, or get advice on destinations, transport, hotels, dining, budget, packing, safety, or local specialties — whether domestic or international, solo or group, self-drive or guided.
   Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, 餐厅推荐, 帮我规划旅行, 出行计划, 行前准备, 特产推荐, 手信, 伴手礼, 预算估算, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign, hotel recommendations, restaurant recommendations, local souvenirs, jhins-trip-planner, planner.
 ---
 
 # Jhins Trip Planner
 
-Version: **0.8.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.9.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -32,7 +32,7 @@ Read references lazily, based on what the request actually needs:
 
 If a rule is in a reference, do not restate it here — follow the pointer.
 
-**Deep references (opt-in)**: the `references/deep/` subdirectory holds extended tables, examples, and destination-specific detail for reference files that have a deep counterpart (`budget.md`, `dining-rules.md`, `safety-and-emergency.md` so far). Do **not** read deep files by default. Open only when the main reference explicitly points there, or when the request crosses a depth trigger stated in the main reference (e.g., 5+ restaurants → dining deep, cross-currency + tight budget → budget deep, multi-city international → safety deep).
+**Deep references (opt-in)**: the `references/deep/` subdirectory holds extended tables, examples, and destination-specific detail for reference files that have a deep counterpart (`budget.md`, `dining-rules.md`, `intake.md`, `safety-and-emergency.md`, `trip-prep.md`). Do **not** read deep files by default. Open only when the main reference explicitly points there, or when the request crosses a depth trigger stated in the main reference (e.g., 5+ restaurants → dining deep, cross-currency + tight budget → budget deep, multi-city international → safety deep, party with children/accessibility → intake deep, transit via US/HK/Dubai/SG or destination-specific payment friction → trip-prep deep).
 
 ## Data Traceability (Hard Constraint)
 

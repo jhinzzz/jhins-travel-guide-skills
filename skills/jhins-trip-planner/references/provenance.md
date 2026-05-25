@@ -78,7 +78,13 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 
 ### hotel-selection.md
 
-_No cases reference this file yet._ Candidates: cases with hotel shortlisting pressure (none today; add when a hotel-focused case lands).
+| Anchor | Cases |
+|---|---|
+| §Evidence Standard | 15 |
+| §Tiering | 15 |
+| §Output Card Format | 15 |
+| §Check-In / Check-Out and Luggage | 15 |
+| §Comparison Format | 15 |
 
 ### local-specialties.md
 

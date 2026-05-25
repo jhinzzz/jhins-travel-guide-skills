@@ -78,7 +78,22 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 **Worth doing when**:
 - A machine-readable trigger map is needed (e.g., pre-invocation filter in a routing skill that decides which specialist skill to call).
 
-### 5. Agentic trip companion
+### 5. Attractions / activities reference
+
+**Current state**: attractions are mentioned in Core Workflow step 4 ("attractions with booking windows") but have no dedicated reference file. Booking lead times, height/age minimums, capacity limits, seasonal closures, timed-entry slots, and peak-hour avoidance are all ad-hoc.
+
+**What it could look like**: `references/attractions.md` with rules for: advance-booking lead times by category (theme park / museum / guided tour / activity), capacity-limited attractions (Alhambra, teamLab, Ghibli Museum, Anne Frank House), seasonal closures (mountain huts, polar regions, monsoon closures), peak-hour strategies, and the relationship between attraction density and pace.
+
+**Why not now**:
+- Most attraction logistics are destination-specific — a generic reference risks being either too thin to be useful or too fat to be general.
+- The current per-day-card approach ("booking lead times stated") works for most cases.
+- Dining, hotel, transport, and budget each had clear *repeated failure modes* that justified a reference. Attractions haven't yet shown the same pattern in test-prompt traces.
+
+**Worth doing when**:
+- A dry-run trace (or real user session) shows repeated failure on attraction booking (missed capacity, wrong timed entry, seasonal closure surprise) across 3+ different trips.
+- A specific test case would need `rule_refs` pointing to attraction rules — and there's no file to point at.
+
+### 6. Agentic trip companion
 
 **Current state**: static skill. Every invocation starts fresh from SKILL.md.
 

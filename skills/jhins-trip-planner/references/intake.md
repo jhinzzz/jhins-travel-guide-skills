@@ -91,30 +91,36 @@ Carry the generic list forward so the Trip Preparation parallel sub-agents can f
 
 Ask once; carry forward to transport, hotel, attraction, and safety sections. Do not surface as an afterthought. Capture whichever apply:
 
-1. **Mobility** — wheelchair (manual / power), walker / cane, limited stair tolerance. Affects hotel room type (roll-in shower, elevator required), attraction vetting (stair-heavy: Cinque Terre, many Kyoto temples, Santorini, Machu Picchu), rental-car choice (hand controls? adapted vehicle rental has longer lead time), intra-city transport (Tokyo metro older lines are elevator-incomplete; London Tube "step-free" network is partial).
-2. **Dialysis** — must pre-book a dialysis centre at the destination (typical lead time 4–8 weeks; longer for peak seasons and small-island destinations). Capture sessions-per-week + preferred day/time. Flag destinations with very limited capacity (Maldives, small Greek islands, rural Iceland). Include centre name + address + confirmation number in the safety section, not "find one locally".
-3. **Cabin oxygen** — airlines require advance medical clearance (48h–7 days lead; some require POC model approval). Capture O₂ flow rate and whether the user owns a POC or needs airline-supplied O₂. Some airlines do not supply onboard O₂ at all (most LCCs, some long-haul carriers) — this may dictate carrier choice.
-4. **Pregnancy** — capture gestational week at departure + at return. Airlines enforce third-trimester cutoffs (typical: ≤28 weeks no letter; 28–36 weeks requires fit-to-fly letter dated within 7 days of flight; ≥36 weeks usually refused — verify the specific carrier). Flag destinations with Zika or malaria prophylaxis concerns. Avoid high-altitude activity (>2,500 m) and hot-spring immersion ≥40 °C.
-5. **Service / assistance animal** — airlines split "service animal" (trained, usually still cabin-accepted) from "emotional support animal" (most carriers no longer cabin-accept as of 2021+). Destinations impose quarantine / vaccination rules separately (UK / Japan / Australia / NZ / HK / Taiwan have long-lead quarantine windows — 4–10 months for rabies-free island states; EU pet-passport ~21 days post-rabies-titer). Capture animal species, weight, age, and vaccination status; calendar pre-trip vet visit and destination-authority paperwork.
-6. **Other flag-and-carry** — severe food allergy (nut / shellfish / gluten) with epinephrine → translate allergen card into destination language per [safety-and-emergency.md](safety-and-emergency.md) §2; sensory sensitivities → flag high-crowd attractions, recommend timed-entry or quiet hours; recent surgery (air-travel waiting period); scuba certification recency if diving planned.
+1. **Mobility** — wheelchair / walker / cane / limited stair tolerance
+2. **Dialysis** — sessions-per-week + preferred day/time; lead time 4–8 weeks
+3. **Cabin oxygen** — O₂ flow rate + POC ownership; airline medical clearance 48h–7 days
+4. **Pregnancy** — gestational week at departure + return; airline cutoffs apply
+5. **Service / assistance animal** — species, weight, vaccination status; quarantine lead times
+6. **Other** — severe food allergy (epinephrine), sensory sensitivities, recent surgery, scuba cert recency
+
+For full detail on each category (constraints, lead times, destination-specific limitations), see [deep/intake.md](deep/intake.md) §6.
 
 ### Accessibility carry-forward rule
 
-When any capture above fires, every downstream section must respect it. Hotel cards show roll-in shower / elevator availability; attraction cards show stair counts + elevator status + sensory-friendly timed entries; transport cards note station step-free status; safety block includes dialysis-centre confirmation or allergen card translation. If a constraint cannot be met at a destination, surface it at intake as a trip-feasibility concern — not at page-render time.
+When any capture above fires, every downstream section must respect it — hotel, attraction, transport, and safety cards must explicitly resolve the constraint. If a constraint cannot be met at a destination, surface it at intake as a trip-feasibility concern — not at page-render time.
 
 ## 7. Child Age Bands (skip if no minors)
 
-When the party includes anyone under 18, capture age-at-departure per child and map to a band. The bands are not cosmetic — each triggers different downstream constraints. Do not merge all "kids" into one bucket.
+When the party includes anyone under 18, capture age-at-departure per child and map to a band:
 
-- **0–2 (infant / 在怀)** — airline lap-infant vs bought-seat; long-haul may require a bassinet (request at booking, ~20 kg max). Hotel crib availability + cost. Restaurant high-chair availability. Stroller transport constraints (narrow alleys of Venice / Kyoto / old-town Medina may defeat a stroller — consider a carrier instead). Altitude: pediatric advice generally avoids >2,500 m for infants. Most museums/attractions free; flag any age floors (wine-country / casino / adult venues refuse entry).
-- **3–5 (preschool)** — attraction attention span ~45 min; plan 1–2 anchor attractions/day max on `balanced` pace. Walking tolerance ~1–2 km; buffer times go up. Meal timing rigidity (early dinner, 18:00–18:30 window) may conflict with Europe/Latin American late-dinner culture — flag. Many museums offer child-friendly audio guides or "backpack" programs — surface if available. Theme parks: verify height minimums.
-- **6–9 (early school)** — can walk 3–4 km/day; attraction tolerance rises to ~1 hour each. Hotel: rollaway vs family-room decision. Many attraction family-ticket discounts kick in. Photo restrictions at geisha districts, military sites still apply — age is not a defense. Food allergies: kid may self-report; still carry translated allergen card.
-- **10–14 (pre-teen)** — mostly adult-pace capable; separate-room consideration starts (especially 12+). Passport signature age varies by country; most still need accompanying adult consent. Some countries bar unaccompanied minors in hotel rooms (UAE, Saudi). Adult museum tickets may apply from 12 in many destinations.
-- **15–17 (teen)** — adult-pace; adult-pricing near-universal. Unaccompanied minor airline fees may still apply on certain carriers even with a parent on the same flight (rare). Age minimums for activities (Iceland ice-cave tour 10+; bungee / skydive typically 18+ or with parental consent). Alcohol access: destination legal age varies (16 for beer/wine in parts of Europe; 18 most of world; 21 US/Indonesia parts — do NOT recommend alcohol-adjacent activities as family inclusions).
+| Band | Age | Key constraint |
+|---|---|---|
+| Infant | 0–2 | Lap-infant vs seat; bassinet; stroller limits; altitude <2,500 m |
+| Preschool | 3–5 | Attention ~45 min; walk ~1–2 km; early dinner window |
+| Early school | 6–9 | Walk 3–4 km; family-ticket discounts; rollaway/family-room |
+| Pre-teen | 10–14 | Near-adult pace; separate-room from 12+; some countries bar solo minors in rooms |
+| Teen | 15–17 | Adult-pace/pricing; activity age minimums; alcohol legal-age varies |
+
+The bands are not cosmetic — each triggers different downstream constraints on pacing, hotel, transport, and dining. For full per-band detail (stroller limits, height minimums, meal timing, photo restrictions, etc.), see [deep/intake.md](deep/intake.md) §7.
 
 ### Child carry-forward rule
 
-Every downstream section respects the child bands captured at intake. Hotel cards show crib/rollaway availability + family-room capacity; restaurant cards flag high-chair / kid-menu / age-floor; attraction cards show stroller accessibility + child ticket pricing + height minimums; transport cards show lap-infant vs separate-ticket + stroller gate-check rules; itinerary pacing respects attention-span and walking-tolerance tiers above.
+Every downstream section respects the child bands captured at intake. Hotel cards show crib/rollaway + family-room capacity; restaurant cards flag high-chair / kid-menu / age-floor; attraction cards show stroller accessibility + child ticket pricing + height minimums; transport cards show lap-infant vs separate-ticket + stroller gate-check; itinerary pacing respects attention-span and walking-tolerance tiers.
 
 ## 8. Self-Drive Readiness Triad (skip if not self-driving)
 

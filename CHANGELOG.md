@@ -8,6 +8,31 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.9.0] — 2026-05-25
+
+### Changed
+
+- **SKILL.md description 重写** — 从 workflow-summary 格式改为 "Use when..." 触发条件格式，修复 writing-skills 框架标注的最危险反模式（LLM 读 description 就觉得够了，跳过规则体）。
+- **trip-prep.md 瘦身 -55%** — "Transit Visa Rules" 5 国展开 + "Practical Payment Friction" 7 国展开 + "Religious and Festival Sensitivities" 5 节展开移入新建 `references/deep/trip-prep.md`。主文件只保留 Rule statement + trigger pointer + 一行摘要。
+- **intake.md §6-§7 瘦身 -60%** — Accessibility 6 类详细说明 + Child Age Bands 5 段展开移入新建 `references/deep/intake.md`。主文件保留精简列表/表格 + carry-forward rule + deep pointer。
+- **SKILL.md deep-references 段** — 更新文件列表（+intake.md, +trip-prep.md）和 depth trigger 示例。
+
+### Added
+
+- **`references/deep/trip-prep.md`** — transit visa 国家细节、destination-specific 支付摩擦 7 国、宗教节日 situation→action 全文。
+- **`references/deep/intake.md`** — accessibility/medical-needs 6 类全量说明 + child age-bands 5 段全量约束表。
+- **test-prompts.json case 15** — `hotel-selection-multi-tier`：京都 3 天 2 晚住宿推荐，覆盖 hotel-selection.md 的 Evidence Standard / Tiering / Output Card Format / Check-In-Out / Comparison Format 5 个 anchor。填补 provenance 唯一的零覆盖 reference。
+- **provenance.md** — hotel-selection.md 段从 "_No cases_" 更新为 case 15 的 5 个 anchor 覆盖。
+- **FUTURE.md §5** — 新增 "Attractions / activities reference" 方向 + 触发条件。
+
+### Why
+
+Skill review 发现 5 个优先级改进：(1) description 反模式高风险；(2) trip-prep 2,439 词是 main reference 中最胖的"准 trash-can"；(3) hotel-selection 唯一零测试覆盖；(4) intake §6-§7 的 ~750 词纯参考内容只在特定 party 组成时触发；(5) attractions 是唯一的结构空洞但暂不值得做——记入 FUTURE 条件触发。
+
+### Structure guarantee
+
+零规则内容删除。零 anchor 改名。所有深度内容原地迁移到 deep/。现有 rule_refs 不受影响（case 14 仍引用 trip-prep.md §3，指向 main 的 Rule statement 仍在）。
+
 ## [0.8.0] — 2026-04-23
 
 ### Changed

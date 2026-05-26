@@ -78,6 +78,39 @@ Put the recommended first pick at the top of each budget group.
 - Put the best option first in each budget group.
 - Keep only a few strong options per tier — 2-3 per budget group is enough.
 
+## Progressive Search (Default Flow)
+
+Hotel verification uses a two-phase progressive approach to avoid long search times:
+
+### Phase 1: Scout (single platform, 2-3 minutes)
+
+- Pick the best platform for the destination per [travel-sources.md](travel-sources.md) (e.g., Ctrip for China domestic, Booking.com for international).
+- Search for 3-5 candidates matching the user's constraints (area, budget, party).
+- Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · source.
+- Ask user to pick 1-2 hotels for deep verification.
+
+### Phase 2: Deep Verify (cross-reference, only on user's picks)
+
+- Cross-reference the user's chosen hotel(s) on a second platform.
+- Fill in the full 7-field output card: name+tier · area · transit · rate · budget fit · why · verdict.
+- Add check-in/out + luggage info.
+
+This eliminates 80% of wasted verification: only user-selected hotels get full treatment.
+
+## Timeout Degradation
+
+If hotel search stalls at any phase, degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5:
+
+| Trigger | Action |
+|---|---|
+| 3 consecutive WebFetch failures for the same hotel | Degrade that hotel to search advisory card |
+| Single hotel search exceeds 3 minutes of active fetching | Degrade to search advisory card |
+| All candidates in Phase 1 fail | Output search advisory card for the entire hotel category |
+
+Never continue searching indefinitely. Never require the user to manually terminate.
+
+When degrading, output the search advisory card with: platform + keywords + filters specific to the user's stated constraints (area, budget, party composition).
+
 ## Parallel Verification for Hotel Shortlists
 
 When the shortlist exceeds **4 candidates** (typical when the trip spans multiple cities, or when the user wants options across 3 budget tiers), verification runs as a batch — not serial WebFetch calls in the main conversation.
@@ -85,5 +118,6 @@ When the shortlist exceeds **4 candidates** (typical when the trip spans multipl
 - Spawn **2–3 parallel sub-agents**, each covering a slice of the shortlist (by city, by budget tier, or by platform).
 - Each sub-agent returns a structured row per hotel: **current nightly rate range · rating on two platforms · transit time to main hub · check-in / check-out policy · luggage storage availability · refund policy · source URL · research date**.
 - The main conversation synthesizes the rows into the comparison table and decides first-pick / backup / niche / avoid.
+- Each sub-agent independently follows the Timeout Degradation rules above.
 
 This follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.

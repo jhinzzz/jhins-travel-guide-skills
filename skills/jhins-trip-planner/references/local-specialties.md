@@ -96,6 +96,10 @@ When the shortlist exceeds **5 candidate specialties** (typical when the destina
 
 This follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.
 
+## Search Advisory Fallback
+
+When web search is unavailable or verification fails for specific shop names, brands, or prices, output a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5 instead of fabricating or omitting. Category-level guidance (what type of specialty to look for, general price expectations, transport constraints) remains Reasoning Layer and can be output directly.
+
 ## Non-Goals
 
 - Do not recommend items without evidence from reputable travel sources.

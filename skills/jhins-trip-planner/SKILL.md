@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.9.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.10.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -28,6 +28,7 @@ Read references lazily, based on what the request actually needs:
 | Restaurant selection, cuisine matrix, operating-status, reservation, swap cascade | [dining-rules.md](references/dining-rules.md) |
 | Souvenirs, 特产, 手信 | [local-specialties.md](references/local-specialties.md) |
 | Emergency numbers, medical, embassy, insurance claim, theft/loss, destination risks, ethical-tourism guardrails | [safety-and-emergency.md](references/safety-and-emergency.md) |
+| Knowledge layer classification, destination matching, search advisory cards | [knowledge-layers.md](references/knowledge-layers.md) |
 | Which platform to use for which info type, rating floors, citation format | [travel-sources.md](references/travel-sources.md) |
 
 If a rule is in a reference, do not restate it here — follow the pointer.
@@ -38,8 +39,8 @@ If a rule is in a reference, do not restate it here — follow the pointer.
 
 Every factual claim — flight/train numbers, fares, schedules, hotel names, restaurant names, shop names, prices, ratings — must be traceable to a real source. Cite `(source, research date)` per [travel-sources.md](references/travel-sources.md).
 
-- Cross-reference ≥2 independent sources for hotel, transport, and specialty picks.
-- Never fabricate specifics. If data is unavailable, give a typical range, mark approximate, and say why.
+- Cross-reference ≥2 independent sources for hotel, transport, and specialty picks. For hotels, use progressive search per [hotel-selection.md](references/hotel-selection.md) §Progressive Search.
+- Never fabricate specifics. If data is unavailable, give a typical range, mark approximate, and say why. For Local Knowledge Layer items (named entities, prices), degrade to search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5 when verification fails.
 - **Never trust restaurants from training data.** Every restaurant must pass operating-status verification per [dining-rules.md](references/dining-rules.md) §2 before appearing in output.
 - Verify against the **target date**, not the typical week — weekly closures + destination-specific peak closures per [dining-rules.md](references/dining-rules.md) §3.
 - Labels: single-source → "approximate"; multi-source confirmed → "verified"; insufficient → "verify locally". Flag data older than 3 months.
@@ -83,7 +84,7 @@ When in doubt, start lighter — the user can ask for more detail.
 
 ## Intake
 
-Follow [intake.md](references/intake.md) for required inputs, question order, minimum-viable-brief threshold, relevance rule (skip captures that don't apply), and the meal × cuisine × area / self-drive triad / theme / pace / medication / accessibility / child-band captures. Do not start detailed planning until the brief crosses the minimum-viable threshold in [intake.md](references/intake.md) §2.
+Follow [intake.md](references/intake.md) for required inputs, question order, minimum-viable-brief threshold, relevance rule (skip captures that don't apply), and the meal × cuisine × area / self-drive triad / theme / pace / medication / accessibility / child-band captures. Do not start detailed planning until the brief crosses the minimum-viable threshold in [intake.md](references/intake.md) §2. For destination-inspiration flows ("推荐个地方"), use the destination-matching framework in [knowledge-layers.md](references/knowledge-layers.md) §4 — objective dimensions only, no named entities.
 
 ## Confirmation Checkpoints
 
@@ -112,7 +113,7 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 - **Missing dates/destination** → stay in scaffold mode; surface assumptions; no day-by-day sequencing.
 - **Missing budget or food preferences** → neutral structure; mark hotel/dining as provisional.
 - **No reliable forecast** → seasonal averages, labeled approximate; also check climate-shift risk per [weather-and-output.md](references/weather-and-output.md) §1.
-- **Weak hotel evidence** → do not promote as first pick; backup/niche/omit per [hotel-selection.md](references/hotel-selection.md).
+- **Weak hotel evidence** → do not promote as first pick; backup/niche/omit per [hotel-selection.md](references/hotel-selection.md). If verification times out, degrade to search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5.
 - **Missing transport preference** → if one mode is dominant, present as primary with alternatives and confirm; if genuinely competitive, present comparison and wait.
 - **Transport schedule/price unavailable** → ranges + research date per [transportation.md](references/transportation.md); never fabricate.
 - **Visa/entry unknown** → flag before booking; assume nothing.
@@ -121,7 +122,7 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 - **Self-drive infeasible/risky** (licence not recognised, low-signal stretches, LHD/RHD first-timer, elderly/kids/pregnant/pets/altitude) → follow [transportation.md](references/transportation.md) §Rental Car / Self-Drive.
 - **Last-minute trip (≤48h)** → real-time channels only; warn about price/availability; skip visa-dependent options.
 - **Conflicting constraints** (luxury-on-tight-budget, 10-attractions-in-2-days) → surface conflict; offer 2–3 prioritization choices; do not silently compromise.
-- **Thin specialty data** → category guidance + "verify locally"; no specific shops without source per [local-specialties.md](references/local-specialties.md).
+- **Thin specialty data** → category guidance + "verify locally"; no specific shops without source per [local-specialties.md](references/local-specialties.md). Output search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5 when verification unavailable.
 - **Contradictory existing content** → preserve source facts; flag; don't resolve by invention.
 - **Web verification stalls** → retry via a different source in [travel-sources.md](references/travel-sources.md); repeated mismatches on the same ID = closed/relocated; never "please verify yourself".
 - **Batch verification** — parallel sub-agents when the batch crosses:
@@ -179,6 +180,7 @@ Verify each area against its canonical checklist — do not re-check rules in re
 - **Safety & emergency**: passes [safety-and-emergency.md](references/safety-and-emergency.md) — numbers · hospital · embassy (incl. after-hours) · insurer claim path · theft/loss steps · risks with §6 phrasing.
 - **Pre-trip recheck block**: present when the trip overlaps a peak period, per [dining-rules.md](references/dining-rules.md) §8.
 - **Specialties** (if present): pass [local-specialties.md](references/local-specialties.md) card checklist.
+- **Knowledge layers**: every named entity (hotel, restaurant, shop, dish, attraction, price) classified per [knowledge-layers.md](references/knowledge-layers.md) §2 bright-line test; Local Knowledge Layer items have web evidence or degrade to search advisory card; destination-matching uses only Reasoning Layer dimensions.
 - **Data traceability**: every factual claim cites source + research date per [travel-sources.md](references/travel-sources.md).
 - **Content preservation**: existing source content preserved unless removal was requested.
 

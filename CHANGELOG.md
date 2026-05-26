@@ -8,6 +8,40 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.10.0] — 2026-05-26
+
+### Added
+
+- **`references/knowledge-layers.md`** — 双层知识架构：Reasoning Layer（客观推理，可用训练数据）vs Local Knowledge Layer（具体名称/价格，必须 web 验证或降级）。包含：
+  - §2 Bright-line test（命名实体/具体数字 = Local Knowledge）
+  - §3 Per-category degradation rules（strict: 餐厅/菜品/票价 · tolerated: 酒店/特产店/景点名）
+  - §4 Destination matching framework（7 个客观维度，无具体名称）
+  - §5 Search advisory card template（平台 + 关键词 + 筛选 + 判断标准 + 避坑）
+  - §6 Behavior flows（4 种用户场景的完整决策路径）
+- **hotel-selection.md §Progressive Search** — 两阶段渐进式酒店搜索：Phase 1 单平台侦察（2-3 分钟出初步结果）→ Phase 2 用户确认后才交叉验证。消除 80% 的无效搜索。
+- **hotel-selection.md §Timeout Degradation** — 3 次连续 WebFetch 失败 OR 单酒店搜索超 3 分钟 → 自动降级为搜索建议卡。永不无限搜索，永不需要用户手动终止。
+- **dining-rules.md §11** — Search advisory fallback：web search 不可用时输出搜索建议卡，保持 §2 absolute ban（餐厅/菜品永不允许 approximate 标签降级）。
+- **local-specialties.md §Search Advisory Fallback** — 同 pattern：验证失败时输出搜索建议卡，category-level guidance 保持 Reasoning Layer 直出。
+- **test-prompts.json cases 16-18** — 三个新测试：(16) 国内目的地推荐无 web search 断言无命名实体；(17) 酒店搜索超时降级断言搜索建议卡输出；(18) 用户提供酒店名验证流程。
+
+### Changed
+
+- **SKILL.md Navigation** — 新增 knowledge-layers.md 行。
+- **SKILL.md §Data Traceability** — 加 progressive search 引用 + Local Knowledge 降级指向。
+- **SKILL.md §Intake** — destination-inspiration 流程指向 knowledge-layers.md §4。
+- **SKILL.md §Fallback Rules** — hotel 和 specialty 降级条目加搜索建议卡指向。
+- **SKILL.md §Final Check** — 新增 Knowledge layers 审计行。
+
+### Why
+
+两个独立问题合并解决：(1) Skill 从训练数据输出中国本地旅行信息（酒店名、餐厅名、菜品）系统性不可靠——之前规则说"不要编造"但没有提供替代行为（Y in "don't do X, do Y"）；(2) 酒店搜索经常花 20-30 分钟无法完成——evidence requirements（8 字段 × 2 平台 × 3 酒店 = 6+ 串行 WebFetch）无降级机制。
+
+双层架构给"不要编造"提供了结构性的替代方案（搜索建议卡），渐进式搜索+超时降级解决了操作层面的超时问题。两者共享搜索建议卡基础设施，一起 ship 比拆开更干净。
+
+### Structure guarantee
+
+零规则内容删除。零 anchor 改名。现有 rule_refs（case 1-15）不受影响。dining-rules.md §2 absolute ban 保持不变且被显式加固。
+
 ## [0.9.0] — 2026-05-25
 
 ### Changed

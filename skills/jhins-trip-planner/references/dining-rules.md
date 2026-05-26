@@ -101,6 +101,10 @@ Trips with 5+ dining picks: verification runs as a batch via 2–3 parallel sub-
 
 Each sub-agent returns: operating status · address · regular closures · peak-season notes · reservation channel · source URL. Status line to user: "Dispatched N sub-agents for venue verification." Pointer: [deep/dining-rules.md](deep/dining-rules.md) §10.
 
+## 11. Search Advisory Fallback
+
+When web search is unavailable or all verification attempts fail for restaurant recommendations, output a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. Never fall back to "approximate" labeling or training-data names for restaurants and dishes — the §2 absolute ban applies regardless of degradation path.
+
 ## Non-Goals
 
 - Do not rely on general training-data restaurant knowledge. Every pick passes §2.

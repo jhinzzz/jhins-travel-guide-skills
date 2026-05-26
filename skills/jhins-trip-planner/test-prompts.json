@@ -510,6 +510,106 @@
     }
   },
   {
+    "id": 16,
+    "scenario": "knowledge-layer-domestic-destination",
+    "prompt": "端午节想带3岁女儿去海边玩几天，从深圳出发，自驾3小时内，有什么推荐？",
+    "assertions": {
+      "mode": "planning-only",
+      "must_use_destination_matching_framework": true,
+      "destination_matching_dimensions_required": [
+        "distance / travel time",
+        "climate in target period",
+        "transport accessibility",
+        "destination type",
+        "infrastructure maturity",
+        "peak-period crowd level",
+        "party-fit signals (3-year-old)"
+      ],
+      "must_not_contain": [
+        "specific hotel name from training data",
+        "specific restaurant name from training data",
+        "specific dish name from training data",
+        "specific ticket price without source"
+      ],
+      "must_contain_search_advisory_for": [
+        "hotels",
+        "dining"
+      ],
+      "output_format_matches": "knowledge-layers.md §4 destination matching template",
+      "rule_refs": [
+        "knowledge-layers.md §2 (bright-line test)",
+        "knowledge-layers.md §4 (destination matching)",
+        "knowledge-layers.md §5 (search advisory card)",
+        "SKILL.md §Intake (destination-inspiration pointer)"
+      ]
+    }
+  },
+  {
+    "id": 17,
+    "scenario": "hotel-search-timeout-degradation",
+    "prompt": "就去海陵岛吧，有什么亲子酒店推荐？要有儿童池，离海滩近",
+    "assertions": {
+      "mode": "planning-only",
+      "progressive_search_phase1": {
+        "platform": "携程 or 飞猪 (domestic China)",
+        "max_candidates_shown": 5,
+        "scout_card_fields": ["name", "area", "nightly rate range", "platform rating", "source"]
+      },
+      "timeout_degradation_triggers": [
+        "3 consecutive WebFetch failures → search advisory card",
+        "single hotel search > 3 min → search advisory card",
+        "all Phase 1 candidates fail → full category search advisory"
+      ],
+      "search_advisory_card_fields_if_degraded": [
+        "platform",
+        "keywords (海陵岛 + 亲子 + 儿童池)",
+        "filters (rating, child facilities, beach proximity)",
+        "judgment criteria",
+        "pitfall warnings"
+      ],
+      "must_never": [
+        "search indefinitely without degradation",
+        "require user to manually terminate",
+        "output hotel names from training data without web evidence"
+      ],
+      "rule_refs": [
+        "hotel-selection.md §Progressive Search",
+        "hotel-selection.md §Timeout Degradation",
+        "knowledge-layers.md §3 (tolerated policy for hotels)",
+        "knowledge-layers.md §5 (search advisory card)"
+      ]
+    }
+  },
+  {
+    "id": 18,
+    "scenario": "user-supplied-hotel-validation",
+    "prompt": "我朋友推荐了海陵岛的敏捷黄金海岸酒店，帮我看看这家怎么样，适合带小孩去吗？",
+    "assertions": {
+      "mode": "planning-only",
+      "user_supplied_name_flow": true,
+      "must_attempt_web_verification": [
+        "does the hotel exist and is it open",
+        "current ratings on platforms",
+        "child-friendly facilities",
+        "beach proximity",
+        "nightly rate range"
+      ],
+      "if_verification_succeeds": {
+        "output": "hotel card with verified data per hotel-selection.md",
+        "must_cite_source": true
+      },
+      "if_verification_fails": {
+        "output": "explicit statement that verification failed + search advisory card for alternatives",
+        "must_not": "embellish user-supplied name with unverified details (fake ratings, invented prices, fabricated facilities)"
+      },
+      "rule_refs": [
+        "knowledge-layers.md §6 (user-supplied hotel name flow)",
+        "hotel-selection.md §Evidence Standard",
+        "hotel-selection.md §Timeout Degradation"
+      ]
+    }
+  },
+  {
     "id": 14,
     "scenario": "budget-rigor-fx-sensitive",
     "prompt": "10 月底和老婆去阿根廷玩 10 天（布宜诺斯艾利斯 + 门多萨 + 巴塔哥尼亚 El Calafate），从北京出发，总预算 5 万人民币（不含国际机票），我们预算比较紧",

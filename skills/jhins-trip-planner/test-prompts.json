@@ -381,7 +381,11 @@
         "etiquette (Hindu temple dress, left-hand taboo, PDA limits)"
       ],
       "must_have_safety_block": {
-        "emergency_numbers": ["110", "118", "113"],
+        "emergency_numbers": [
+          "110",
+          "118",
+          "113"
+        ],
         "foreigner_hospital_example": "BIMC Hospital Kuta",
         "consulate": "Chinese Consulate Denpasar with after-hours line",
         "ocean_risk_phrasing": "Aug–Oct west coast swell; midday Padang Padang high-tide hazard; dive only with PADI 5-star operators"
@@ -418,9 +422,19 @@
         "insurer claim hotline"
       ],
       "expected_emergency_numbers": {
-        "Japan": ["110", "119"],
-        "Korea": ["112", "119"],
-        "Thailand": ["191", "1669", "1155"]
+        "Japan": [
+          "110",
+          "119"
+        ],
+        "Korea": [
+          "112",
+          "119"
+        ],
+        "Thailand": [
+          "191",
+          "1669",
+          "1155"
+        ]
       },
       "must_cite_source_for": [
         "every intercity flight/train fare",
@@ -455,8 +469,15 @@
       ],
       "tour_operator_vetting_source": "DTCM / visitdubai.com certified list — NOT generic TripAdvisor floor",
       "safety_block_required": {
-        "emergency_numbers": ["999", "998", "997"],
-        "foreigner_hospital_example": ["American Hospital Dubai", "Mediclinic"],
+        "emergency_numbers": [
+          "999",
+          "998",
+          "997"
+        ],
+        "foreigner_hospital_example": [
+          "American Hospital Dubai",
+          "Mediclinic"
+        ],
         "consulate_phone_rule": "if exact number unverifiable — leave phone blank + '→ Fetch from http://dubai.china-consulate.gov.cn/' per §3 partial-number ban"
       },
       "minor_entry_documents": [
@@ -553,7 +574,13 @@
       "progressive_search_phase1": {
         "platform": "携程 or 飞猪 (domestic China)",
         "max_candidates_shown": 5,
-        "scout_card_fields": ["name", "area", "nightly rate range", "platform rating", "source"]
+        "scout_card_fields": [
+          "name",
+          "area",
+          "nightly rate range",
+          "platform rating",
+          "source"
+        ]
       },
       "timeout_degradation_triggers": [
         "3 consecutive WebFetch failures → search advisory card",
@@ -606,6 +633,41 @@
         "knowledge-layers.md §6 (user-supplied hotel name flow)",
         "hotel-selection.md §Evidence Standard",
         "hotel-selection.md §Timeout Degradation"
+      ]
+    }
+  },
+  {
+    "id": 19,
+    "scenario": "login-wall-exhaustion-gate",
+    "prompt": "就去顺德吧，帮我推荐 Day1 午餐的顺德菜餐厅。（模拟：大众点评搜索页 302 跳登录、高德地图返回需登录的空白页）",
+    "assertions": {
+      "mode": "planning-only",
+      "login_wall_is_not_search_failure": true,
+      "must_retry_before_degrading": {
+        "min_channels": 2,
+        "at_least_one_must_be": "search aggregator (DuckDuckGo HTML endpoint / Bing)",
+        "rationale": "a login wall blocks the platform's own page, not the aggregator-indexed copy"
+      },
+      "must_not": [
+        "output a search advisory card after only Dianping + Amap login walls",
+        "treat two login-walled platforms as 'all verification attempts failed'",
+        "output restaurant names from training data without aggregator-sourced evidence",
+        "tell the user to just search it themselves without first attempting the aggregator"
+      ],
+      "if_aggregator_surfaces_verifiable_data": {
+        "output": "verified restaurant card(s) with cuisine · rating · walk time · price band per dining-rules.md §5",
+        "must_cite_source": "underlying platform via aggregator, e.g. 大众点评 4.5（经 DuckDuckGo 聚合, date）"
+      },
+      "if_aggregator_retry_also_fails": {
+        "output": "search advisory card as LAST RESORT",
+        "must_state": "which channels were tried and why each failed"
+      },
+      "rule_refs": [
+        "knowledge-layers.md §6 (exhaustion gate)",
+        "travel-sources.md §Login-Wall Fallback (Search Aggregators)",
+        "dining-rules.md §11 (exhaust channels before degrading)",
+        "dining-rules.md §2 (operating-status verification)",
+        "SKILL.md §Fallback Rules (Web verification stalls)"
       ]
     }
   },

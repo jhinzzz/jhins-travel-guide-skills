@@ -25,6 +25,8 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Confirmation Checkpoints (Ramadan) | 13 |
 | §Data Traceability | 5 |
 | §Fallback Rules (Missing dates/destination) | 3, 14 |
+| §Fallback Rules (Web verification stalls) | 19 |
+| §Intake (destination-inspiration pointer) | 16 |
 
 ### intake.md
 
@@ -61,10 +63,11 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | §1 | 1 |
-| §2 | 8 |
+| §2 | 8, 19 |
 | §3 (Spring Festival / New Year peak) | 5 |
 | §9 | 8 |
 | §10 | 8 |
+| §11 | 19 |
 | §§1-10 | 6, 7 |
 
 ### budget.md
@@ -105,11 +108,23 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §6 (DTCM vetting) | 13 |
 | §9 | 12 |
 
+### knowledge-layers.md
+
+| Anchor | Cases |
+|---|---|
+| §2 (bright-line test) | 16 |
+| §3 (tolerated policy for hotels) | 17 |
+| §4 (destination matching) | 16 |
+| §5 (search advisory card) | 16, 17 |
+| §6 (user-supplied hotel name flow) | 18 |
+| §6 (exhaustion gate) | 19 |
+
 ### travel-sources.md
 
 | Anchor | Cases |
 |---|---|
 | §Per-Person Price Tiers | 7 |
+| §Login-Wall Fallback (Search Aggregators) | 19 |
 
 ## Case index (for looking up what a case exercises)
 

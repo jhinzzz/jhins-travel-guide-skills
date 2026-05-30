@@ -91,6 +91,14 @@ For `planning-only` mode, use a compact variant (platform + keywords + top 2 fil
 
 ## 6. Behavior Flows
 
+### Exhaustion gate (read before degrading)
+
+A single platform returning a **login wall / 302 redirect / timeout / blank result is NOT a search failure** — it only means *that platform* won't serve an anonymous fetch. The same datum is re-indexed by search aggregators (see [travel-sources.md](travel-sources.md) §Login-Wall Fallback).
+
+Before degrading any Local Knowledge item to a search advisory card, you must have tried **≥2 channels, at least one of which is a search aggregator** (DuckDuckGo HTML endpoint / Bing). Only after the aggregator retry also fails to surface a verifiable datum may you output the advisory card — and it must state which channels were tried and why each failed.
+
+The search advisory card is a **last resort**, not the default response to the first login wall. "Platform needs login → I can't verify → advisory card" is a forbidden shortcut: the login wall blocks the platform's *own* page, not the aggregator-indexed copy.
+
 ```
 User: "推荐个地方"
   → Reasoning Layer: destination matching (objective dimensions only)
@@ -100,7 +108,8 @@ User: "推荐个地方"
 User: "就去X吧，有什么酒店推荐？"
   → Attempt web search (progressive per hotel-selection.md)
   → IF search succeeds: output verified hotel cards
-  → IF search fails/timeout: output search advisory card
+  → IF a platform is login-walled/blank: retry via aggregator (≥2 channels) per exhaustion gate above
+  → IF aggregator retry ALSO fails: output search advisory card (last resort, list channels tried)
   → NEVER output hotel names from training data without verification
 
 User: "推荐个地方，顺便看看有什么好酒店"
@@ -113,7 +122,8 @@ User: "我听说X酒店不错，帮我看看"
   → Name came from user, not training data
   → Attempt web search to VALIDATE (exists? open? ratings? price?)
   → IF search confirms: output hotel card with verified data
-  → IF search fails: "我没能验证这家酒店的信息" + search advisory
+  → IF a platform is login-walled: retry via aggregator (≥2 channels) per exhaustion gate above
+  → IF aggregator retry ALSO fails: "我没能验证这家酒店的信息" + search advisory
   → NEVER embellish user-supplied names with unverified details
 ```
 

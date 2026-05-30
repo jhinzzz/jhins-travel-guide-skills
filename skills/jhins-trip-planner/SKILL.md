@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.10.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.11.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -124,7 +124,7 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 - **Conflicting constraints** (luxury-on-tight-budget, 10-attractions-in-2-days) → surface conflict; offer 2–3 prioritization choices; do not silently compromise.
 - **Thin specialty data** → category guidance + "verify locally"; no specific shops without source per [local-specialties.md](references/local-specialties.md). Output search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5 when verification unavailable.
 - **Contradictory existing content** → preserve source facts; flag; don't resolve by invention.
-- **Web verification stalls** → retry via a different source in [travel-sources.md](references/travel-sources.md); repeated mismatches on the same ID = closed/relocated; never "please verify yourself".
+- **Web verification stalls** → retry via a different source in [travel-sources.md](references/travel-sources.md); a login wall / 302 / blank on one platform is **not** a failure — retry via a search aggregator (≥2 channels) per [knowledge-layers.md](references/knowledge-layers.md) §6 exhaustion gate **before** degrading to a search advisory card; repeated mismatches on the same ID = closed/relocated; never "please verify yourself".
 - **Batch verification** — parallel sub-agents when the batch crosses:
   - Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10
   - Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification

@@ -26,6 +26,17 @@ Define the canonical set of travel information sources used for research, cross-
 | 12306 | China rail schedules and tickets | 12306.cn | Official and authoritative for all China rail |
 | 高德地图 / 百度地图 | Directions, transit routes, real-time traffic (China) | amap.com / map.baidu.com | Authoritative for China domestic navigation |
 
+### Login-Wall Fallback (Search Aggregators)
+
+China platforms (Dianping, Ctrip, Mafengwo, Xiaohongshu, Amap) routinely gate their result pages behind a **login wall / 302 redirect / blank response** to anonymous fetches. When that happens, do **not** treat it as "no data" — these aggregators re-index the same content and surface it in result snippets:
+
+| Aggregator | Best For | URL | Notes |
+|---|---|---|---|
+| DuckDuckGo (HTML endpoint) | Anonymous web search that returns parseable snippets | html.duckduckgo.com/html/ | **First-choice retry when a China platform is login-walled.** Snippets routinely carry shop name · address · per-person price · rating sourced from Dianping / Ctrip / Mafengwo / TripAdvisor. |
+| Bing | Second search aggregator for cross-checking | bing.com/search | Use a second aggregator to confirm a name surfaced by the first. |
+
+These are a **retry channel, not a primary source** — the underlying datum still belongs to Dianping / Ctrip / etc. and is cited as such (e.g., `大众点评 4.5分（经 DuckDuckGo 聚合, 2026-05-30）`). A single platform's login wall is **not** a verification failure — see [knowledge-layers.md](knowledge-layers.md) §6 exhaustion gate before degrading to a search advisory card.
+
 ### International Platforms
 
 | Platform | Best For | URL | Notes |
@@ -68,6 +79,7 @@ Define the canonical set of travel information sources used for research, cross-
 | Train schedules (Europe) | National rail site | Trainline / Rome2Rio |
 | Hotel pricing and reviews | Booking.com / Ctrip / Trip.com | TripAdvisor / Google Maps / Agoda |
 | Restaurant recommendations | Dianping (China) / Tabelog (Japan) / TripAdvisor (intl) | 小红书 / Google Maps |
+| China platform login-walled (302 / blank) | DuckDuckGo HTML endpoint (re-indexes the blocked platform) | Bing — confirm the name on a second aggregator |
 | Local specialties | 马蜂窝 / 小红书 | Dianping / TripAdvisor / Lonely Planet |
 | Attraction info and tickets | Official site / Klook | 马蜂窝 / TripAdvisor |
 | Visa and entry | Embassy / government site | Travel forum cross-check |

@@ -31,7 +31,9 @@ Trigger: every restaurant recommendation, always. Pointer: [deep/dining-rules.md
 
 Every restaurant must be checked against the **specific trip date**, not its usual pattern. Weekly closures + destination-specific peak closures eliminate otherwise-good picks.
 
-Record per restaurant: regular closed days · holiday-season notices · irregular / chef's-discretion flags.
+Record per restaurant: regular closed days · holiday-season notices · irregular / chef's-discretion flags · **opening hours**.
+
+**Opening hours must cover the meal slot you schedule it in.** A shop that opens at 16:30 cannot be a lunch pick, however famous. Check before slotting — do not place a venue, then discover the clash. Single-item / sell-out venues (limited daily stock, "sells out by X") get the same gate: if its open-and-stocked window doesn't cover the slot, it is not that meal's pick — surface it as a flagged optional detour, not a main.
 
 Trigger: any restaurant with a regular day off, or trip window overlapping a destination peak (Japan GW / China Spring Festival / Europe Christmas / Middle East Ramadan + Eid etc.). Pointer: [deep/dining-rules.md](deep/dining-rules.md) §3.
 
@@ -104,6 +106,15 @@ Each sub-agent returns: operating status · address · regular closures · peak-
 ## 11. Search Advisory Fallback
 
 When web search is unavailable or all verification attempts fail for restaurant recommendations, output a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. Never fall back to "approximate" labeling or training-data names for restaurants and dishes — the §2 absolute ban applies regardless of degradation path.
+
+**Exhaust channels before degrading.** A login wall on one platform is not "all verification attempts failed" — the [knowledge-layers.md](knowledge-layers.md) §6 exhaustion gate applies: try ≥2 channels (≥1 search aggregator) first. The advisory card is a last resort, not the response to the first 302.
+
+| Rationalization | Reality |
+|---|---|
+| "Dianping needs login → can't verify → output advisory card" | The login wall blocks Dianping's *own* page; the same shop name/rating is indexed by aggregators. **Not allowed to degrade before trying an aggregator.** |
+| "I already tried two platforms (Dianping + Amap), both login-walled" | Two login walls on the *same kind* of source ≠ exhaustion. The required retry is a **search aggregator**, which neither of those is. |
+
+🚩 **Red flag — STOP before writing a restaurant search advisory card:** ask "how many channels did I try, and was one an aggregator?" Fewer than 2, or zero aggregators → keep searching, do not degrade.
 
 ## Non-Goals
 

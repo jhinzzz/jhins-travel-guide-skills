@@ -8,6 +8,34 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.11.0] — 2026-05-30
+
+### Added
+
+- **`travel-sources.md` §Login-Wall Fallback (Search Aggregators)** — 新增一类来源：通用搜索聚合器（DuckDuckGo HTML 端点 / Bing）。中国平台（点评/携程/马蜂窝/小红书/高德）对匿名抓取普遍返回登录墙 / 302 / 空白，但这些聚合器**重新索引了同样的内容**，店名·地址·人均·评分常直接出现在结果摘要里。明确标注为 retry 渠道（底层数据仍归属原平台并如此引用），不是 primary source。
+- **`knowledge-layers.md` §6 Exhaustion gate（穷尽闸）** — 在 behavior flows 顶部新增硬规则：单平台登录墙 / 302 / 超时 / 空白 **≠ search failed**。降级为搜索建议卡之前，必须先试 **≥2 个渠道（其中至少 1 个搜索聚合器）**；搜索建议卡是 **last resort**，且须注明已试渠道与失败原因。两条 hotel flow 的 `IF search fails` 分支同步改写。
+- **`dining-rules.md` §11 反合理化表 + red flag** — 钉死两个借口（"平台要登录=无法核实=出建议卡"、"我已试了点评+高德两个平台"），并加 STOP red-flag：写餐厅搜索建议卡前自问"试了几个渠道、有没有聚合器"，<2 或零聚合器 → 继续搜。
+- **`dining-rules.md` §3 营业时段闸** — 新增"开门时段必须覆盖排入的餐段"：16:30 才开的店不能排进午餐；单品/易售罄店同理，窗口不覆盖就只作 flagged optional detour，不作正餐主选。
+- **test-prompts.json case 19**（`login-wall-exhaustion-gate`）— 顺德午餐场景，模拟点评 302 + 高德登录墙，断言坚持聚合器 retry、不过早降级、不用训练数据店名。
+- **provenance.md** — 新增缺失的 `knowledge-layers.md` 段（补登 case 16/17/18 + 新 case 19），并登记 case 19 跨 5 个 anchor 的覆盖。
+
+### Changed
+
+- **SKILL.md §Fallback Rules（Web verification stalls）** — 补充"登录墙 / 302 / 空白 ≠ 失败，先经 §6 穷尽闸用聚合器 retry 再降级"。
+- **SKILL.md Version** — 0.10.0 → 0.11.0（VERSION / plugin.json / marketplace.json 同步）。
+
+### Why
+
+本轮实战（顺德端午亲子行）暴露了一个**结构性**缺陷：点评/高德对匿名抓取弹登录墙时，skill 把"单平台登录墙"等同于"search failed"，直接降级成搜索建议卡——餐厅、手信连续两次"全让用户自己搜"。但同一轮里 DuckDuckGo 一搜就拿到了带评分/地址/电话的真实店（聚福山庄、顺德人家、李禧记、黄但记…），证明核实渠道一直通，是规则让"过早降级"这条路太好走。
+
+A/B 子代理测试确认了根因:**RED**(当前规则,含"绝不让用户自己核实""换源重试""餐厅禁用训练数据"全部防线)两样本**均复现降级**;**GREEN**(RED + 穷尽闸 + 聚合器渠道 + 反合理化)两样本**均坚持 retry、不降级**。精确变量就是"穷尽闸 + 把聚合器列为强制 retry 渠道"。
+
+§3 营业时段闸是同轮的次要发现:把 16:30 才开的烧鹅店误排进午餐位,属"自打脸再纠正",加一道开门时段校验在第一遍即可拦下。
+
+### Structure guarantee
+
+零规则内容删除。零既有 anchor 改名。现有 rule_refs（case 1-18）不受影响。dining-rules.md §2 absolute ban 保持不变并被 §11 反合理化表进一步加固。新 anchor：travel-sources.md §Login-Wall Fallback (Search Aggregators)、knowledge-layers.md §6 (exhaustion gate)。
+
 ## [0.10.0] — 2026-05-26
 
 ### Added

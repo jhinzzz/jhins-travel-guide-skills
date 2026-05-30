@@ -8,6 +8,34 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.11.0] — 2026-05-30
+
+### Added
+
+- **`travel-sources.md` §Login-Wall Fallback (Search Aggregators)** — new source class: general search aggregators (DuckDuckGo HTML endpoint / Bing). China platforms (Dianping/Ctrip/Mafengwo/Xiaohongshu/Amap) routinely login-wall / 302 / blank anonymous fetches, but aggregators **re-index the same content** — shop name · address · per-person price · rating surface in result snippets. Marked explicitly as a retry channel (the underlying datum still belongs to the original platform and is cited as such), not a primary source.
+- **`knowledge-layers.md` §6 exhaustion gate** — hard rule added atop the behavior flows: a single platform's login wall / 302 / timeout / blank is **NOT a search failure**. Before degrading to a search advisory card you must try **≥2 channels (≥1 search aggregator)**; the advisory card is a **last resort** and must list which channels were tried and why each failed. Both hotel-flow `IF search fails` branches rewritten to match.
+- **`dining-rules.md` §11 rationalization table + red flag** — nails two excuses ("platform needs login = can't verify = advisory card"; "I already tried Dianping + Amap") and a STOP red flag: before writing a restaurant advisory card, ask "how many channels, and was one an aggregator?" — fewer than 2 or zero aggregators → keep searching.
+- **`dining-rules.md` §3 operating-hours gate** — "opening hours must cover the meal slot": a shop opening at 16:30 can't be a lunch pick; sell-out/single-item venues get the same gate — if the open-and-stocked window doesn't cover the slot, it's a flagged optional detour, not a main.
+- **test-prompts.json case 19** (`login-wall-exhaustion-gate`) — Shunde lunch scenario simulating Dianping 302 + Amap login wall; asserts aggregator retry is attempted, no premature degradation, no training-data shop names.
+- **provenance.md** — added the missing `knowledge-layers.md` section (backfills cases 16/17/18 + new case 19) and registered case 19's 5-anchor coverage.
+
+### Changed
+
+- **SKILL.md §Fallback Rules (Web verification stalls)** — added "a login wall / 302 / blank is not a failure — retry via a search aggregator (≥2 channels) per §6 exhaustion gate before degrading."
+- **Version** — 0.10.0 → 0.11.0 (VERSION / SKILL.md / plugin.json / marketplace.json in sync).
+
+### Why
+
+A real session (Shunde Dragon-Boat family trip) exposed a **structural** defect: when Dianping/Amap login-walled anonymous fetches, the skill equated "one platform login-walled" with "search failed" and degraded straight to a search advisory card — twice telling the user to "just search it yourself" for restaurants and souvenirs. Yet in the same session a DuckDuckGo query immediately surfaced real shops with ratings/addresses/phones (Jufu Shanzhuang, Shunde Renjia, Li Xi Ji, Huang Dan Ji…), proving the verification path was open the whole time — the rules just made premature degradation too easy.
+
+An A/B subagent test confirmed root cause: **RED** (current rules, including all existing guards — "never tell the user to verify themselves", "retry via another source", "restaurants banned from training data") reproduced the degradation in both samples; **GREEN** (RED + exhaustion gate + aggregator channel + rationalization table) held in both samples. The precise variable was "exhaustion gate + aggregator as a mandatory retry channel."
+
+The §3 operating-hours gate is a secondary finding from the same session — a 16:30-opening roast-goose shop was mistakenly slotted into lunch; an opening-hours check catches this on the first pass.
+
+### Structure guarantee
+
+Zero rule content deleted. Zero existing anchors renamed. Existing rule_refs (cases 1-18) unaffected. dining-rules.md §2 absolute ban unchanged and further hardened by the §11 rationalization table. New anchors: travel-sources.md §Login-Wall Fallback (Search Aggregators), knowledge-layers.md §6 (exhaustion gate).
+
 ## [0.8.0] — 2026-04-23
 
 ### Changed

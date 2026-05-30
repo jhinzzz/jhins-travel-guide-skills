@@ -2,7 +2,7 @@
 
 [中文 / CHANGELOG.md](./CHANGELOG.md)
 
-Iteration log for the `jhins-trip-planner` skill. Every version answers two questions: **what changed** and **why**. Latest on top.
+Iteration log for the `jhins-trip-planner` skill, recording **what changed** in each version. Latest on top.
 
 Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
@@ -24,14 +24,6 @@ Version numbers follow the spirit of semver:
 - **SKILL.md §Fallback Rules (Web verification stalls)** — added "a login wall / 302 / blank is not a failure — retry via a search aggregator (≥2 channels) per §6 exhaustion gate before degrading."
 - **Version** — 0.10.0 → 0.11.0 (VERSION / SKILL.md / plugin.json / marketplace.json in sync).
 
-### Why
-
-A real session (Shunde Dragon-Boat family trip) exposed a **structural** defect: when Dianping/Amap login-walled anonymous fetches, the skill equated "one platform login-walled" with "search failed" and degraded straight to a search advisory card — twice telling the user to "just search it yourself" for restaurants and souvenirs. Yet in the same session a DuckDuckGo query immediately surfaced real shops with ratings/addresses/phones (Jufu Shanzhuang, Shunde Renjia, Li Xi Ji, Huang Dan Ji…), proving the verification path was open the whole time — the rules just made premature degradation too easy.
-
-An A/B subagent test confirmed root cause: **RED** (current rules, including all existing guards — "never tell the user to verify themselves", "retry via another source", "restaurants banned from training data") reproduced the degradation in both samples; **GREEN** (RED + exhaustion gate + aggregator channel + rationalization table) held in both samples. The precise variable was "exhaustion gate + aggregator as a mandatory retry channel."
-
-The §3 operating-hours gate is a secondary finding from the same session — a 16:30-opening roast-goose shop was mistakenly slotted into lunch; an opening-hours check catches this on the first pass.
-
 ### Structure guarantee
 
 Zero rule content deleted. Zero existing anchors renamed. Existing rule_refs (cases 1-18) unaffected. dining-rules.md §2 absolute ban unchanged and further hardened by the §11 rationalization table. New anchors: travel-sources.md §Login-Wall Fallback (Search Aggregators), knowledge-layers.md §6 (exhaustion gate).
@@ -50,12 +42,6 @@ Zero rule content deleted. Zero existing anchors renamed. Existing rule_refs (ca
 - `scripts/check-size.sh` now also checks `deep/` with relaxed thresholds (> 400 warn / > 500 error — deep files are supposed to be larger).
 - **`FUTURE.md` rewritten** — from "5 conditionally-triggered technical directions" to a **strategic positioning + ecosystem roadmap**: the main skill stays broad and general; domain specialists (pet travel / business / LGBTQ safety / cross-strait / destination-specific) land as **separate skills routed by trigger words**, not as new sections inside this skill.
 
-### Why
-
-The user's intent for this skill is "broad and general-purpose; never a deep specialist in any one domain unless a trigger routes to a dedicated skill." The last 4 iterations went the wrong direction: v0.7.0 added infra, v0.7.1 added checks, v0.7.2 added a new reference. Each pass made the main skill fatter. A local dry-run (Taiwan GW case, `session-learnings-*`) found 16 gaps — continuing the old path would have spawned 3-4 more reference files.
-
-This release reverses direction: **no new content, only relocation**. Deep material stays available (zero information loss), but the LLM's default context window reads -217 fewer lines. Future specialist domains → separate skills, not new references. Jobs's subtraction default, applied.
-
 ### Structure guarantee
 
 Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four checks (links / provenance / version / size) remain green.
@@ -72,12 +58,6 @@ Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four 
 - SKILL.md Navigation gets a new row; Core Workflow §3 now references budget.md §1; Final Check upgrades its budget line from "present" to a 4-point audit (band · hidden costs · refundable · FX).
 - `test-prompts.json` adds case 14 (Argentina 10 days, tight budget, FX-sensitive) — exercises all 4 budget.md sections. `provenance.md` adds the budget.md section plus case 14's trip-prep §3 and Fallback Rules references.
 
-### Why
-
-The skill already had 9 rule files, but "budget" only appeared as fragments across intake (a single number), SKILL.md (15% overage checkpoint), and trip-prep.md (payment friction). The real-world result: 90% of budget overruns come from **nobody telling the user** that "35% lodging in East Asia or 20% transport in the Nordics is normal," or that "Argentina requires carrying USD cash — do not pre-convert CNY → ARS." This release consolidates scattered budget knowledge into one reference and pairs it with the 15% checkpoint (checkpoint = trigger, budget.md = evidence).
-
-No existing rule file content was touched (zero pollution). SKILL.md is 195 lines (was 194), leaving 55 lines of headroom against the 250-line threshold.
-
 ## [0.7.1] — 2026-04-23
 
 ### Fixed
@@ -92,10 +72,6 @@ No existing rule file content was touched (zero pollution). SKILL.md is 195 line
   - `scripts/check-all.sh` — aggregator runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` in one command, replacing the manual release checklist.
 - README / README_CN Release checklist now points to `scripts/check-all.sh`.
 
-### Why
-
-The v0.7.0 commit summary explicitly called the 0.5.2 drift in plugin.json / marketplace.json "out of scope" — that was an excuse. This release fixes it and promotes the manual pre-release checklist into a machine contract: one command runs four orthogonal checks. Also closes the FUTURE §3 risk that SKILL.md could quietly re-grow past the rule-fatigue threshold.
-
 ### Added
 
 - **Rule Provenance mechanism** — makes "why does this rule exist" machine-verifiable and reverse-queryable.
@@ -104,12 +80,6 @@ The v0.7.0 commit summary explicitly called the 0.5.2 drift in plugin.json / mar
   - SKILL.md top meta line adds a pointer to provenance.md — Navigation table stays clean.
   - FUTURE.md §1 (test automation) updated: ground truth is now structured and ready; when the harness ships, no corpus needs to be built.
 
-### Why
-
-The skill now has 9 rule files, 1400+ lines. Marginal cost of adding more coverage is low, but the reasoning behind each rule is leaking (`session-learnings-*.md` files are prose, not bound to rules). Without this mechanism, changing `dining-rules.md §5` has no way to surface that cases 6/7/8 depend on it. Now provenance.md makes it visible at a glance and check-provenance.sh blocks anchor drift at commit time.
-
-No existing rule file content was edited. Rule files stay clean — provenance lives in `test-prompts.json`'s `rule_refs` plus a single index file, zero inline annotation.
-
 ## [0.6.4] — 2026-04-22
 
 ### Changed
@@ -117,22 +87,12 @@ No existing rule file content was edited. Rule files stay clean — provenance l
 - SKILL.md §Confirmation Checkpoints gets a batching rule: multiple intake-phase checkpoints can be asked in a single batch (max 3, priority order legal/safety > scheduling > preference); mid-flight checkpoints (budget overage, restaurant swap, pace/theme conflict) still fire **one at a time**.
 - dining-rules.md §3 peak list now covers Eid al-Fitr / al-Adha: `Middle East Ramadan (daytime closures) + Eid al-Fitr / al-Adha (2–4 day public holidays, date shifts by moon sighting, many venues closed or on special hours)`. Previously only Ramadan was listed.
 
-### Why
-
-Case 13 (Dubai 5 days + Ramadan + 8-year-old daughter) QA simulation exposed two gaps:
-1. Intake triggered 3 checkpoints simultaneously (Ramadan dates / theme conflict / kid desert intensity). The rule said "stop and ask" but never said whether they could be batched. The LLM made a judgment call and batched them — the new rule legitimizes that.
-2. Eid al-Fitr immediately follows Ramadan and is a 2–4 day public holiday with widespread closures or special hours. The old rule only mentioned Ramadan.
-
 ## [0.6.3] — 2026-04-22
 
 ### Added
 
 - `.gitignore` — explicitly excludes `session-learnings-*.md` (personal session notes) and locally generated cache directories from git. Replaces the "just remember not to track them" soft constraint.
 - `FUTURE.md` item 1 gets a clarification: the `rule_refs` field in `test-prompts.json` is a **human-readable annotation**, not a machine assertion; `check-links.sh` does not scan JSON. Prevents future readers from mistaking these references as harness dependencies.
-
-### Why
-
-Three informational findings from the internal pre-landing review of v0.6.0–v0.6.2 — mechanical fixes, bundled into one bump.
 
 ## [0.6.2] — 2026-04-22
 
@@ -142,20 +102,12 @@ Three informational findings from the internal pre-landing review of v0.6.0–v0
 - CHANGELOG backfilled to v0.3.0 (mined from git log).
 - FUTURE.md records 5 "conditionally triggered future directions" (test automation / thresholds.json / destinations/ split / triggers matrix / agentification), each with its trigger condition.
 
-### Why
-
-Infrastructure rather than rule changes. The skill has matured from "a pile of rules" into "versioned, with history, with a roadmap" — these three files are the supporting layer.
-
 ## [0.6.1] — 2026-04-22
 
 ### Added
 
 - `scripts/check-links.sh` — bash script that scans the skill package and validates cross-file references: every `[text](file.md)` points to a real file, every `§Anchor` matches a heading in the target file, orphan reference files are warned. Zero dependencies, pure bash + POSIX tools, runs in under 1 second.
 - Smart anchor parsing — correctly distinguishes that in "`(dining-rules.md) §5 for how they combine with meal`" the anchor is `§5`, not the whole trailing phrase.
-
-### Why
-
-`v0.6.0` split `planning-rules.md` into three files, and cross-file references grew from under 10 to 30+. Manual maintenance has too high a miss rate; it needed automation.
 
 ## [0.6.0] — 2026-04-22
 
@@ -182,10 +134,6 @@ Infrastructure rather than rule changes. The skill has matured from "a pile of r
   - `trip-prep.md` (108 lines) — §1-§7 numbered, visa + payment + SIM + insurance + etiquette + safety pointer
   - `weather-and-output.md` (70 lines) — weather + output + downstream pointers + independent-vs-guided
 - **`test-prompts.json` structured** — the prose `expected` field is replaced with machine-checkable `assertions` (13 cases, each with mode / must_contain / must_cite_source_for / rule_refs fields).
-
-### Why
-
-An earlier skill review surfaced three classes of problem: (1) SKILL.md was 32KB and the LLM hit rule fatigue by the time it reached Final Check; (2) coverage blind spots (accessibility / ethics / transit visas / climate / diverse payment methods) would bite on real trips; (3) test-prompts was prose, unusable for regression. This release fixes all three in one pass.
 
 ## [0.5.2] — 2026-04-22
 

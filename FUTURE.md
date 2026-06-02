@@ -15,12 +15,12 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 1. Automated testing for `test-prompts.json`
 
-**Current state**: 14 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
+**Current state**: 19 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
 
 **What it could look like**: a script (Node / Python, Anthropic SDK) that runs each case, applies two kinds of assertion: `grep-level` (must_contain / must_not_contain_literal) and `judge-level` (must_have_section, rule_refs traced). Ground truth is already structured; the harness just consumes it.
 
 **Why not now**:
-- 14 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
+- 19 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
 - Judge-level assertion (LLM judging LLM) has drift risk.
 - Manual case spot-checking on PR review catches most regressions.
 
@@ -31,7 +31,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 2. Independent specialist skills (by trigger)
 
-**Current state**: One skill, ten reference files, three with deep counterparts (opt-in extended).
+**Current state**: One skill, twelve reference files, five with deep counterparts (opt-in extended).
 
 **What it could look like**: separate skills published in the same marketplace, triggered by domain-specific words:
 
@@ -42,7 +42,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 - `jhins-destination-japan` / `jhins-destination-italy` / etc. — only if user interaction volume per country justifies a dedicated skill.
 
 **Why not now**:
-- The main skill's 10 references are already covering the 80% case. Before forking specialist skills, confirm the 20% is painful enough for repeat users.
+- The main skill's 12 references are already covering the 80% case. Before forking specialist skills, confirm the 20% is painful enough for repeat users.
 - Each new skill needs its own `plugin.json`, `marketplace.json` entry, CHANGELOG, setup — overhead is real.
 - The deep/ mechanism (v0.8.0) is cheaper for content that sits in the gray zone: "sometimes needed, always same domain."
 

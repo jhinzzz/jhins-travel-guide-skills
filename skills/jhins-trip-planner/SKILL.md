@@ -1,5 +1,5 @@
 ---
-name: planner
+name: jhins-trip-planner
 description: >
   Use when the user asks to plan a trip, organize travel notes into a guide, refactor an existing itinerary page, or get advice on destinations, transport, hotels, dining, budget, packing, safety, or local specialties — whether domestic or international, solo or group, self-drive or guided.
   Trigger words: 旅行规划, 行程安排, 旅行攻略, 交通规划, 酒店推荐, 餐厅推荐, 帮我规划旅行, 出行计划, 行前准备, 特产推荐, 手信, 伴手礼, 预算估算, trip planning, travel itinerary, travel guide, plan a trip, itinerary redesign, hotel recommendations, restaurant recommendations, local souvenirs, jhins-trip-planner, planner.

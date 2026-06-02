@@ -199,6 +199,29 @@ check_skill() {
   fi
 }
 
+# Root-level docs (README, CHANGELOG, FUTURE, …) link into the skill tree and
+# at each other. This checker historically scanned only skills/*, so a stale
+# link here — e.g. a reference file renamed out from under README — stayed green.
+# Validate root docs too. Links inside inline-code spans (`[text](file.md)`) are
+# documentation examples, not real links — strip code spans first, mirroring how
+# markdown renders them (a code span is never a link).
+check_root_docs() {
+  printf '\n== root docs ==\n'
+  local docs=(README.md README_CN.md FUTURE.md CHANGELOG.md CHANGELOG_EN.md)
+  for doc in "${docs[@]}"; do
+    [ -f "$ROOT/$doc" ] || continue
+    sed 's/`[^`]*`//g' "$ROOT/$doc" \
+      | grep -oE '\]\(([a-zA-Z0-9_./-]+\.md(#[a-zA-Z0-9_-]+)?)\)' 2>/dev/null \
+      | sed -E 's/^\]\(//; s/\)$//' \
+      | while IFS= read -r target; do
+          local target_file="${target%%#*}"
+          if ! [ -f "$ROOT/$target_file" ]; then
+            die "$doc → missing file: $target_file"
+          fi
+        done
+  done
+}
+
 # --- Main ---
 
 if [ $# -gt 0 ]; then
@@ -208,6 +231,7 @@ else
     [ -d "$sd" ] || continue
     check_skill "${sd%/}"
   done
+  check_root_docs
 fi
 
 errors=$(wc -l < "$ERR_FILE" | tr -d ' ')

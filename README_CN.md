@@ -24,15 +24,18 @@
 - [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json)：当前仓库自己的 Claude marketplace 清单
 - [`skills/jhins-trip-planner/`](./skills/jhins-trip-planner/)：真正的 skill 目录
 - [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md)：主技能文件
-- [`skills/jhins-trip-planner/references/planning-rules.md`](./skills/jhins-trip-planner/references/planning-rules.md)：行程输入、天气处理、交通规划、交付形式的唯一规则来源
-- [`skills/jhins-trip-planner/references/hotel-selection.md`](./skills/jhins-trip-planner/references/hotel-selection.md)：酒店证据标准、分层与输出规则
+- [`skills/jhins-trip-planner/references/intake.md`](./skills/jhins-trip-planner/references/intake.md)：行程需求采集 — 必要输入、提问顺序、最小可用 brief 阈值、主题/节奏/用药/无障碍/儿童/自驾/餐饮三元组采集
+- [`skills/jhins-trip-planner/references/trip-prep.md`](./skills/jhins-trip-planner/references/trip-prep.md)：行前准备 — 签证 + 过境签、支付/货币、SIM、保险、当地礼仪、宗教/节庆重叠、多国并行验证
+- [`skills/jhins-trip-planner/references/weather-and-output.md`](./skills/jhins-trip-planner/references/weather-and-output.md)：天气感知规划（含气候漂移风险）、输出格式选择、自由行 vs 跟团决策
+- [`skills/jhins-trip-planner/references/hotel-selection.md`](./skills/jhins-trip-planner/references/hotel-selection.md)：酒店证据标准、分层、渐进式搜索、超时降级与输出规则
 - [`skills/jhins-trip-planner/references/transportation.md`](./skills/jhins-trip-planner/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
 - [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）
-- [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md)：旅游攻略数据源、交叉验证规则与引用格式
+- [`skills/jhins-trip-planner/references/travel-sources.md`](./skills/jhins-trip-planner/references/travel-sources.md)：旅游攻略数据源、交叉验证规则、登录墙兜底（搜索聚合器）与引用格式
+- [`skills/jhins-trip-planner/references/knowledge-layers.md`](./skills/jhins-trip-planner/references/knowledge-layers.md)：双层知识模型（Reasoning vs Local Knowledge）、bright-line 判定、按类别降级、目的地匹配框架、搜索建议卡、登录墙穷尽闸
 - [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md)：安全与应急规则 — 目的地紧急号码、医疗就近、领事支持、保险理赔路径、失窃/丢失响应、目的地特定风险
 - [`skills/jhins-trip-planner/references/budget.md`](./skills/jhins-trip-planner/references/budget.md)：预算规则 — 按区域 band 分类目占比、隐性成本、refundable 取舍触发、汇率与支付时机
-- [`skills/jhins-trip-planner/references/deep/`](./skills/jhins-trip-planner/references/deep/)：opt-in 深度 reference（`budget` / `dining-rules` / `safety-and-emergency` 的表格 + 示例扩展）。LLM 只在主 reference 的 pointer 命中 depth trigger 时才读。
+- [`skills/jhins-trip-planner/references/deep/`](./skills/jhins-trip-planner/references/deep/)：opt-in 深度 reference（`budget` / `dining-rules` / `intake` / `safety-and-emergency` / `trip-prep` 的表格 + 示例扩展）。LLM 只在主 reference 的 pointer 命中 depth trigger 时才读。
 - [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md)：反向索引 — 每条规则 heading 被 test-prompts.json 的哪些 case 覆盖
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh)：校验 `test-prompts.json` 里每个 `rule_refs` 锚点指向的 heading 真实存在
 - [`scripts/check-version.sh`](./scripts/check-version.sh)：`VERSION` 必须和 `SKILL.md` / `plugin.json` / `marketplace.json` 对齐

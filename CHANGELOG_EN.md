@@ -8,6 +8,23 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.12.0] — 2026-06-02
+
+### Added
+
+- **`travel-sources.md` §Login-Wall Fallback — snippet-level §2 evidence bar (the headline)** — fills the gap v0.11.0 left open. When the live page is login-walled, `dining-rules.md §2`'s four signals (closure notice / 404 redirect / Google Maps banner / page integrity) are unreachable, yet case 19 demands a *verified* restaurant card from aggregator data. New rule: clear a restaurant from snippets only when **all four** hold — ① ≥2 aggregators surface the same name + address (single-source = candidacy only) ② current-year / recent activity in the snippets ③ no closure language in any snippet ④ name + district match the address (§4 ward consistency). A snippet-cleared restaurant ships with a visible qualifier `（经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）`; below the bar → candidacy only → search advisory card. §2's absolute ban on training-data names is unchanged and reinforced.
+- **International-platform symmetry** — §Login-Wall Fallback's trigger generalizes from "China platforms login-walled" to **access failure modes** (login wall / 302 / blank / captcha / cookie-consent wall / rate-limit / geo-block), explicitly covering Booking.com / TripAdvisor / Google Maps / Tabelog. The rule keys on the failure mode, not a brand list (which would rot); brands are examples.
+- **test-prompts.json case 20** (`international-login-wall-snippet-bar`) — a Tokyo/Ebisu izakaya scenario simulating Tabelog 302 + Google Maps consent wall. Asserts international platforms take the same aggregator retry, the snippet-level §2 four-point bar is enforced, output carries the "not live page" qualifier, and no training-data names. Closes the international-coverage test gap (case 19 only exercises the China path).
+
+### Changed
+
+- **Channel order consolidated (de-duplicated)** — the login-wall channel order previously appeared 3× in `travel-sources.md` (trigger :31, DuckDuckGo cell :35, Source-Selection table :82) plus `knowledge-layers.md §6`. This release makes `§Login-Wall Fallback` the **single canonical source**: the :82 table row and §6:98 become pointers instead of restating the order. The DuckDuckGo cell is reworded tool-agnostically — "use a native web-search tool if available; the HTML endpoint is the guaranteed floor; never assume a richer tool exists" — removing the hard dependency on an undocumented tool.
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.11.0 → 0.12.0.
+
+### Structure guarantee
+
+Zero rule deletions. Zero existing-anchor renames (`§Login-Wall Fallback (Search Aggregators)`, `§6 (exhaustion gate)`, `§Per-Person Price Tiers` keep their names). Existing rule_refs (cases 1-19) unaffected; case 20 added. `dining-rules.md §2` absolute ban unchanged and reinforced by the snippet bar (the bar is additive, not a softening). This release uses in-place edits to consolidate (not append-only) — a correction to the v2 plan's mistaken "add, never edit" assumption.
+
 ## [0.11.0] — 2026-05-30
 
 ### Added

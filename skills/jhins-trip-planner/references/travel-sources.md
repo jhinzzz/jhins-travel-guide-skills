@@ -28,14 +28,25 @@ Define the canonical set of travel information sources used for research, cross-
 
 ### Login-Wall Fallback (Search Aggregators)
 
-China platforms (Dianping, Ctrip, Mafengwo, Xiaohongshu, Amap) routinely gate their result pages behind a **login wall / 302 redirect / blank response** to anonymous fetches. When that happens, do **not** treat it as "no data" — these aggregators re-index the same content and surface it in result snippets:
+Travel platforms — Chinese (Dianping, Ctrip, Mafengwo, Xiaohongshu, Amap) **and international (Booking.com, TripAdvisor, Google Maps, Tabelog)** — routinely gate their result pages behind a **login wall / 302 redirect / blank response / captcha / cookie-consent wall / rate-limit / geo-block** for anonymous fetches. The rule keys on the **failure mode**, not the brand — the platforms named here are examples, not an exhaustive list. When it happens, do **not** treat it as "no data" — search aggregators re-index the same content and surface it in result snippets:
 
 | Aggregator | Best For | URL | Notes |
 |---|---|---|---|
-| DuckDuckGo (HTML endpoint) | Anonymous web search that returns parseable snippets | html.duckduckgo.com/html/ | **First-choice retry when a China platform is login-walled.** Snippets routinely carry shop name · address · per-person price · rating sourced from Dianping / Ctrip / Mafengwo / TripAdvisor. |
+| DuckDuckGo (HTML endpoint) | Anonymous web search that returns parseable snippets | html.duckduckgo.com/html/ | **First aggregator to try.** If a native web-search tool is available, use it for snippets too; the DuckDuckGo HTML endpoint is the **guaranteed floor** — never assume a richer tool exists. Snippets routinely carry shop name · address · per-person price · rating sourced from Dianping / Ctrip / Mafengwo / TripAdvisor / Tabelog. |
 | Bing | Second search aggregator for cross-checking | bing.com/search | Use a second aggregator to confirm a name surfaced by the first. |
 
 These are a **retry channel, not a primary source** — the underlying datum still belongs to Dianping / Ctrip / etc. and is cited as such (e.g., `大众点评 4.5分（经 DuckDuckGo 聚合, 2026-05-30）`). A single platform's login wall is **not** a verification failure — see [knowledge-layers.md](knowledge-layers.md) §6 exhaustion gate before degrading to a search advisory card.
+
+#### What an aggregator snippet must carry to clear a restaurant for output
+
+A live page gives [dining-rules.md](dining-rules.md) §2's four signals (closure notice · 404/redirect · Google Maps banner · page-integrity); a login-walled page can't, so a snippet can't reproduce them. The **snippet-level bar is explicitly weaker than a live page** and an item cleared this way must say so. Clear a restaurant from snippets only when **all four** hold:
+
+1. **≥2 aggregators** surface the same name + address. A single-source snippet is **candidacy only**, never a main pick.
+2. **Current-year / recent activity** in the snippets (recent review dates or a current price) — stale-only hits do not clear it.
+3. **No closure language** in any snippet (停业 / 歇业 / 閉店 / "permanently closed" / chiuso …).
+4. **Name + district match the address** (the §4 ward-consistency check — doable from snippet text).
+
+Output a snippet-cleared restaurant **with a visible tier qualifier**: `（经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）`. If the four-point bar is **not** fully met → candidacy only → not a main pick → degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. This **does not** weaken [dining-rules.md](dining-rules.md) §2's absolute ban: a name with **zero** aggregator evidence still never ships, regardless of degradation path.
 
 ### International Platforms
 
@@ -79,7 +90,7 @@ These are a **retry channel, not a primary source** — the underlying datum sti
 | Train schedules (Europe) | National rail site | Trainline / Rome2Rio |
 | Hotel pricing and reviews | Booking.com / Ctrip / Trip.com | TripAdvisor / Google Maps / Agoda |
 | Restaurant recommendations | Dianping (China) / Tabelog (Japan) / TripAdvisor (intl) | 小红书 / Google Maps |
-| China platform login-walled (302 / blank) | DuckDuckGo HTML endpoint (re-indexes the blocked platform) | Bing — confirm the name on a second aggregator |
+| Any platform login-walled / blocked (302 / blank / captcha / consent wall) | See §Login-Wall Fallback (canonical channel order) | — |
 | Local specialties | 马蜂窝 / 小红书 | Dianping / TripAdvisor / Lonely Planet |
 | Attraction info and tickets | Official site / Klook | 马蜂窝 / TripAdvisor |
 | Visa and entry | Embassy / government site | Travel forum cross-check |

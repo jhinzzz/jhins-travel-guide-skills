@@ -716,5 +716,49 @@
         "SKILL.md §Fallback Rules (Missing dates/destination)"
       ]
     }
+  },
+  {
+    "id": 20,
+    "scenario": "international-login-wall-snippet-bar",
+    "prompt": "去东京旅行，帮我推荐惠比寿（恵比寿）附近 Day2 晚餐的一家居酒屋。（模拟：Tabelog 餐厅页 302 跳登录、Google Maps 返回需同意 cookie 的空白页）",
+    "assertions": {
+      "mode": "planning-only",
+      "login_wall_is_not_search_failure": true,
+      "applies_to_international_platforms": "Tabelog + Google Maps consent/login walls are NOT 'no data' — same failure-mode rule as China platforms",
+      "must_retry_before_degrading": {
+        "min_channels": 2,
+        "at_least_one_must_be": "search aggregator (DuckDuckGo HTML endpoint / Bing)",
+        "rationale": "the canonical channel order in travel-sources.md §Login-Wall Fallback applies regardless of platform brand"
+      },
+      "snippet_level_section2_bar_required": {
+        "all_four_must_hold": [
+          "≥2 aggregators surface the same name + address (single-source = candidacy only)",
+          "current-year / recent activity in snippets (no stale-only hits)",
+          "no closure / relocation language in any snippet (閉店 / 移転 / permanently closed)",
+          "name + district (恵比寿) match the address — §4 ward consistency"
+        ],
+        "if_bar_met": "output the izakaya card WITH the visible tier qualifier （经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）",
+        "if_bar_not_met": "candidacy only — not a main pick — degrade to search advisory card per knowledge-layers.md §5"
+      },
+      "per_restaurant_card_required_fields": [
+        "cuisine category (izakaya)",
+        "rating (Tabelog, via aggregator)",
+        "walking minutes from 恵比寿 station",
+        "per-person price band (JPY)"
+      ],
+      "must_not": [
+        "treat Tabelog 302 + Google Maps consent wall as 'all verification attempts failed'",
+        "output an izakaya name from training data without aggregator-sourced evidence",
+        "present a snippet-cleared restaurant as live-page verified (must carry the snippet-tier qualifier)",
+        "output a single-aggregator name as a confirmed main pick"
+      ],
+      "rule_refs": [
+        "travel-sources.md §Login-Wall Fallback (Search Aggregators)",
+        "knowledge-layers.md §6 (exhaustion gate)",
+        "dining-rules.md §2 (operating-status verification)",
+        "dining-rules.md §11 (exhaust channels before degrading)",
+        "dining-rules.md §4"
+      ]
+    }
   }
 ]

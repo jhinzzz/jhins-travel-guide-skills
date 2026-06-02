@@ -8,6 +8,23 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.12.0] — 2026-06-02
+
+### Added
+
+- **`travel-sources.md` §Login-Wall Fallback — snippet 级 §2 证据门槛（本版核心）** — 补上 v0.11.0 没写的那块：活页被登录墙挡住时，`dining-rules.md §2` 的四个信号（关停通知 / 404 跳转 / Google Maps 横幅 / 页面完整性）拿不到，但 case 19 又要求"聚合器有数据就出 verified 餐厅卡"。新规则明确：靠聚合器快照放行一家餐厅，必须**四条全满**——①≥2 个聚合器给出同一店名+地址（单源仅作候选）②快照显示当年/近期活跃 ③任一快照无停业词 ④店名与地址行政区一致（§4）。放行后必须带可见限定 `（经聚合器快照核实，非活页）`；不满足则降级为搜索建议卡。§2 对训练数据店名的绝对禁令不变且被加固。
+- **国际平台对称覆盖** — §Login-Wall Fallback 的触发条件从"中国平台登录墙"泛化为**访问失败模式**（登录墙 / 302 / 空白 / captcha / cookie 同意墙 / 限流 / 地域封锁），明确同样适用于 Booking.com / TripAdvisor / Google Maps / Tabelog。规则按失败模式而非品牌清单生效，品牌只作示例（避免清单腐烂）。
+- **test-prompts.json case 20**（`international-login-wall-snippet-bar`）— 东京惠比寿居酒屋场景，模拟 Tabelog 302 + Google Maps 同意墙，断言国际平台同样走聚合器 retry、强制 snippet 级 §2 四点门槛、输出带"非活页"限定、不出训练数据店名。补上 v0.12.0 国际覆盖的测试缺口（case 19 只覆盖中国路径）。
+
+### Changed
+
+- **渠道顺序归一（去重）** — 登录墙渠道顺序此前在 `travel-sources.md` 重复出现 3 处（触发句 :31、DuckDuckGo 单元格 :35、Source-Selection 表 :82）外加 `knowledge-layers.md §6`。本版把 `§Login-Wall Fallback` 定为**唯一权威来源**：:82 表行与 §6:98 改为指针，不再各自复述顺序。DuckDuckGo 单元格改为工具无关措辞——"有原生 web-search 工具就用，HTML 端点是保底，永不假设有更强工具"，消除对未记录工具的硬依赖。
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.11.0 → 0.12.0。
+
+### Structure guarantee
+
+零规则删除。零既有 anchor 改名（`§Login-Wall Fallback (Search Aggregators)`、`§6 (exhaustion gate)`、`§Per-Person Price Tiers` 名称不变）。现有 rule_refs（case 1-19）不受影响；case 20 新增。`dining-rules.md §2` 绝对禁令保持不变并被 snippet 门槛加固（门槛是附加约束，非放松）。本版为 in-place 编辑去重（非 append-only）——这是对 v2 方案"只加不改"误判的修正。
+
 ## [0.11.0] — 2026-05-30
 
 ### Added

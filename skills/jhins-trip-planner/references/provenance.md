@@ -63,11 +63,12 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | §1 | 1 |
-| §2 | 8, 19 |
+| §2 | 8, 19, 20 |
 | §3 (Spring Festival / New Year peak) | 5 |
+| §4 | 20 |
 | §9 | 8 |
 | §10 | 8 |
-| §11 | 19 |
+| §11 | 19, 20 |
 | §§1-10 | 6, 7 |
 
 ### budget.md
@@ -117,14 +118,14 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §4 (destination matching) | 16 |
 | §5 (search advisory card) | 16, 17 |
 | §6 (user-supplied hotel name flow) | 18 |
-| §6 (exhaustion gate) | 19 |
+| §6 (exhaustion gate) | 19, 20 |
 
 ### travel-sources.md
 
 | Anchor | Cases |
 |---|---|
 | §Per-Person Price Tiers | 7 |
-| §Login-Wall Fallback (Search Aggregators) | 19 |
+| §Login-Wall Fallback (Search Aggregators) | 19, 20 |
 
 ## Case index (for looking up what a case exercises)
 

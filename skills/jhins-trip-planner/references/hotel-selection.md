@@ -87,6 +87,7 @@ Hotel verification uses a two-phase progressive approach to avoid long search ti
 - Pick the best platform for the destination per [travel-sources.md](travel-sources.md) (e.g., Ctrip for China domestic, Booking.com for international).
 - Search for 3-5 candidates matching the user's constraints (area, budget, party).
 - Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · source.
+- **Partial-scout fallback (price unreachable):** nightly rate is the field platforms most often withhold from anonymous fetch (Booking blank, Ctrip name+rating-but-no-price). A scout that has name + area + rating but **no verifiable price** is still useful — present it with the rate field marked `价格需登录查询 / price requires login — verify on booking` rather than dropping the candidate or inventing a number. Do **not** backfill a price from a single stale or wrong-currency aggregator snippet. A scout missing *only* price is not a verification failure; only escalate to the Timeout Degradation advisory card when name **and** rating are also unobtainable.
 - Ask user to pick 1-2 hotels for deep verification.
 
 ### Phase 2: Deep Verify (cross-reference, only on user's picks)

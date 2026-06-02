@@ -8,6 +8,25 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.12.1] — 2026-06-02
+
+### Fixed
+
+- **snippet-level §2 bar was too strict in practice → reframed as Case A / Case B (exposed by a real-fetch dry-run)** — v0.12.0's bar required "≥2 aggregators surface the same name." A live fetch showed DuckDuckGo and Bing return **completely disjoint** results for the same query (Bing even returned Osaka shops for an Ebisu query), so a genuinely open, Tabelog-3.58 sushi place would be demoted to a search advisory card — **overriding the authoritative platform's own verdict.** Reframed:
+  - **Case A (check first)** — if anonymous fetch of the authoritative platform (Tabelog / Dianping) already returns name + rating + price + ward, that **is** §2 verification: cite normally, no "not-live-page" qualifier, do not run the weaker aggregator bar. The login-wall apparatus is a fallback, not the default path.
+  - **Case B (authoritative page walled)** — point #1 relaxed to "**one authoritative-sourced snippet (a DDG/Bing result carrying the Tabelog/Dianping name + score) OR ≥2 independent aggregator hits**," since exact cross-aggregator agreement is the exception, not the rule.
+- **§2 signal #3 "Google Maps Permanently-closed banner" is unreachable to anonymous fetch → made explicit** — Maps returns blank to anonymous fetch, so that signal is not directly obtainable. The bar now says "do the strongest closure check the reachable channels allow and flag residual uncertainty," instead of implying a banner check that can't be run.
+- **hotel-selection.md §Progressive Search — added a "price unreachable" branch** — nightly rate is the field platforms most often withhold from anonymous fetch (Booking blank, Ctrip gives name+rating but not price). New partial-scout fallback: when name+area+rating are present but price isn't, mark the rate field `price requires login — verify on booking` rather than dropping the candidate or inventing a number; only escalate to the advisory card when name+rating are also unobtainable.
+- **test-prompts.json case 20** reframed to Case A / Case B assertions, matching the corrected behavior.
+
+### Changed
+
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.0 → 0.12.1.
+
+### Structure guarantee
+
+Zero rule deletions. Zero existing-anchor renames. rule_refs for cases 1-20 unaffected (case 20's internal assertions rewritten; anchors unchanged). §2 absolute ban unchanged. This is an evidence-driven patch from a real-fetch dry-run (`session-learnings-2026-06-02`) — v0.12.0 passed every static check and two adversarial plan-reviews, yet failed the snippet bar on the first live fetch.
+
 ## [0.12.0] — 2026-06-02
 
 ### Added

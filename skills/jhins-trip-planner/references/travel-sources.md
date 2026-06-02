@@ -37,16 +37,20 @@ Travel platforms — Chinese (Dianping, Ctrip, Mafengwo, Xiaohongshu, Amap) **an
 
 These are a **retry channel, not a primary source** — the underlying datum still belongs to Dianping / Ctrip / etc. and is cited as such (e.g., `大众点评 4.5分（经 DuckDuckGo 聚合, 2026-05-30）`). A single platform's login wall is **not** a verification failure — see [knowledge-layers.md](knowledge-layers.md) §6 exhaustion gate before degrading to a search advisory card.
 
-#### What an aggregator snippet must carry to clear a restaurant for output
+#### Clearing a restaurant when the authoritative page may be walled
 
-A live page gives [dining-rules.md](dining-rules.md) §2's four signals (closure notice · 404/redirect · Google Maps banner · page-integrity); a login-walled page can't, so a snippet can't reproduce them. The **snippet-level bar is explicitly weaker than a live page** and an item cleared this way must say so. Clear a restaurant from snippets only when **all four** hold:
+A live authoritative page (Tabelog / Dianping / TheFork …) gives [dining-rules.md](dining-rules.md) §2's four signals. Two real cases — check **Case A first**:
 
-1. **≥2 aggregators** surface the same name + address. A single-source snippet is **candidacy only**, never a main pick.
-2. **Current-year / recent activity** in the snippets (recent review dates or a current price) — stale-only hits do not clear it.
-3. **No closure language** in any snippet (停业 / 歇业 / 閉店 / "permanently closed" / chiuso …).
+**Case A — the authoritative platform served data.** Anonymous fetch of the platform's own list / detail page often *does* succeed (Tabelog list pages routinely do). If you have live name + rating + price + ward from the destination's authoritative platform, that **is** §2 verification — cite it normally (no qualifier), and **do not run the weaker snippet bar you don't need**. The login-wall apparatus is a fallback, not the default path.
+
+**Case B — the authoritative page is walled; only aggregator snippets are reachable.** A snippet can't reproduce §2's live signals (notably the Google Maps "Permanently closed" banner is itself unreachable to anonymous fetch), so this bar is **explicitly weaker** and the output must say so. Clear a restaurant from snippets only when **all** hold:
+
+1. **Name + rating corroborated by either** (a) one snippet *sourced from the authoritative platform* (a DuckDuckGo/Bing result carrying the Tabelog/Dianping name + score), **or** (b) ≥2 independent aggregator hits on the same name + address. Aggregators routinely surface *different* shops for the same query, so exact cross-aggregator agreement is the exception — an authoritative-sourced single snippet counts; a single *generic* snippet is candidacy only.
+2. **Recent activity** — current-year review dates or a current price; stale-only hits do not clear it.
+3. **No closure / relocation language** in any reachable snippet (停业 / 歇业 / 閉店 / 移転 / "permanently closed" / chiuso …). The live Maps banner may be unreachable — do the strongest closure check the reachable channels allow, and flag residual uncertainty rather than implying a banner check you couldn't run.
 4. **Name + district match the address** (the §4 ward-consistency check — doable from snippet text).
 
-Output a snippet-cleared restaurant **with a visible tier qualifier**: `（经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）`. If the four-point bar is **not** fully met → candidacy only → not a main pick → degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. This **does not** weaken [dining-rules.md](dining-rules.md) §2's absolute ban: a name with **zero** aggregator evidence still never ships, regardless of degradation path.
+Output a Case-B restaurant **with a visible tier qualifier**: `（经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）`. If the bar is **not** met → candidacy only → not a main pick → degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. Neither case weakens [dining-rules.md](dining-rules.md) §2's absolute ban: a name with **zero** evidence still never ships, regardless of degradation path.
 
 ### International Platforms
 

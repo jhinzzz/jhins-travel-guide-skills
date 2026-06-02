@@ -730,11 +730,15 @@
         "at_least_one_must_be": "search aggregator (DuckDuckGo HTML endpoint / Bing)",
         "rationale": "the canonical channel order in travel-sources.md §Login-Wall Fallback applies regardless of platform brand"
       },
-      "snippet_level_section2_bar_required": {
-        "all_four_must_hold": [
-          "≥2 aggregators surface the same name + address (single-source = candidacy only)",
-          "current-year / recent activity in snippets (no stale-only hits)",
-          "no closure / relocation language in any snippet (閉店 / 移転 / permanently closed)",
+      "case_A_authoritative_page_served": {
+        "rule": "if anonymous fetch of Tabelog (the authoritative Tokyo dining platform) actually returns name + rating + price + ward, that IS §2 verification — cite normally, NO snippet qualifier, do NOT run the weaker aggregator bar",
+        "rationale": "the login-wall apparatus is a fallback, not the default — Tabelog list pages routinely serve anonymous data"
+      },
+      "case_B_authoritative_walled_snippet_bar": {
+        "all_must_hold": [
+          "name + rating corroborated by EITHER one authoritative-sourced snippet (DDG/Bing result carrying the Tabelog name+score) OR ≥2 independent aggregator hits on same name+address — a single generic snippet is candidacy only",
+          "recent activity (current-year reviews or current price)",
+          "no closure / relocation language in any reachable snippet (閉店 / 移転 / permanently closed); flag residual uncertainty if the live Maps banner was unreachable",
           "name + district (恵比寿) match the address — §4 ward consistency"
         ],
         "if_bar_met": "output the izakaya card WITH the visible tier qualifier （经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）",

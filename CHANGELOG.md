@@ -8,6 +8,25 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.12.1] — 2026-06-02
+
+### Fixed
+
+- **snippet 级 §2 门槛在实战中过严 → 重构为 Case A / Case B（real-fetch dry-run 暴露）** — v0.12.0 的门槛第①条要求"≥2 个聚合器给出同一店名"。实际抓取发现 DuckDuckGo 与 Bing 对同一查询返回**完全不相交**的结果（Bing 对惠比寿查询甚至返回大阪），导致一家真实开业、Tabelog 3.58 的好店会被降级成搜索建议卡——**反而覆盖了权威平台自己的判断**。重构：
+  - **Case A（先判）** — 若匿名抓取权威平台（Tabelog/点评）本就拿到 name+rating+price+ward，这**就是** §2 验证，正常引用、不加"非活页"限定、不跑更弱的聚合器门槛。登录墙机制是 fallback，不是默认路径。
+  - **Case B（权威页被挡）** — 第①条放宽为"**一个权威来源的 snippet（DDG/Bing 携带 Tabelog/点评店名+评分）或 ≥2 个独立聚合器命中**"，因为跨聚合器精确一致是例外而非常态。
+- **§2 信号#3"Google Maps 关停横幅"对匿名抓取不可达 → 明示** — Maps 对匿名 fetch 返回空白，该信号实践中拿不到。门槛改为"用可达渠道做最强关停检查，并标注残余不确定性"，不再暗示做了一个根本没法做的横幅检查。
+- **hotel-selection.md §Progressive Search 补"价格拿不到"分支** — 价格是平台最常对匿名抓取隐藏的字段（Booking 空白、Ctrip 给名字+评分但不给价）。新增 partial-scout fallback：name+area+rating 齐全但无价时，价格字段标 `价格需登录查询`，而非丢弃候选或编造数字；仅当连 name+rating 都拿不到才升级为建议卡。
+- **test-prompts.json case 20** 同步重构为 Case A / Case B 断言，匹配修正后的行为。
+
+### Changed
+
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.0 → 0.12.1。
+
+### Structure guarantee
+
+零规则删除。零既有 anchor 改名。case 1-20 的 rule_refs 不受影响（case 20 内部断言重写，anchor 不变）。§2 绝对禁令保持不变。本次为 real-fetch dry-run（`session-learnings-2026-06-02`）证据驱动的 patch——v0.12.0 通过了所有静态检查与两轮对抗式 plan-review，却在第一次真实抓取时暴露 snippet 门槛失效。
+
 ## [0.12.0] — 2026-06-02
 
 ### Added

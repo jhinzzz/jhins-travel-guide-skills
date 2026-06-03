@@ -12,97 +12,77 @@ Version numbers follow the spirit of semver:
 
 ### Added
 
-- **Channel ladder: JS-render + fingerprint-resistant render tiers — `travel-sources.md §Login-Wall Fallback`** — the anti-scraping fallback previously had two rungs: static fetch → search-aggregator snippet. Two live-fetch dry-runs (Tokyo 6-02 + this round's three-way comparison) proved that model was on the wrong track: for many platforms the "can't fetch" failure is not a login wall, it's **JS-rendered content** (a static fetch doesn't run JS, so it returns only page chrome). The channel order is upgraded to a **four-rung capability ladder**: ① static fetch (no JS) ② JS-rendering headless browser (if available) ③ fingerprint-resistant render (if available) ④ search aggregators (guaranteed floor). **Described by capability, never naming a specific tool** — a runtime missing a rung just skips to the next, keeping the skill cross-environment portable. Evidence: Google Maps returned zero data on static fetch, but after JS render gave 6 real shop names + ratings + the `営業中` status banner; Booking was blank on static fetch and still blank with JS, but a fingerprint-resistant render gave 25 properties + real JPY prices (APA ¥27,300, etc.). Both rungs used zero credentials.
-- **test-prompts.json case 25** — channel-ladder JS-render-tier regression: asserts a static-fetch blank/chrome is "the next rung to climb" not a verification failure, asserts climbing in ladder order, asserts JS render recovers the Maps status banner (the §2 signal), fingerprint-resistant render recovers OTA price, and a live page from a render rung counts as Case A (cite normally, no snippet qualifier). All rule_refs point to existing anchors, zero new anchors.
+- **Channel ladder: JS-render + fingerprint-resistant render tiers — `travel-sources.md §Login-Wall Fallback`** — the channel order is upgraded from two rungs (static fetch → search-aggregator snippet) to a four-rung capability ladder: ① static fetch (no JS) ② JS-rendering headless browser ③ fingerprint-resistant render ④ search aggregators (guaranteed floor). Described by capability, never naming a specific tool; a runtime missing a rung skips to the next.
+- **test-prompts.json case 25** — channel-ladder JS-render-tier regression test.
 
 ### Changed
 
-- **`deep/dining-rules.md §2` fixes F4 (Google Maps banner reachability)** — §2 previously listed the "Google Maps Permanently-closed banner" as one of four co-equal signals, but the 6-02 dry-run found it is **structurally unreachable to a static fetch** (Maps is JS-rendered; a static fetch returns only chrome). Reworded: the banner needs a JS-rendering rung to reach; **on a failed static fetch its absence is non-signal — never read as "open"**; the JS-render rung (ladder rung 2) is the canonical way to obtain this signal. Closes the silent "fetch failed → false-positive open" hole.
-- **`hotel-selection.md §Progressive Search` + §Timeout Degradation fix F7/F8** — Progressive Search's "price unreachable" fallback gains a precondition: "a blank Booking / price-hidden Ctrip is usually a JS-render or headless-fingerprint block, not a login wall — climb the render rungs before declaring price unreachable." The Timeout Degradation table gains a guard line: a static-fetch blank/302 is a rung to climb, not a failure counted toward degradation, mirroring the knowledge-layers §6 exhaustion gate (also closing the F8 hotel-side gap flagged in 6-02).
-- **`travel-sources.md` Case A / Case B refactor** — Case A widened from "static fetch succeeded" to "a live page recovered at **any ladder rung** is §2 verification, cited normally"; Case B clarified as "the authoritative page stayed walled at every available rung, only then the weak snippet bar," scoping the "Maps banner unreachable" claim precisely to the **static rung** (an environment with a JS-render rung that recovers the banner lands in Case A).
-- **`knowledge-layers.md §6` exhaustion gate** — upgraded from "≥2 channels (≥1 aggregator)" to "climb the channel ladder (JS / fingerprint-resistant render rungs when available), then ≥2 channels (≥1 aggregator)," keeping a single source of truth with the travel-sources ladder.
-- **FUTURE.md §8** — the authenticated-fetch direction is marked "partially addressed by v0.14.0's render rungs": the Booking/Ctrip failure was proven to be anti-fingerprint (defeated by a zero-credential fingerprint-resistant render), not a login wall; genuine cookie-based authenticated fetch stays gated (only when the render rungs also fail to verify AND the user has cookies configured for another reason). §1 test-case count 24→25.
+- **`deep/dining-rules.md §2`** — clarified that the Google Maps banner needs a JS-rendering rung to reach; on a failed static fetch its absence is non-signal, never read as "open".
+- **`hotel-selection.md §Progressive Search` + §Timeout Degradation** — "price unreachable" fallback gains a precondition: climb the render rungs first; the Timeout Degradation table gains a guard line: a static-fetch blank/302 is not counted toward degradation.
+- **`travel-sources.md` Case A / Case B refactor** — Case A widened to "a live page recovered at any ladder rung is §2 verification"; Case B is "the authoritative page stayed walled at every available rung, only then the weak snippet bar," scoping the "Maps banner unreachable" claim to the static rung.
+- **`knowledge-layers.md §6` exhaustion gate** — upgraded to "climb the channel ladder (JS / fingerprint-resistant render rungs), then ≥2 channels (≥1 aggregator)".
+- **FUTURE.md §8** — authenticated-fetch direction marked "partially addressed by v0.14.0's render rungs"; §1 test-case count 24→25.
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.13.0 → 0.14.0.
-
-### Structure guarantee
-
-Zero rule deletions. Zero existing-anchor renames (new content is the channel-ladder list under §Login-Wall Fallback and reworded bullets under §2 / §Progressive Search / §Timeout Degradation / §6 — no renumbering, no existing heading text changed). rule_refs for cases 1-24 unaffected. SKILL.md stays 199 lines; Final Check stays 19 invariants — SKILL.md inherits the ladder upgrade for free through its existing `§Login-Wall Fallback` pointer, no edit needed. The capability-tiered wording keeps the skill un-bound to any tool ecosystem. Evidence: two live-fetch dry-runs (`session-learnings-2026-06-02` Tokyo + this round's three-way browse comparison), hitting `FUTURE.md §8`'s trigger condition squarely.
 
 ## [0.13.0] — 2026-06-03
 
 ### Added
 
-- **Cross-strait / Greater China permits (NOT a visa) — `trip-prep.md §2` + `deep/trip-prep.md`** — §2 previously framed every border crossing as a visa case. Mainland↔Taiwan uses 大陆居民往来台湾通行证 + 入台证; HK/Macau↔Taiwan and Mainland↔HK/Macau use 港澳通行证 + endorsements — compact permits, not standard tourist visas. This is the highest-frequency missing entry rule for a Chinese-language skill. The main §2 gets one bullet (mirroring the "Minors crossing borders" style): names the permit class, says "these are permits, not a visa," lists the routing pairs that fire it, and treats the lead time like a visa lead time at intake. The deep file gets `§Cross-Strait Greater China Permits` with the full matrix (individual-vs-group eligibility, return-leg 台胞证/回乡证). Processing times are illustrative ranges + "verify at research time"; if unconfirmable, state as an unverified estimate + issuing-authority URL — never fabricate.
-- **Thermal-immersion safety for vulnerable travellers — `safety-and-emergency.md §6` + deep §6** — §6 covered pickpockets/altitude/marine but was silent on child onsen safety. For a trip whose theme IS hot springs with a young child (the original Taiwan dry-run brief), this is a foreseeable safety gap the LLM does not reliably infer. Framed as thermal exposure for vulnerable travellers (children + elderly/cardiac + reuse of the existing pregnancy ≥40 °C note, not duplicated or deleted), in §6 risk→trigger→action style: keep immersion brief, coolest pool, exit at first flushing/dizziness, hydrate, and **surface the facility's own posted age-floor / time-limit**; infants generally not recommended. **No fabricated pediatric temperature/minute threshold in the skill** (medical liability + staleness + not citable) — the concrete, non-fabricated action is to point at the posted limit. Trigger is itinerary-content-based ("an onsen appears anywhere"), not theme-flag-based (catches the common "one onsen-ryokan night, no wellness theme" case).
-- **Disaster / closure-status recheck — `safety-and-emergency.md §6` + deep §6** — no rule previously said "high-seismic / volcanic / wildfire / recent-disaster destinations need a status recheck before departure." Taroko post-quake, Iceland volcano, California wildfire are one class — present implicitly everywhere, codified nowhere. The new rule fires on a **specific signal** (named post-disaster closure status / active official advisory window / a named seasonal hazard window per weather §1), NOT on ambient risk (which would fire on every Japan trip and become the generic filler §6 bans). Action: recheck official closure status via the **government tourism-board / national-park-authority / disaster-agency** source class (not the venue-level operating-status check used for restaurants/shops), 3–5 days before departure, appended as **one line inside the existing pre-trip recheck block** (dining §8), not a second block. The hazard-forecast / AQI recheck stays in weather §1 (1–2 weeks out) — no duplication. The Tokyo dry-run's "post-peak-adjacent window" (F9) folds in via the seasonal-window arm.
-- **test-prompts.json cases 21–24** — 21 cross-strait permit (asserts not-treated-as-visa + names the permits), 22 pediatric onsen (asserts surfaces posted facility limit + contains no fabricated child threshold), 23 Taroko post-quake disaster recheck (asserts authority-source class + single combined block), 24 integration (the original Taiwan Golden Week brief, all three fixes together). 3 isolated regressions + 1 integration, so a single combined case can't certify coincidence and hide a per-rule regression.
+- **Cross-strait / Greater China permits (NOT a visa) — `trip-prep.md §2` + `deep/trip-prep.md`** — main §2 gets one bullet: Mainland↔Taiwan, HK/Macau↔Taiwan and Mainland↔HK/Macau use permits + endorsements, not tourist visas; lists the routing pairs, treats the lead time like a visa lead time at intake. The deep file gets `§Cross-Strait Greater China Permits` with the full matrix (individual-vs-group eligibility, return-leg 台胞证/回乡证).
+- **Thermal-immersion safety for vulnerable travellers — `safety-and-emergency.md §6` + deep §6** — new rule framed as thermal exposure for vulnerable travellers (children + elderly/cardiac + reuse of the existing pregnancy ≥40 °C note), in risk→trigger→action style: keep immersion brief, coolest pool, exit at first flushing/dizziness, hydrate, surface the facility's posted age-floor / time-limit. No fabricated pediatric threshold. Trigger is "an onsen appears in the itinerary".
+- **Disaster / closure-status recheck — `safety-and-emergency.md §6` + deep §6** — new rule firing on a specific signal (named post-disaster closure status / active official advisory window / named seasonal hazard window per weather §1): recheck official closure status via the government tourism-board / national-park-authority / disaster-agency source class, 3–5 days before departure, appended as one line inside the existing pre-trip recheck block (dining §8).
+- **test-prompts.json cases 21–24** — 21 cross-strait permit, 22 pediatric onsen, 23 Taroko post-quake disaster recheck, 24 integration.
 
 ### Changed
 
-- **SKILL.md §Final Check — ZERO new invariants (stays at 19)** — onsen carry-forward folded into the existing Intake carry-forward bullet; disaster recheck reworded the existing Pre-trip recheck bullet's trigger ("peak period **or** disaster/closure-status signal — both fold into one block"), no new bullet. Holds the rule-fatigue line that slimmed SKILL.md from 331→199 lines.
+- **SKILL.md §Final Check** — zero new invariants (stays at 19): onsen carry-forward folded into the existing Intake carry-forward bullet; disaster recheck reworded the existing Pre-trip recheck bullet's trigger.
 - **intake.md §7 Child carry-forward rule** gains one clause: "an onsen appears in the itinerary → carry the child band into thermal-immersion safety per safety §6."
-- **FUTURE.md** — fixed the §2 line 41 wording that contradicted the new reality (it said "cross-strait is not in trip-prep §2"); wrote in the `destinations/` migration trigger (cross-strait content outgrows ~one screen / a 2nd Greater-China dry-run reopens F6/F9/F11 → split to `destinations/cross-strait.md`); updated §1 test-case count 19→24.
+- **FUTURE.md** — fixed the §2 line 41 wording; wrote in the `destinations/` migration trigger; updated §1 test-case count 19→24.
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.1 → 0.13.0.
-
-### Structure guarantee
-
-Zero rule deletions. Zero existing-anchor renames (new content is bullets under §2/§6/§7 or a new name-anchored deep heading `§Cross-Strait Greater China Permits`; no existing § renumbered). rule_refs for cases 1-20 unaffected. SKILL.md stays 199 lines; Final Check stays 19 invariants. `check-all.sh` green (versions / sizes / links / 80 rule_refs all resolve). Evidence: the Taiwan dry-run (`session-learnings-2026-04-23`) actually hit all three gaps; the Tokyo dry-run (`session-learnings-2026-06-02`) confirmed by inspection they remain open. Reviewed via /autoplan's three phases (CEO / Eng / DX) with dual-model adversarial review — the Eng phase caught two CRITICALs that would have made the plan unbuildable (deep-file pointer aimed at the wrong §2 Transit section; the pregnancy ≥40°C figure colliding with the "no medical numbers" decision), both resolved before implementation.
 
 ## [0.12.1] — 2026-06-02
 
 ### Fixed
 
-- **snippet-level §2 bar was too strict in practice → reframed as Case A / Case B (exposed by a real-fetch dry-run)** — v0.12.0's bar required "≥2 aggregators surface the same name." A live fetch showed DuckDuckGo and Bing return **completely disjoint** results for the same query (Bing even returned Osaka shops for an Ebisu query), so a genuinely open, Tabelog-3.58 sushi place would be demoted to a search advisory card — **overriding the authoritative platform's own verdict.** Reframed:
-  - **Case A (check first)** — if anonymous fetch of the authoritative platform (Tabelog / Dianping) already returns name + rating + price + ward, that **is** §2 verification: cite normally, no "not-live-page" qualifier, do not run the weaker aggregator bar. The login-wall apparatus is a fallback, not the default path.
-  - **Case B (authoritative page walled)** — point #1 relaxed to "**one authoritative-sourced snippet (a DDG/Bing result carrying the Tabelog/Dianping name + score) OR ≥2 independent aggregator hits**," since exact cross-aggregator agreement is the exception, not the rule.
-- **§2 signal #3 "Google Maps Permanently-closed banner" is unreachable to anonymous fetch → made explicit** — Maps returns blank to anonymous fetch, so that signal is not directly obtainable. The bar now says "do the strongest closure check the reachable channels allow and flag residual uncertainty," instead of implying a banner check that can't be run.
-- **hotel-selection.md §Progressive Search — added a "price unreachable" branch** — nightly rate is the field platforms most often withhold from anonymous fetch (Booking blank, Ctrip gives name+rating but not price). New partial-scout fallback: when name+area+rating are present but price isn't, mark the rate field `price requires login — verify on booking` rather than dropping the candidate or inventing a number; only escalate to the advisory card when name+rating are also unobtainable.
-- **test-prompts.json case 20** reframed to Case A / Case B assertions, matching the corrected behavior.
+- **snippet-level §2 bar reframed as Case A / Case B** — corrected the too-strict snippet bar:
+  - **Case A (check first)** — if anonymous fetch of the authoritative platform (Tabelog / Dianping) already returns name + rating + price + ward, that **is** §2 verification: cite normally, no "not-live-page" qualifier, do not run the weaker aggregator bar.
+  - **Case B (authoritative page walled)** — point #1 relaxed to "one authoritative-sourced snippet OR ≥2 independent aggregator hits."
+- **§2 signal #3 "Google Maps Permanently-closed banner" is unreachable to anonymous fetch → made explicit** — the bar now says "do the strongest closure check the reachable channels allow and flag residual uncertainty."
+- **hotel-selection.md §Progressive Search — added a "price unreachable" branch** — when name+area+rating are present but price isn't, mark the rate field `price requires login — verify on booking` rather than dropping the candidate or inventing a number.
+- **test-prompts.json case 20** reframed to Case A / Case B assertions.
 
 ### Changed
 
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.0 → 0.12.1.
 
-### Structure guarantee
-
-Zero rule deletions. Zero existing-anchor renames. rule_refs for cases 1-20 unaffected (case 20's internal assertions rewritten; anchors unchanged). §2 absolute ban unchanged. This is an evidence-driven patch from a real-fetch dry-run (`session-learnings-2026-06-02`) — v0.12.0 passed every static check and two adversarial plan-reviews, yet failed the snippet bar on the first live fetch.
-
 ## [0.12.0] — 2026-06-02
 
 ### Added
 
-- **`travel-sources.md` §Login-Wall Fallback — snippet-level §2 evidence bar (the headline)** — fills the gap v0.11.0 left open. When the live page is login-walled, `dining-rules.md §2`'s four signals (closure notice / 404 redirect / Google Maps banner / page integrity) are unreachable, yet case 19 demands a *verified* restaurant card from aggregator data. New rule: clear a restaurant from snippets only when **all four** hold — ① ≥2 aggregators surface the same name + address (single-source = candidacy only) ② current-year / recent activity in the snippets ③ no closure language in any snippet ④ name + district match the address (§4 ward consistency). A snippet-cleared restaurant ships with a visible qualifier `（经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）`; below the bar → candidacy only → search advisory card. §2's absolute ban on training-data names is unchanged and reinforced.
-- **International-platform symmetry** — §Login-Wall Fallback's trigger generalizes from "China platforms login-walled" to **access failure modes** (login wall / 302 / blank / captcha / cookie-consent wall / rate-limit / geo-block), explicitly covering Booking.com / TripAdvisor / Google Maps / Tabelog. The rule keys on the failure mode, not a brand list (which would rot); brands are examples.
-- **test-prompts.json case 20** (`international-login-wall-snippet-bar`) — a Tokyo/Ebisu izakaya scenario simulating Tabelog 302 + Google Maps consent wall. Asserts international platforms take the same aggregator retry, the snippet-level §2 four-point bar is enforced, output carries the "not live page" qualifier, and no training-data names. Closes the international-coverage test gap (case 19 only exercises the China path).
+- **`travel-sources.md` §Login-Wall Fallback — snippet-level §2 evidence bar** — when the live page is login-walled, clear a restaurant from snippets only when **all four** hold — ① ≥2 aggregators surface the same name + address ② current-year / recent activity in the snippets ③ no closure language in any snippet ④ name + district match the address (§4). A snippet-cleared restaurant ships with a visible qualifier `（经聚合器快照核实，非活页 / verified via aggregator snippet, not live page）`; below the bar → search advisory card.
+- **International-platform symmetry** — §Login-Wall Fallback's trigger generalizes from "China platforms login-walled" to access failure modes (login wall / 302 / blank / captcha / cookie-consent wall / rate-limit / geo-block), covering Booking.com / TripAdvisor / Google Maps / Tabelog.
+- **test-prompts.json case 20** (`international-login-wall-snippet-bar`) — a Tokyo/Ebisu izakaya scenario simulating Tabelog 302 + Google Maps consent wall.
 
 ### Changed
 
-- **Channel order consolidated (de-duplicated)** — the login-wall channel order previously appeared 3× in `travel-sources.md` (trigger :31, DuckDuckGo cell :35, Source-Selection table :82) plus `knowledge-layers.md §6`. This release makes `§Login-Wall Fallback` the **single canonical source**: the :82 table row and §6:98 become pointers instead of restating the order. The DuckDuckGo cell is reworded tool-agnostically — "use a native web-search tool if available; the HTML endpoint is the guaranteed floor; never assume a richer tool exists" — removing the hard dependency on an undocumented tool.
+- **Channel order consolidated (de-duplicated)** — makes `§Login-Wall Fallback` the single canonical source: the Source-Selection table row and `knowledge-layers.md §6` become pointers; the DuckDuckGo cell is reworded tool-agnostically.
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.11.0 → 0.12.0.
-
-### Structure guarantee
-
-Zero rule deletions. Zero existing-anchor renames (`§Login-Wall Fallback (Search Aggregators)`, `§6 (exhaustion gate)`, `§Per-Person Price Tiers` keep their names). Existing rule_refs (cases 1-19) unaffected; case 20 added. `dining-rules.md §2` absolute ban unchanged and reinforced by the snippet bar (the bar is additive, not a softening). This release uses in-place edits to consolidate (not append-only) — a correction to the v2 plan's mistaken "add, never edit" assumption.
 
 ## [0.11.0] — 2026-05-30
 
 ### Added
 
-- **`travel-sources.md` §Login-Wall Fallback (Search Aggregators)** — new source class: general search aggregators (DuckDuckGo HTML endpoint / Bing). China platforms (Dianping/Ctrip/Mafengwo/Xiaohongshu/Amap) routinely login-wall / 302 / blank anonymous fetches, but aggregators **re-index the same content** — shop name · address · per-person price · rating surface in result snippets. Marked explicitly as a retry channel (the underlying datum still belongs to the original platform and is cited as such), not a primary source.
-- **`knowledge-layers.md` §6 exhaustion gate** — hard rule added atop the behavior flows: a single platform's login wall / 302 / timeout / blank is **NOT a search failure**. Before degrading to a search advisory card you must try **≥2 channels (≥1 search aggregator)**; the advisory card is a **last resort** and must list which channels were tried and why each failed. Both hotel-flow `IF search fails` branches rewritten to match.
-- **`dining-rules.md` §11 rationalization table + red flag** — nails two excuses ("platform needs login = can't verify = advisory card"; "I already tried Dianping + Amap") and a STOP red flag: before writing a restaurant advisory card, ask "how many channels, and was one an aggregator?" — fewer than 2 or zero aggregators → keep searching.
-- **`dining-rules.md` §3 operating-hours gate** — "opening hours must cover the meal slot": a shop opening at 16:30 can't be a lunch pick; sell-out/single-item venues get the same gate — if the open-and-stocked window doesn't cover the slot, it's a flagged optional detour, not a main.
-- **test-prompts.json case 19** (`login-wall-exhaustion-gate`) — Shunde lunch scenario simulating Dianping 302 + Amap login wall; asserts aggregator retry is attempted, no premature degradation, no training-data shop names.
-- **provenance.md** — added the missing `knowledge-layers.md` section (backfills cases 16/17/18 + new case 19) and registered case 19's 5-anchor coverage.
+- **`travel-sources.md` §Login-Wall Fallback (Search Aggregators)** — new source class: general search aggregators (DuckDuckGo HTML endpoint / Bing), marked explicitly as a retry channel (the underlying datum still belongs to the original platform), not a primary source.
+- **`knowledge-layers.md` §6 exhaustion gate** — hard rule added: a single platform's login wall / 302 / timeout / blank is NOT a search failure; before degrading to a search advisory card you must try ≥2 channels (≥1 search aggregator). Both hotel-flow `IF search fails` branches rewritten to match.
+- **`dining-rules.md` §11 rationalization table + red flag** — nails two excuses and a STOP red flag: before writing a restaurant advisory card, ask "how many channels, and was one an aggregator?"
+- **`dining-rules.md` §3 operating-hours gate** — "opening hours must cover the meal slot".
+- **test-prompts.json case 19** (`login-wall-exhaustion-gate`) — Shunde lunch scenario simulating Dianping 302 + Amap login wall.
+- **provenance.md** — added the missing `knowledge-layers.md` section and registered case 19's coverage.
 
 ### Changed
 
 - **SKILL.md §Fallback Rules (Web verification stalls)** — added "a login wall / 302 / blank is not a failure — retry via a search aggregator (≥2 channels) per §6 exhaustion gate before degrading."
 - **Version** — 0.10.0 → 0.11.0 (VERSION / SKILL.md / plugin.json / marketplace.json in sync).
-
-### Structure guarantee
-
-Zero rule content deleted. Zero existing anchors renamed. Existing rule_refs (cases 1-18) unaffected. dining-rules.md §2 absolute ban unchanged and further hardened by the §11 rationalization table. New anchors: travel-sources.md §Login-Wall Fallback (Search Aggregators), knowledge-layers.md §6 (exhaustion gate).
 
 ## [0.8.0] — 2026-04-23
 
@@ -112,21 +92,17 @@ Zero rule content deleted. Zero existing anchors renamed. Existing rule_refs (ca
   - `budget.md`: 88 → 52 lines (-40%)
   - `dining-rules.md`: 190 → 110 lines (-42%)
   - `safety-and-emergency.md`: 205 → 104 lines (-49%)
-  - All anchors preserved (§1-§10 / §3 / §6 / §9 etc.); provenance still 40/40; no existing rule_refs break.
-- **Introduced `references/deep/` opt-in subdirectory** — the trimmed-out extended content (tables, destination-specific examples, swap-cascade detail, 6-class ethical guardrails, partial-number-ban rationale, allergen-card template, etc.) all migrated to `references/deep/{budget,dining-rules,safety-and-emergency}.md`. LLM does not read these by default; only when a main reference's pointer explicitly triggers a depth threshold.
-- **SKILL.md adds a "Deep references (opt-in)" note** (3 lines, after Navigation) stating the read rule.
-- `scripts/check-size.sh` now also checks `deep/` with relaxed thresholds (> 400 warn / > 500 error — deep files are supposed to be larger).
-- **`FUTURE.md` rewritten** — from "5 conditionally-triggered technical directions" to a **strategic positioning + ecosystem roadmap**: the main skill stays broad and general; domain specialists (pet travel / business / LGBTQ safety / cross-strait / destination-specific) land as **separate skills routed by trigger words**, not as new sections inside this skill.
-
-### Structure guarantee
-
-Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four checks (links / provenance / version / size) remain green.
+  - All anchors preserved.
+- **Introduced `references/deep/` opt-in subdirectory** — the trimmed-out extended content migrated to `references/deep/{budget,dining-rules,safety-and-emergency}.md`, read only when a main reference's pointer triggers a depth threshold.
+- **SKILL.md adds a "Deep references (opt-in)" note** (3 lines, after Navigation).
+- `scripts/check-size.sh` now also checks `deep/` with relaxed thresholds (> 400 warn / > 500 error).
+- **`FUTURE.md` rewritten** — from "5 conditionally-triggered technical directions" to a strategic positioning + ecosystem roadmap: domain specialists land as separate skills routed by trigger words.
 
 ## [0.7.2] — 2026-04-23
 
 ### Added
 
-- **`references/budget.md`** — 4-section reference filling the skill's highest-frequency blind spot. Budget is touched on every trip, but until now only a single rule existed ("15% overage confirmation checkpoint"). This file supplies the structure that checkpoint draws from.
+- **`references/budget.md`** — new 4-section budget reference.
   - §1 Category split defaults by region band (East Asia / mainland China+SEA / Western Europe / Nordics-Iceland / US / Middle East / South+SEA rural — 7 tiers, each with 6 category percentages in local currency).
   - §2 Hidden-cost checklist in "situation → specific line item" format: entry/departure taxes, tipping layers, IC-card deposits, FX fees, DCC traps, duty-free liquid limits, self-drive hidden charges, peak surcharges, return-country customs.
   - §3 Refundable vs non-refundable decision: 7 triggers to spend the premium (age 70+, pregnancy 28w+, young kids, risk-window overlap, pending visa, narrow connection, business) + 4 scenarios to skip (solo flexible, short low-risk, already-flexible multi-leg, premium > 20% of lodging total).
@@ -138,23 +114,23 @@ Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four 
 
 ### Fixed
 
-- **Plugin metadata version drift** — `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (two places) were still pinned at `0.5.2`. Bumped to `0.7.1`. Prior `/plugin install` flows were reading stale metadata.
+- **Plugin metadata version drift** — `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (two places) bumped from `0.5.2` to `0.7.1`.
 
 ### Added
 
-- **Release hygiene pack** — four checks now form a full gate:
+- **Release hygiene pack** — four checks:
   - `scripts/check-version.sh` — VERSION must agree with SKILL.md, plugin.json, marketplace.json; any drift exits 1.
-  - `scripts/check-size.sh` — SKILL.md > 250 lines → error; `reference/*.md` > 220 warn / > 260 error. Thresholds aligned with the v0.6.0 "rule fatigue" lesson (SKILL.md was trimmed from 331 → 190 lines).
-  - `scripts/check-all.sh` — aggregator runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` in one command, replacing the manual release checklist.
+  - `scripts/check-size.sh` — SKILL.md > 250 lines → error; `reference/*.md` > 220 warn / > 260 error.
+  - `scripts/check-all.sh` — aggregator runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` in one command.
 - README / README_CN Release checklist now points to `scripts/check-all.sh`.
 
 ### Added
 
-- **Rule Provenance mechanism** — makes "why does this rule exist" machine-verifiable and reverse-queryable.
-  - `scripts/check-provenance.sh` — verifies that every `rule_refs` anchor in `test-prompts.json` actually points to a heading in the target rule file. Zero dependencies (pure bash + POSIX awk), with a jq fast path when available. Passes 34/34 on positive cases; returns exit code 1 on injected bad refs.
-  - `skills/jhins-trip-planner/references/provenance.md` — reverse index (rule → cases that cover it). Before changing a rule, check who's testing it. Un-referenced headings are a signal to add tests, not delete rules.
-  - SKILL.md top meta line adds a pointer to provenance.md — Navigation table stays clean.
-  - FUTURE.md §1 (test automation) updated: ground truth is now structured and ready; when the harness ships, no corpus needs to be built.
+- **Rule Provenance mechanism**
+  - `scripts/check-provenance.sh` — verifies that every `rule_refs` anchor in `test-prompts.json` actually points to a heading in the target rule file. Zero dependencies, with a jq fast path when available.
+  - `skills/jhins-trip-planner/references/provenance.md` — reverse index (rule → cases that cover it).
+  - SKILL.md top meta line adds a pointer to provenance.md.
+  - FUTURE.md §1 (test automation) updated.
 
 ## [0.6.4] — 2026-04-22
 
@@ -167,30 +143,30 @@ Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four 
 
 ### Added
 
-- `.gitignore` — explicitly excludes `session-learnings-*.md` (personal session notes) and locally generated cache directories from git. Replaces the "just remember not to track them" soft constraint.
-- `FUTURE.md` item 1 gets a clarification: the `rule_refs` field in `test-prompts.json` is a **human-readable annotation**, not a machine assertion; `check-links.sh` does not scan JSON. Prevents future readers from mistaking these references as harness dependencies.
+- `.gitignore` — explicitly excludes `session-learnings-*.md` (personal session notes) and locally generated cache directories from git.
+- `FUTURE.md` item 1 gets a clarification: the `rule_refs` field in `test-prompts.json` is a human-readable annotation, not a machine assertion; `check-links.sh` does not scan JSON.
 
 ## [0.6.2] — 2026-04-22
 
 ### Added
 
 - `VERSION` file, this `CHANGELOG.md`, and `FUTURE.md` — versioning infrastructure. SKILL.md now shows the current version number at the top.
-- CHANGELOG backfilled to v0.3.0 (mined from git log).
-- FUTURE.md records 5 "conditionally triggered future directions" (test automation / thresholds.json / destinations/ split / triggers matrix / agentification), each with its trigger condition.
+- CHANGELOG backfilled to v0.3.0.
+- FUTURE.md records 5 conditionally triggered future directions (test automation / thresholds.json / destinations/ split / triggers matrix / agentification).
 
 ## [0.6.1] — 2026-04-22
 
 ### Added
 
-- `scripts/check-links.sh` — bash script that scans the skill package and validates cross-file references: every `[text](file.md)` points to a real file, every `§Anchor` matches a heading in the target file, orphan reference files are warned. Zero dependencies, pure bash + POSIX tools, runs in under 1 second.
-- Smart anchor parsing — correctly distinguishes that in "`(dining-rules.md) §5 for how they combine with meal`" the anchor is `§5`, not the whole trailing phrase.
+- `scripts/check-links.sh` — bash script that scans the skill package and validates cross-file references: every `[text](file.md)` points to a real file, every `§Anchor` matches a heading in the target file, orphan reference files are warned.
+- Smart anchor parsing.
 
 ## [0.6.0] — 2026-04-22
 
 ### Added
 
-- **Accessibility capture** (`intake.md §6`) — wheelchair / dialysis / in-cabin oxygen / pregnancy / service animal / allergies carry-forward. Each category must be explicitly resolved in downstream hotel / attraction / transport cards, no more "later verify".
-- **Children age banding** (`intake.md §7`) — 0-2 / 3-5 / 6-9 / 10-14 / 15-17, each band mapping to different attraction / lodging / restaurant constraints. Replaces the vague "young children".
+- **Accessibility capture** (`intake.md §6`) — wheelchair / dialysis / in-cabin oxygen / pregnancy / service animal / allergies carry-forward. Each category must be explicitly resolved in downstream hotel / attraction / transport cards.
+- **Children age banding** (`intake.md §7`) — 0-2 / 3-5 / 6-9 / 10-14 / 15-17, each band mapping to different attraction / lodging / restaurant constraints.
 - **Transit visa blind spots** (`trip-prep.md §2`) — US has no sterile transit, Hong Kong 24/72/168h, Dubai stopover, Singapore VFTF, Schengen ATV-required countries.
 - **Interline baggage conflicts** (`transportation.md`) — piece-vs-weight system clashes, self-transfer time budgeting, duty-free liquid re-screening, cabin-bag size mismatches.
 - **Climate shift risk** (`weather-and-output.md §1`) — European summer heat waves, earlier cherry blossoms, late-season typhoons, North American wildfire smoke, coral season disruption. Any use of seasonal averages must carry a disclaimer.
@@ -200,16 +176,16 @@ Zero rule content deleted. Zero anchor renamed. Zero rule_refs broken. All four 
 - **Payment friction in practice** (`trip-prep.md §3`) — destination-specific friction for China / Japan / Iceland / Germany-Austria / India / Argentina / United States.
 - **Minimum viable brief threshold** (`intake.md §2`) — with destination + dates + party + budget in hand, detailed planning can proceed; pace/theme have defaults and do not block.
 - **Capture relevance rule** (top of `intake.md`) — irrelevant captures should not be mechanically asked (two adults: skip accessibility; no kids: skip age banding).
-- **Peak-period pre-trip recheck now covers planning-only mode** — SKILL.md Mode-Specific Scope adds one line, closing the systematic gap for scenarios like domestic May Day / National Day holidays.
+- **Peak-period pre-trip recheck now covers planning-only mode** — SKILL.md Mode-Specific Scope adds one line.
 
 ### Changed
 
-- **SKILL.md slimmed by 44%** (331 → 190 lines). Adds a North Star + Navigation table. Rule details move down into their reference files; SKILL.md keeps only pointers.
-- **Split `planning-rules.md`** (205-line grab bag) into three focused files:
+- **SKILL.md slimmed by 44%** (331 → 190 lines). Adds a North Star + Navigation table; rule details move down into their reference files, SKILL.md keeps only pointers.
+- **Split `planning-rules.md`** into three focused files:
   - `intake.md` (142 lines) — §1-§10 numbered, capture + carry-forward
   - `trip-prep.md` (108 lines) — §1-§7 numbered, visa + payment + SIM + insurance + etiquette + safety pointer
   - `weather-and-output.md` (70 lines) — weather + output + downstream pointers + independent-vs-guided
-- **`test-prompts.json` structured** — the prose `expected` field is replaced with machine-checkable `assertions` (13 cases, each with mode / must_contain / must_cite_source_for / rule_refs fields).
+- **`test-prompts.json` structured** — the prose `expected` field is replaced with machine-checkable `assertions` (13 cases).
 
 ## [0.5.2] — 2026-04-22
 

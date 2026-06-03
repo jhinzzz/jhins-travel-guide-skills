@@ -8,6 +8,26 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.13.0] — 2026-06-03
+
+### Added
+
+- **跨海峡 / 大中华通行证（不是签证）— `trip-prep.md §2` + `deep/trip-prep.md`** — §2 此前把每一次跨境都当成签证案例。大陆↔台湾用 大陆居民往来台湾通行证 + 入台证；港澳↔台湾、大陆↔港澳用 港澳通行证 + 签注——都是 compact 通行证，不是标准旅游签证。这是面向中文用户最高频的缺失入境规则。主文件 §2 加一条 bullet（仿 "Minors crossing borders" 风格），明示"这是通行证不是签证"、列出触发的口岸对、把办理周期当签证周期在 intake 阶段提示；深度文件加 `§Cross-Strait Greater China Permits` 写完整矩阵（含自由行/跟团口径、回程台胞证/回乡证），办理天数为示例性范围 + "research time 复核"，办不出来就标未核实估计 + 指向官方，不编造数字。
+- **脆弱旅客温泉/热浴安全 — `safety-and-emergency.md §6` + deep §6** — §6 此前覆盖扒手/高原/海洋风险，但对儿童温泉安全沉默。对"主题就是温泉 + 带小孩"的行程（原始 Taiwan dry-run brief）这是可预见的安全裂缝，LLM 不会稳定推理出来。抽象为"脆弱旅客的热暴露"（小孩 + 老人/心血管 + 复用既有孕妇 ≥40°C 注，不重复不删除），按 risk→trigger→action 写：短时间、最凉的池、出现脸红/头晕立刻出水、补水、**显示场馆自己张贴的年龄下限/时长上限**；婴儿一般不建议。**不在 skill 里写死儿童水温/分钟阈值**（医疗责任 + 易腐 + 难引用）——把"指向场馆张贴限值"作为具体且不编造的 action。触发条件挂在"行程里出现温泉"而非"wellness 主题"（避免漏掉常见的"住一晚温泉旅馆但没选 wellness 主题"）。
+- **灾害 / 闭店状态复查 — `safety-and-emergency.md §6` + deep §6** — 此前没有规则说"高地震/火山/野火/近期灾害目的地需在出发前复查状态"。太鲁阁震后封闭、冰岛火山、加州野火同属一类，处处隐含、从未成文。新规则按 **具体信号** 触发（具名景点震后状态 / 官方预警窗口 / weather §1 已列的季节灾害窗口），不在所有地震国触发（否则变成 §6 自己禁止的"通用废话"）。动作：通过**政府旅游局/国家公园管理局/灾害机构**这一权威源类（不是给餐厅/店铺用的 venue operating-status）复查官方闭店状态，出发前 3–5 天，并作为**一行并入已有的出发前复查块**（dining §8），不另起第二块；天气/AQI 复查仍归 weather §1（1–2 周），本规则只管闭店状态、不重复。把东京 dry-run 的"紧邻假期后窗口"（F9）并入季节窗口触发条件一并关闭。
+- **test-prompts.json case 21–24** — 21 跨海峡通行证（断言不当签证处理 + 具名通行证）、22 儿童温泉安全（断言显示场馆限值 + 不出现编造儿童阈值）、23 太鲁阁震后灾害复查（断言权威源类 + 并入单一复查块）、24 集成案例（原始 Taiwan 黄金周 brief，三条规则一起跑）。3 个隔离回归 + 1 个集成，避免单一合并案例靠巧合通过却掩盖单条回归。
+
+### Changed
+
+- **SKILL.md §Final Check — 零新增 invariant（19 条不变）** — onsen carry-forward 并入既有 Intake carry-forward 行；灾害复查改写既有 Pre-trip recheck 行的触发条件（"peak period **or** disaster/closure-status signal，两者合一块"），不新增 bullet。守住把 SKILL.md 从 331→199 行瘦身那条 rule-fatigue 红线。
+- **intake.md §7 Child carry-forward rule** 加一条"行程出现温泉 → 带入 safety §6 热浴安全"的挂钩。
+- **FUTURE.md** — 修正 §2 第41行与新现实矛盾的措辞（此前写"cross-strait 不在 trip-prep §2"）；写入 `destinations/` 迁移触发器（跨海峡内容超过一屏 / 第二次 Greater-China dry-run 复现 F6/F9/F11 → 拆 `destinations/cross-strait.md`）；§1 测试用例计数 19→24。
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.1 → 0.13.0。
+
+### Structure guarantee
+
+零规则删除。零既有 anchor 改名（新内容均为 §2/§6/§7 下的 bullet 或 deep 文件的新具名 heading `§Cross-Strait Greater China Permits`，不重编号既有 §）。case 1-20 的 rule_refs 不受影响。SKILL.md 行数 199 不变，Final Check 19 条 invariant 不变。`check-all.sh` 全绿（versions / sizes / links / 80 rule_refs 全解析）。证据来源：Taiwan dry-run（`session-learnings-2026-04-23`）实际踩中全部三个缺口；Tokyo dry-run（`session-learnings-2026-06-02`）经检视确认三者仍 open。本版经 /autoplan 三阶段（CEO / Eng / DX）双模型对抗式 review——其中 Eng 阶段抓到两个会让计划根本做不成的 CRITICAL（深度文件指针指向错误的 §2 Transit 段、孕妇 ≥40°C 数字与"无医疗数字"决定冲突），均在落地前解决。
+
 ## [0.12.1] — 2026-06-02
 
 ### Fixed

@@ -34,6 +34,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 |---|---|
 | (whole file) | 3 |
 | §3, §4 | 11 |
+| §6, §7 | 22 |
 | §8 | 9 |
 
 ### trip-prep.md
@@ -42,6 +43,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 |---|---|
 | (whole file) | 5 |
 | §1 | 12 |
+| §2 | 21, 24 |
 | §3 | 14 |
 | §6 | 13 |
 
@@ -66,6 +68,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §2 | 8, 19, 20 |
 | §3 (Spring Festival / New Year peak) | 5 |
 | §4 | 20 |
+| §8 | 23, 24 |
 | §9 | 8 |
 | §10 | 8 |
 | §11 | 19, 20 |
@@ -107,6 +110,8 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §3 (partial number ban) | 13 |
 | §6 | 11 |
 | §6 (DTCM vetting) | 13 |
+| §6 (thermal-immersion safety) | 22, 24 |
+| §6 (disaster closure-status recheck) | 23, 24 |
 | §9 | 12 |
 
 ### knowledge-layers.md
@@ -125,7 +130,20 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | §Per-Person Price Tiers | 7 |
+| §Source Selection Rules | 23 |
 | §Login-Wall Fallback (Search Aggregators) | 19, 20 |
+
+### deep/trip-prep.md
+
+| Anchor | Cases |
+|---|---|
+| §Cross-Strait Greater China Permits | 21, 24 |
+
+### deep/safety-and-emergency.md
+
+| Anchor | Cases |
+|---|---|
+| §6 | 22, 23 |
 
 ## Case index (for looking up what a case exercises)
 

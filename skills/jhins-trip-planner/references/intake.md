@@ -120,7 +120,7 @@ The bands are not cosmetic — each triggers different downstream constraints on
 
 ### Child carry-forward rule
 
-Every downstream section respects the child bands captured at intake. Hotel cards show crib/rollaway + family-room capacity; restaurant cards flag high-chair / kid-menu / age-floor; attraction cards show stroller accessibility + child ticket pricing + height minimums; transport cards show lap-infant vs separate-ticket + stroller gate-check; itinerary pacing respects attention-span and walking-tolerance tiers.
+Every downstream section respects the child bands captured at intake. Hotel cards show crib/rollaway + family-room capacity; restaurant cards flag high-chair / kid-menu / age-floor; attraction cards show stroller accessibility + child ticket pricing + height minimums; transport cards show lap-infant vs separate-ticket + stroller gate-check; itinerary pacing respects attention-span and walking-tolerance tiers. When a hot spring / onsen / thermal bath appears anywhere in the itinerary (not only when `wellness & spa` is the stated theme), carry the child band forward into thermal-immersion safety per [safety-and-emergency.md](safety-and-emergency.md) §6.
 
 ## 8. Self-Drive Readiness Triad (skip if not self-driving)
 

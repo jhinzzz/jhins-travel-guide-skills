@@ -119,6 +119,26 @@ Common categories: theft / pickpocket hotspots · traffic and road safety · nat
 
 When risk mitigation tells the traveller how to pick a safer venue / operator / taxi, **name the destination-authoritative platform** per [travel-sources.md](../travel-sources.md). For Rome restaurants: Gambero Rosso / TheFork / Dissapore + Google Maps + TripAdvisor. For Tokyo: Tabelog. For mainland China: 大众点评. For UAE tour operators: DTCM-certified list. Do not default to "TripAdvisor > X.X stars" globally.
 
+### Thermal-immersion safety for vulnerable travellers — detail
+
+Triggered when the itinerary includes a hot spring / onsen / sento / thermal bath and the party includes a vulnerable traveller (carry-forward from [intake.md](../intake.md) §6/§7; pregnancy is already handled at [deep/intake.md](intake.md) §6.4). Frame the abstraction as *thermal exposure for vulnerable travellers*, not children-only.
+
+- **Young children** — heat tolerance is lower and they overheat faster than adults. Keep sessions short and in the coolest pool available, watch actively for flushing / dizziness / lethargy, and get out at the first sign. Hydrate before and between dips. Infants are generally not recommended in hot springs. **Do not invent a specific temperature or minute threshold** — these are facility- and age-specific and not reliably citable. The concrete, non-fabricated action is to surface the facility's own posted age-floor and time-limit (most Japanese/Taiwanese onsen and spas post them at the entrance or front desk) and to confirm with pediatric guidance if the user wants a number.
+- **Elderly / cardiovascular / blood-pressure conditions** — hot immersion drops blood pressure and stresses the heart; rapid temperature change (hot pool → cold plunge) is the higher-risk move. Action: shorter sessions, avoid the cold-plunge cycle, no immersion right after alcohol, and have the traveller clear it with their physician where a known condition exists.
+- **Pregnancy** — already covered at [deep/intake.md](intake.md) §6.4 (avoid hot-spring immersion ≥40 °C). Do not duplicate or restate the figure here; carry it forward from intake.
+
+Fallback: if the facility's posted limits are not fetchable, the directional guidance above is the floor — state it as guidance and direct the user to confirm on-site. Never fabricate a pediatric threshold.
+
+### Disaster / closure-status recheck — detail
+
+Triggered on a specific signal (named post-disaster closure/recovery status, active official advisory window, or a named seasonal hazard window per [weather-and-output.md](../weather-and-output.md) §1) — not on ambient seismic/volcanic risk, which would fire on every trip to Japan/Taiwan/Iceland and degrade into the generic filler §6 bans.
+
+- **What to recheck** — the official **closure / operating status** of the affected attraction or region: is the national park / trail / site open, partially open, or closed; are there access restrictions or permit requirements added post-disaster. This is distinct from the venue-level operating-status check ([travel-sources.md](../travel-sources.md) §Operating-Status Detection), which is for restaurants/shops.
+- **Where to check** — the authority-source class: national-park authority, government tourism board, civil-defence / disaster agency, or the official site of the specific attraction (e.g. Taroko Gorge → 太魯閣國家公園官網 + 公路局 road-status page). Name the specific authority for the destination, not a generic search.
+- **When** — 3–5 days before departure, folded as one line into the existing pre-trip recheck block ([dining-rules.md](../dining-rules.md) §8). Do not create a second block. The hazard-forecast / AQI recheck stays in [weather-and-output.md](../weather-and-output.md) §1 (1–2 weeks out) — this rule does not duplicate it; it covers closure status only.
+- **Fallback** — authority page login-walled / 404 / contradictory → apply the [travel-sources.md](../travel-sources.md) §Login-Wall Fallback exhaustion gate (≥2 channels incl. an aggregator). If status is genuinely unconfirmable, output the recheck as a pre-departure to-do **with the official URL** — never infer "open / all-clear" from a page that failed to load.
+- **Post-peak adjacency** — a trip window immediately after a travel peak (e.g. the week after Golden Week) counts as a named-window trigger here: post-holiday irregular closures and catch-up rest days are a real risk even when the window does not overlap the peak itself.
+
 ## 7. Ethical / Responsible-Tourism Guardrails — Full List
 
 Some popular activities are not safe for animals, communities, or the traveller's own legal exposure. Flag and redirect rather than recommend by default. Every item: *what to avoid → why → what to recommend instead*.

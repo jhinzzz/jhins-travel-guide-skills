@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.12.1** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.13.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -175,10 +175,10 @@ Verify each area against its canonical checklist — do not re-check rules in re
 - **Dining**: passes [dining-rules.md](references/dining-rules.md) §§1-9.
 - **Self-drive** (when applicable): passes [transportation.md](references/transportation.md) §Rental Car / Self-Drive + intake triad.
 - **Pace & theme**: daily density matches pace; theme conflicts resolved; high-intensity adventure reconciled per day.
-- **Intake carry-forward**: chronic-medication generics (if any) flow into Trip Preparation per-country legality flags; accessibility/medical needs (wheelchair · dialysis · cabin-O₂ · pregnancy · service animal) flow into transport/hotel/attraction vetting; minors-with-one-parent documents raised where enforced; Ramadan/moveable-festival dates verified.
+- **Intake carry-forward**: chronic-medication generics (if any) flow into Trip Preparation per-country legality flags; accessibility/medical needs (wheelchair · dialysis · cabin-O₂ · pregnancy · service animal) flow into transport/hotel/attraction vetting; minors-with-one-parent documents raised where enforced; cross-strait/Greater-China crossings handled as permits not visas per [trip-prep.md](references/trip-prep.md) §2; thermal-immersion safety carried forward when a hot spring/onsen appears with a vulnerable traveller per [safety-and-emergency.md](references/safety-and-emergency.md) §6; Ramadan/moveable-festival dates verified.
 - **Local etiquette**: destination-triggered items phrased as *situation → specific action* per [trip-prep.md](references/trip-prep.md) §6.
 - **Safety & emergency**: passes [safety-and-emergency.md](references/safety-and-emergency.md) — numbers · hospital · embassy (incl. after-hours) · insurer claim path · theft/loss steps · risks with §6 phrasing.
-- **Pre-trip recheck block**: present when the trip overlaps a peak period, per [dining-rules.md](references/dining-rules.md) §8.
+- **Pre-trip recheck block**: present when the trip overlaps a peak period (per [dining-rules.md](references/dining-rules.md) §8) **or** when a disaster/closure-status signal fires (per [safety-and-emergency.md](references/safety-and-emergency.md) §6) — both fold into one block, not two.
 - **Specialties** (if present): pass [local-specialties.md](references/local-specialties.md) card checklist.
 - **Knowledge layers**: every named entity (hotel, restaurant, shop, dish, attraction, price) classified per [knowledge-layers.md](references/knowledge-layers.md) §2 bright-line test; Local Knowledge Layer items have web evidence or degrade to search advisory card; destination-matching uses only Reasoning Layer dimensions.
 - **Data traceability**: every factual claim cites source + research date per [travel-sources.md](references/travel-sources.md).

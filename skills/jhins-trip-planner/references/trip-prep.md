@@ -21,6 +21,7 @@ Follows the same batch-verification pattern as [dining-rules.md](dining-rules.md
 - For visa-free destinations, note any entry requirements (passport validity, return ticket, hotel booking proof).
 - If visa status is unknown, ask; do not assume.
 - **Minors crossing borders** — when the party includes a child under 18 travelling with only one parent (or with a non-parent adult), many destinations require supporting documents: notarised consent from the absent parent/guardian, translated birth certificate linking child to accompanying adult, and sometimes an apostille. High-enforcement destinations include UAE, Saudi Arabia, South Africa, Mexico, and several EU members. Surface the requirement at intake, not at the airport.
+- **Cross-strait & Greater China crossings are PERMITS, not a visa** — do not treat every cross-border trip as a visa case. Mainland China ↔ Taiwan, HK/Macau ↔ Taiwan, and Mainland China ↔ HK/Macau use compact-specific travel permits, not standard tourist visas. Fires whenever the routing connects any pair among Mainland China / Taiwan / Hong Kong / Macau. Name the permit class (Mainland↔Taiwan: 大陆居民往来台湾通行证 + 入台证; Mainland↔HK/Macau: 港澳通行证 + 签注) and treat its lead time like a visa lead time — surface at intake. Detail + processing per [deep/trip-prep.md](deep/trip-prep.md) §Cross-Strait Greater China Permits. If processing time cannot be confirmed, state it as an unverified estimate and point to the issuing-authority site — never present an unverified number as fact.
 
 ### Transit Visa Rules
 

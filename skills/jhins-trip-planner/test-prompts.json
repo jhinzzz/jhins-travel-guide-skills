@@ -764,5 +764,101 @@
         "dining-rules.md §4"
       ]
     }
+  },
+  {
+    "id": 21,
+    "scenario": "cross-strait-permit-not-visa",
+    "prompt": "五一假期带 6 岁儿子从上海去台湾环岛 8 天，3 人，预算人民币 3 万，喜欢夜市和温泉。帮我规划行前准备。",
+    "assertions": {
+      "must_treat_entry_as_permit_not_visa": true,
+      "must_name_permits": [
+        "大陆居民往来台湾通行证",
+        "入台证"
+      ],
+      "must_not_contain_literal": [
+        "台湾旅游签证",
+        "Taiwan tourist visa"
+      ],
+      "must_flag_processing_lead_time_at_intake": true,
+      "must_have_section": [
+        "trip preparation / 行前准备",
+        "permit / entry"
+      ],
+      "must_verify_or_flag": "individual-travel (自由行) eligibility depends on origin city in pilot scheme; otherwise group-tour channel — verify, do not assume",
+      "fallback_on_unverifiable_processing": "state as unverified estimate + point to issuing-authority official site; never present an unverified number as fact",
+      "rule_refs": [
+        "trip-prep.md §2",
+        "deep/trip-prep.md §Cross-Strait Greater China Permits",
+        "SKILL.md §Final Check"
+      ]
+    }
+  },
+  {
+    "id": 22,
+    "scenario": "pediatric-onsen-thermal-safety",
+    "prompt": "带 5 岁女儿去日本箱根泡温泉，住温泉旅馆两晚，帮我注意安全。",
+    "assertions": {
+      "must_surface_thermal_safety_for_child": true,
+      "must_have_thermal_safety_items": [
+        "keep immersion brief / coolest pool",
+        "exit at first flushing or dizziness",
+        "hydrate between dips",
+        "surface the facility's posted age-floor / time-limit"
+      ],
+      "must_not_contain_fabricated_pediatric_threshold": "do NOT state a specific pediatric water temperature or minute limit as fact (e.g. invented '≤39°C' / '≤10 min' for children); direct to the facility's posted limit instead",
+      "trigger_is_itinerary_content_not_theme": "fires because an onsen appears in the itinerary, even though 'wellness' was not the stated theme",
+      "rule_refs": [
+        "safety-and-emergency.md §6",
+        "deep/safety-and-emergency.md §6",
+        "intake.md §6, §7"
+      ]
+    }
+  },
+  {
+    "id": 23,
+    "scenario": "disaster-closure-status-recheck",
+    "prompt": "9 月去台湾花莲太鲁阁徒步两天，帮我规划，注意 2024 地震后的状况。",
+    "assertions": {
+      "must_fire_disaster_status_recheck": true,
+      "must_recheck_official_closure_status": true,
+      "must_name_authority_source_class": "national-park authority / government tourism board / road-status (NOT venue operating-status, which is for restaurants/shops)",
+      "recheck_cadence": "3-5 days before departure, folded into the existing pre-trip recheck block (one block, not two)",
+      "must_not_duplicate_weather_recheck": "the hazard-forecast/AQI recheck lives in weather-and-output §1 (1-2 weeks out); this rule is closure-status only",
+      "fallback_on_unconfirmable_status": "if authority page walled/404/contradictory → exhaustion gate; if still unconfirmable, output a pre-departure to-do WITH the official URL — never infer open/all-clear",
+      "rule_refs": [
+        "safety-and-emergency.md §6",
+        "deep/safety-and-emergency.md §6",
+        "dining-rules.md §8",
+        "travel-sources.md §Source Selection Rules"
+      ]
+    }
+  },
+  {
+    "id": 24,
+    "scenario": "cross-strait-family-integration",
+    "prompt": "五一黄金周带 6 岁儿子去台湾环岛 10 天（5月1日-5月10日），从上海出发，3 人（我+老婆+娃），预算人民币 3 万，喜欢夜市、温泉、海景，不想太累。",
+    "assertions": {
+      "_note": "integration case — the original Taiwan-Golden-Week dry-run brief. Exercises all three v0.13.0 fixes together plus pre-existing peak-recheck.",
+      "must_treat_entry_as_permit_not_visa": true,
+      "must_name_permits": [
+        "大陆居民往来台湾通行证",
+        "入台证"
+      ],
+      "must_surface_thermal_safety_for_child": true,
+      "must_not_contain_fabricated_pediatric_threshold": true,
+      "must_fire_peak_recheck_block": "May Day (五一) is a China travel peak — pre-trip recheck block required per dining-rules §8",
+      "disaster_recheck_if_taroko_in_itinerary": "if an itinerary touches Taroko/east-coast post-quake zone, fold closure-status recheck into the same block",
+      "must_have_section": [
+        "trip preparation / 行前准备",
+        "safety & emergency",
+        "pre-trip recheck block"
+      ],
+      "rule_refs": [
+        "trip-prep.md §2",
+        "deep/trip-prep.md §Cross-Strait Greater China Permits",
+        "safety-and-emergency.md §6",
+        "dining-rules.md §8"
+      ]
+    }
   }
 ]

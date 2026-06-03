@@ -15,12 +15,12 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 1. Automated testing for `test-prompts.json`
 
-**Current state**: 19 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
+**Current state**: 24 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
 
 **What it could look like**: a script (Node / Python, Anthropic SDK) that runs each case, applies two kinds of assertion: `grep-level` (must_contain / must_not_contain_literal) and `judge-level` (must_have_section, rule_refs traced). Ground truth is already structured; the harness just consumes it.
 
 **Why not now**:
-- 19 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
+- 24 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
 - Judge-level assertion (LLM judging LLM) has drift risk.
 - Manual case spot-checking on PR review catches most regressions.
 
@@ -38,7 +38,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 - `jhins-pet-travel` — trigger: 带狗 / 带猫 / pet carrier / 宠物检疫. Covers airline cargo/cabin policies, destination quarantine windows, pet-friendly hotels, EU pet passport.
 - `jhins-business-travel` — trigger: 出差 / business trip / 发票 / VAT refund / work desk. Covers expense receipts, VAT refund ops, work-ready hotel fields, meeting buffer days.
 - `jhins-lgbtq-safety` — trigger: partner / same-sex / trans / LGBTQ + destination in high-risk jurisdiction list. Covers entry-law maps, hotel double-bed defaults, passport-gender-vs-presentation risk, trans-specific airport lines.
-- `jhins-cross-strait` — trigger: 台湾 / Taiwan / 往来台湾通行证 / 入台证 / 港澳通行证. Covers Mainland ↔ Taiwan / HK / Macau compact permits (not in trip-prep.md §2 — that's international visa only).
+- `jhins-cross-strait` — trigger: 台湾 / Taiwan / 往来台湾通行证 / 入台证 / 港澳通行证. Covers Mainland ↔ Taiwan / HK / Macau compact permits. As of v0.13.0, `trip-prep.md §2` carries a permit-awareness bullet + `deep/trip-prep.md §Cross-Strait Greater China Permits` carries the matrix; a dedicated skill remains the home for full cross-strait depth (booking channels, hidden costs, night-market cash, child pricing) **if the migration trigger below fires**. Migration trigger: cross-strait content in `trip-prep.md §2` / its deep section outgrows ~one screen, OR a second Greater-China dry-run reopens F6/F9/F11 (booking channels / Taiwan hidden costs / night-market cash). Until then, surgical patches in trip-prep stay.
 - `jhins-destination-japan` / `jhins-destination-italy` / etc. — only if user interaction volume per country justifies a dedicated skill.
 
 **Why not now**:
@@ -110,7 +110,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 7. Live-fetch smoke test in the release ritual
 
-**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 20 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
+**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 24 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
 
 **What it exposed**: v0.12.0 shipped a snippet-level §2 bar that passed every static check and both adversarial plan-reviews, then **failed on the first real fetch** — the "≥2 aggregators agree" gate was unsatisfiable in practice (DuckDuckGo and Bing return disjoint results), which would have demoted a genuinely-open restaurant. A v0.7.2-style dry-run caught it; v0.12.1 fixed it. Static checks structurally could not.
 

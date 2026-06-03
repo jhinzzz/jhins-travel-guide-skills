@@ -108,6 +108,37 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 - Personal repeat use hits "would be nice if X" often enough.
 - Sharing with family / friends where manual skill invocation is a barrier.
 
+### 7. Live-fetch smoke test in the release ritual
+
+**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 20 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
+
+**What it exposed**: v0.12.0 shipped a snippet-level §2 bar that passed every static check and both adversarial plan-reviews, then **failed on the first real fetch** — the "≥2 aggregators agree" gate was unsatisfiable in practice (DuckDuckGo and Bing return disjoint results), which would have demoted a genuinely-open restaurant. A v0.7.2-style dry-run caught it; v0.12.1 fixed it. Static checks structurally could not.
+
+**What it could look like**: before any release that touches `travel-sources.md` §Login-Wall Fallback / `knowledge-layers.md` §6 / `dining-rules.md` §2/§11, run one login-wall-heavy brief end-to-end with **real** WebFetch/WebSearch against the actual platforms (Tabelog / Dianping / DuckDuckGo HTML / Bing) and walk the canonical channel order + snippet bar. Capture findings as a committed (or at least retained) dry-run artifact. Lightweight form: a `scripts/`-adjacent checklist that names the brief and the four observations to record (did the authoritative page serve? did aggregators agree? did the qualifier read sensibly? did the bar clear a known-good shop?).
+
+**Why not now (as automation)**:
+- A scripted live-fetch harness needs a model in the loop + network + platform-shape stability — same cost/drift problem as §1's full eval suite.
+- The manual dry-run already works and is cheap (~30 min), proven twice (v0.7.2 Taiwan, v0.12.0 Tokyo).
+
+**Worth doing when**:
+- A second anti-scraping release ships a runtime-conditional rule (the manual dry-run becomes a standing pre-release step, not an ad-hoc one).
+- §1's eval harness gets built — fold the live-fetch smoke brief into it as one always-run case rather than a separate ritual.
+
+### 8. Authenticated fetch via browser cookies
+
+**Current state**: when a platform login-walls an anonymous fetch, the skill degrades to search-aggregator snippets (v0.11/v0.12). Snippets are a *discovery* layer — they carry name/rating but not the live page's full §2 signals (the Google Maps "Permanently closed" banner is unreachable to anonymous fetch at all).
+
+**What it could look like**: an authenticated fetch path using the user's own session cookies (there is a `setup-browser-cookies`-style mechanism in the broader tooling) that defeats the login wall *directly* and returns the real platform page — strictly more evidence than scraping a re-indexed snippet. Plausibly the real 10× for anti-scraping: it would let §2's four live signals actually be checked instead of approximated.
+
+**Why not now**:
+- Different mechanism with its own risks: it handles the user's real credentials/cookies, raises platform-ToS questions, and couples the skill to a stateful auth setup it currently doesn't need.
+- v0.11/v0.12 + v0.12.1's Case-A/Case-B reframe cover the common path well enough; the snippet route is additive, not blocking.
+- Building it blind (before a dry-run shows the snippet path failing on real recommendations the user cares about) risks over-engineering.
+
+**Worth doing when**:
+- A dry-run or real session shows the snippet path repeatedly *failing to verify* restaurants/hotels the user actually wants (not just theoretically weaker — actually producing advisory cards where a logged-in fetch would have confirmed).
+- The cookie/auth mechanism is already set up for another reason, making the marginal cost of wiring it into the skill small.
+
 ---
 
 ## Recording principle

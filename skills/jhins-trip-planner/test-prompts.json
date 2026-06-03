@@ -860,5 +860,44 @@
         "dining-rules.md §8"
       ]
     }
+  },
+  {
+    "id": 25,
+    "scenario": "channel-ladder-js-render-tier",
+    "prompt": "去东京旅行，帮我推荐惠比寿（恵比寿）附近 Day2 晚餐的一家寿司店，并推荐一家新宿性价比酒店。（模拟：静态抓取下 Google Maps 只回页面框架/无餐厅数据、Booking 结果页空白；但本环境具备会执行 JS 的无头浏览器 + 抗指纹渲染能力）",
+    "assertions": {
+      "mode": "planning-only",
+      "static_blank_is_not_failure": "a static (no-JS) fetch returning Maps chrome / blank Booking is a rung to climb, NOT a verification failure or 'no data'",
+      "must_climb_channel_ladder_in_order": [
+        "static fetch (no JS)",
+        "JS-rendering headless browser if available",
+        "fingerprint-resistant render if available",
+        "search aggregators (guaranteed floor)"
+      ],
+      "js_render_recovers_for_dining": [
+        "Google Maps restaurant names + ratings",
+        "operating-status / 'Permanently closed' banner (the §2 signal unreachable to static fetch)"
+      ],
+      "fingerprint_resistant_render_recovers_for_hotel": [
+        "Booking/Ctrip OTA listing names",
+        "nightly price (the field a static fetch leaves blank)"
+      ],
+      "live_page_from_render_rung_is_case_A": "a live authoritative page recovered by the JS-render or fingerprint-resistant rung IS §2 verification — cite normally, NO snippet qualifier, do NOT run the weaker aggregator snippet bar",
+      "capability_tiered_not_tool_named": "rules describe capabilities (JS-rendering / fingerprint-resistant render), not a specific tool; an environment missing a rung skips to the next and may legitimately land in Case B",
+      "must_not": [
+        "treat a static-fetch Maps chrome / blank Booking as 'all verification attempts failed'",
+        "read the absence of a 'Permanently closed' banner from a failed static fetch as 'open'",
+        "degrade to a search advisory card before climbing the available render rungs",
+        "apply the snippet-tier qualifier to a live page recovered by a render rung"
+      ],
+      "rule_refs": [
+        "travel-sources.md §Login-Wall Fallback (Search Aggregators)",
+        "knowledge-layers.md §6 (exhaustion gate)",
+        "dining-rules.md §2 (operating-status verification)",
+        "deep/dining-rules.md §2",
+        "hotel-selection.md §Progressive Search",
+        "hotel-selection.md §Timeout Degradation"
+      ]
+    }
   }
 ]

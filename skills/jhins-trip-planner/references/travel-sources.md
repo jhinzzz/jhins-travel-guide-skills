@@ -28,7 +28,16 @@ Define the canonical set of travel information sources used for research, cross-
 
 ### Login-Wall Fallback (Search Aggregators)
 
-Travel platforms — Chinese (Dianping, Ctrip, Mafengwo, Xiaohongshu, Amap) **and international (Booking.com, TripAdvisor, Google Maps, Tabelog)** — routinely gate their result pages behind a **login wall / 302 redirect / blank response / captcha / cookie-consent wall / rate-limit / geo-block** for anonymous fetches. The rule keys on the **failure mode**, not the brand — the platforms named here are examples, not an exhaustive list. When it happens, do **not** treat it as "no data" — search aggregators re-index the same content and surface it in result snippets:
+Travel platforms — Chinese (Dianping, Ctrip, Mafengwo, Xiaohongshu, Amap) **and international (Booking.com, TripAdvisor, Google Maps, Tabelog)** — routinely gate their result pages behind a **login wall / 302 redirect / blank response / captcha / cookie-consent wall / rate-limit / geo-block** for anonymous fetches. The rule keys on the **failure mode**, not the brand — the platforms named here are examples, not an exhaustive list. When it happens, do **not** treat it as "no data" — climb the channel ladder below before degrading.
+
+**Channel ladder — try in order; use the most capable rung the environment offers, fall through on failure.** The skill names *capabilities*, not specific tools — a runtime missing a rung simply skips to the next. A failure on one rung is a signal to climb, **not** to degrade to an advisory card.
+
+1. **Static fetch (no JS)** — the default web-fetch. Serves server-rendered pages; Tabelog list pages routinely return full anonymous data here. Returns only page chrome / blank for JS-rendered apps (Google Maps, most OTA result pages). A blank/chrome result is **not** "no data" — it means the content is script-rendered; fall through, do not treat as verification failure.
+2. **JS-rendering headless browser (if available)** — executing the page's JavaScript recovers what a static fetch cannot: Google Maps search results, ratings, and the **operating-status / "Permanently closed" banner** (the [dining-rules.md](dining-rules.md) §2 signal that is otherwise unreachable to anonymous fetch). This rung alone clears most dining §2 verification. No credentials, no login.
+3. **Fingerprint-resistant render (if available)** — some OTAs (Booking, Ctrip) silently degrade for a headless fingerprint: chrome renders but results/prices stay hidden even with JS. A headed / anti-fingerprint render recovers OTA listings and prices. This defeats bot-detection, **not** a login wall — still no credentials.
+4. **Search aggregators (guaranteed floor)** — re-index the same content as result snippets (table below). Always available, weakest evidence. Use when no richer rung exists or the rungs above also fail.
+
+A live page recovered by rung 2 or 3 is **stronger** than a rung-4 snippet — it is a live fetch of the authoritative source, so cite it normally (Case A below), not with the snippet qualifier. The tier-4 aggregators:
 
 | Aggregator | Best For | URL | Notes |
 |---|---|---|---|
@@ -41,9 +50,9 @@ These are a **retry channel, not a primary source** — the underlying datum sti
 
 A live authoritative page (Tabelog / Dianping / TheFork …) gives [dining-rules.md](dining-rules.md) §2's four signals. Two real cases — check **Case A first**:
 
-**Case A — the authoritative platform served data.** Anonymous fetch of the platform's own list / detail page often *does* succeed (Tabelog list pages routinely do). If you have live name + rating + price + ward from the destination's authoritative platform, that **is** §2 verification — cite it normally (no qualifier), and **do not run the weaker snippet bar you don't need**. The login-wall apparatus is a fallback, not the default path.
+**Case A — the authoritative platform served data (any ladder rung).** A live page from the platform's own list / detail page, recovered at **any** rung — static fetch (Tabelog list pages routinely do), JS-rendering render (Google Maps results + status banner), or fingerprint-resistant render (OTA listings) — is a live fetch of the authoritative source. If you have live name + rating + price + ward, that **is** §2 verification — cite it normally (no qualifier), and **do not run the weaker snippet bar you don't need**. The ladder's lower rungs are fallbacks, not the default path.
 
-**Case B — the authoritative page is walled; only aggregator snippets are reachable.** A snippet can't reproduce §2's live signals (notably the Google Maps "Permanently closed" banner is itself unreachable to anonymous fetch), so this bar is **explicitly weaker** and the output must say so. Clear a restaurant from snippets only when **all** hold:
+**Case B — the authoritative page stayed walled at every available rung; only aggregator snippets are reachable.** A snippet can't reproduce §2's live signals, so this bar is **explicitly weaker** and the output must say so. (The Google Maps "Permanently closed" banner is unreachable to a *static* fetch — but a JS-rendering rung, if the environment has one, recovers it, which lands you in Case A. Case B is the genuine floor: no render rung available, or it too failed.) Clear a restaurant from snippets only when **all** hold:
 
 1. **Name + rating corroborated by either** (a) one snippet *sourced from the authoritative platform* (a DuckDuckGo/Bing result carrying the Tabelog/Dianping name + score), **or** (b) ≥2 independent aggregator hits on the same name + address. Aggregators routinely surface *different* shops for the same query, so exact cross-aggregator agreement is the exception — an authoritative-sourced single snippet counts; a single *generic* snippet is candidacy only.
 2. **Recent activity** — current-year review dates or a current price; stale-only hits do not clear it.

@@ -15,12 +15,12 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 1. Automated testing for `test-prompts.json`
 
-**Current state**: 24 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
+**Current state**: 25 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
 
 **What it could look like**: a script (Node / Python, Anthropic SDK) that runs each case, applies two kinds of assertion: `grep-level` (must_contain / must_not_contain_literal) and `judge-level` (must_have_section, rule_refs traced). Ground truth is already structured; the harness just consumes it.
 
 **Why not now**:
-- 24 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
+- 25 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
 - Judge-level assertion (LLM judging LLM) has drift risk.
 - Manual case spot-checking on PR review catches most regressions.
 
@@ -110,7 +110,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 7. Live-fetch smoke test in the release ritual
 
-**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 24 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
+**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 25 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
 
 **What it exposed**: v0.12.0 shipped a snippet-level §2 bar that passed every static check and both adversarial plan-reviews, then **failed on the first real fetch** — the "≥2 aggregators agree" gate was unsatisfiable in practice (DuckDuckGo and Bing return disjoint results), which would have demoted a genuinely-open restaurant. A v0.7.2-style dry-run caught it; v0.12.1 fixed it. Static checks structurally could not.
 
@@ -126,17 +126,17 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 8. Authenticated fetch via browser cookies
 
-**Current state**: when a platform login-walls an anonymous fetch, the skill degrades to search-aggregator snippets (v0.11/v0.12). Snippets are a *discovery* layer — they carry name/rating but not the live page's full §2 signals (the Google Maps "Permanently closed" banner is unreachable to anonymous fetch at all).
+**Current state (partially addressed by v0.14.0)**: the channel ladder (`travel-sources.md §Login-Wall Fallback`) now has render rungs between static fetch and aggregator snippets. A v0.14.0 three-way dry-run proved most of what looked like "login walls" were not: Google Maps (incl. the §2 "Permanently closed" banner) is recovered by a **zero-credential JS-rendering rung**, and Booking/Ctrip prices — blank even with JS — are recovered by a **zero-credential fingerprint-resistant render** (the failure was anti-bot fingerprinting, not authentication). So the "real 10×" turned out to be render capability, not cookies, for the platforms tested. What remains genuinely cookie-gated: platforms that wall content behind an actual logged-in session even to a fingerprint-resistant render (none confirmed yet in dry-runs).
 
-**What it could look like**: an authenticated fetch path using the user's own session cookies (there is a `setup-browser-cookies`-style mechanism in the broader tooling) that defeats the login wall *directly* and returns the real platform page — strictly more evidence than scraping a re-indexed snippet. Plausibly the real 10× for anti-scraping: it would let §2's four live signals actually be checked instead of approximated.
+**What it could look like**: an authenticated fetch path using the user's own session cookies (there is a `setup-browser-cookies`-style mechanism in the broader tooling) that defeats a true login wall *directly*. Strictly additive on top of v0.14.0's render rungs — it only matters for the residual case where rendering alone still can't reach the datum.
 
 **Why not now**:
+- v0.14.0's render rungs already recover the signals the 6-02 dry-run flagged (Maps banner, OTA price) with zero credentials — the cookie path's marginal value shrank.
 - Different mechanism with its own risks: it handles the user's real credentials/cookies, raises platform-ToS questions, and couples the skill to a stateful auth setup it currently doesn't need.
-- v0.11/v0.12 + v0.12.1's Case-A/Case-B reframe cover the common path well enough; the snippet route is additive, not blocking.
-- Building it blind (before a dry-run shows the snippet path failing on real recommendations the user cares about) risks over-engineering.
+- No dry-run has yet shown a datum that a fingerprint-resistant render *can't* reach but a logged-in fetch *could* — building it blind still risks over-engineering.
 
 **Worth doing when**:
-- A dry-run or real session shows the snippet path repeatedly *failing to verify* restaurants/hotels the user actually wants (not just theoretically weaker — actually producing advisory cards where a logged-in fetch would have confirmed).
+- A dry-run or real session shows the **render rungs themselves failing to verify** restaurants/hotels the user actually wants (a true login wall that survives a fingerprint-resistant render — not the anti-fingerprint blocks v0.14.0 already defeats).
 - The cookie/auth mechanism is already set up for another reason, making the marginal cost of wiring it into the skill small.
 
 ---

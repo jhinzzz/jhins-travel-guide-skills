@@ -93,9 +93,9 @@ For `planning-only` mode, use a compact variant (platform + keywords + top 2 fil
 
 ### Exhaustion gate (read before degrading)
 
-A single platform returning a **login wall / 302 redirect / timeout / blank result is NOT a search failure** — it only means *that platform* won't serve an anonymous fetch. The same datum is re-indexed by search aggregators (see [travel-sources.md](travel-sources.md) §Login-Wall Fallback).
+A single platform returning a **login wall / 302 redirect / timeout / blank result is NOT a search failure** — it only means *that platform* won't serve *that rung* of the channel ladder. A blank/chrome result from a static (no-JS) fetch usually means the content is script-rendered, not absent: a JS-rendering rung recovers it, and the same datum is also re-indexed by search aggregators (full ladder in [travel-sources.md](travel-sources.md) §Login-Wall Fallback).
 
-Before degrading any Local Knowledge item to a search advisory card, you must have tried **≥2 channels, at least one of which is a search aggregator** (canonical channel order in [travel-sources.md](travel-sources.md) §Login-Wall Fallback). Only after the aggregator retry also fails to surface a verifiable datum may you output the advisory card — and it must state which channels were tried and why each failed.
+Before degrading any Local Knowledge item to a search advisory card, you must have **climbed the channel ladder**: tried the more capable rungs the environment offers (JS-rendering / fingerprint-resistant render, when available) and, at minimum, **≥2 channels one of which is a search aggregator**. Only after the reachable rungs all fail to surface a verifiable datum may you output the advisory card — and it must state which channels were tried and why each failed.
 
 The search advisory card is a **last resort**, not the default response to the first login wall. "Platform needs login → I can't verify → advisory card" is a forbidden shortcut: the login wall blocks the platform's *own* page, not the aggregator-indexed copy.
 

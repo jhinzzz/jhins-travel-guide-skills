@@ -23,10 +23,10 @@ For every restaurant, check all four:
 
 1. **Closure / rest notices in destination language**: Japanese 閉店・休業・移転・建替; Chinese 停业・歇业・搬迁・装修; English "Permanently closed" / "Temporarily closed" on Google Maps; Italian chiuso / trasferito; Spanish cerrado / traslado. Adapt to destination language + authoritative platform.
 2. **404 or "new store" redirect** on the official site.
-3. **Google Maps status banner** — "Permanently closed" overrides everything else.
+3. **Google Maps status banner** — "Permanently closed" overrides everything else. Maps is JS-rendered: a *static* (no-JS) fetch returns only page chrome, so the banner is unreachable and its **absence is non-signal — never read a failed static fetch as "open."** A JS-rendering rung (channel ladder rung 2 in [travel-sources.md](../travel-sources.md) §Login-Wall Fallback), if the environment has one, recovers the banner and ratings directly; that is the canonical way to obtain this signal. With no render rung, fall to the snippet closure-word scan and flag the residual uncertainty.
 4. **Platform page integrity** — if the platform ID now resolves to a different business (name mismatch, different address), treat original as closed / relocated.
 
-Authoritative platform per destination: see [travel-sources.md](../travel-sources.md).
+Authoritative platform per destination: see [travel-sources.md](../travel-sources.md). Recovering JS-rendered signals (Maps banner, ratings) uses the channel ladder in [travel-sources.md](../travel-sources.md) §Login-Wall Fallback.
 
 ### Failure modes to watch for
 

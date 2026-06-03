@@ -12,97 +12,77 @@
 
 ### Added
 
-- **抓取渠道阶梯：JS 渲染 + 抗指纹渲染层 — `travel-sources.md §Login-Wall Fallback`** — 此前的反爬 fallback 只有两档：静态抓取 → 搜索聚合器 snippet。两次 live-fetch dry-run（Tokyo 6-02 + 本轮三路对照）证明这个模型选错了赛道：很多平台的"抓不到"不是登录墙，是**内容靠 JS 渲染**（静态抓取不跑 JS，只回页面框架）。把渠道顺序升级为**四档能力阶梯**：① 静态抓取（无 JS）② JS 渲染无头浏览器（若环境具备）③ 抗指纹渲染（若环境具备）④ 搜索聚合器（保底）。**按能力分层描述，不点名任何具体工具**——缺某一档的环境直接跳到下一档，保持 skill 跨环境可用。取证：Google Maps 在静态抓取下零数据，JS 渲染后拿到 6 个真实店名 + 评分 + `営業中` 状态横幅；Booking 静态抓取空白、JS 渲染仍空，抗指纹渲染后拿到 25 个房源 + 真实日元价格（APA ¥27,300 等）。两档都零凭证。
-- **test-prompts.json case 25** — channel-ladder JS-render 层回归：断言静态抓取的空白/框架是"该爬的下一档"而非验证失败、断言按阶梯顺序爬升、断言 JS 渲染恢复 Maps 状态横幅（§2 信号）、抗指纹渲染恢复 OTA 价格、断言 render 档拿到的活页算 Case A（正常引用、不加 snippet 限定词）。全部 rule_refs 指向既有 anchor，零新增 anchor。
+- **抓取渠道阶梯：JS 渲染 + 抗指纹渲染层 — `travel-sources.md §Login-Wall Fallback`** — 渠道顺序从两档（静态抓取 → 搜索聚合器 snippet）升级为四档能力阶梯：① 静态抓取（无 JS）② JS 渲染无头浏览器 ③ 抗指纹渲染 ④ 搜索聚合器（保底）。按能力分层描述，不点名具体工具，缺某档的环境跳到下一档。
+- **test-prompts.json case 25** — channel-ladder JS-render 层回归测试。
 
 ### Changed
 
-- **`deep/dining-rules.md §2` 修 F4（Google Maps 横幅可达性）** — 此前 §2 把"Google Maps 永久关闭横幅"当四个共一级的信号，但 6-02 取证发现它对静态抓取**结构上不可达**（Maps 是 JS 渲染，静态抓取只回框架）。改写：明示横幅需 JS 渲染才可达；**静态抓取失败时横幅的缺失是 non-signal，绝不能读成"营业中"**；JS 渲染档（阶梯 rung 2）是拿到这个信号的标准方式。修掉了"抓取失败 → 误判营业中"的隐性假阳性。
-- **`hotel-selection.md §Progressive Search` + §Timeout Degradation 修 F7/F8** — Progressive Search 的"价格不可达"fallback 加一条前置："Booking 空白/Ctrip 无价多半是 JS 渲染或 headless 指纹拦截，不是登录墙——先爬渲染档再判定价格不可达"。Timeout Degradation 表加一行守则：静态抓取的空白/302 是"该爬的下一档"，不计入降级触发次数，与 knowledge-layers §6 exhaustion gate 对齐（同时关闭 6-02 标记的 F8 hotel-side gap）。
-- **`travel-sources.md` Case A / Case B 重构** — Case A 从"静态抓取成功"放宽为"**任意阶梯档**拿到的活页都算 §2 验证、正常引用"；Case B 明确为"所有可达档都被墙才走 snippet 弱档"，并把"Maps 横幅不可达"的说法精确限定到**静态档**（有 JS 渲染档的环境拿到横幅就落进 Case A）。
-- **`knowledge-layers.md §6` exhaustion gate** — 从"≥2 channels（≥1 聚合器）"升级为"先爬渠道阶梯（JS/抗指纹渲染档若有），再 ≥2 channels（≥1 聚合器）"，与 travel-sources 阶梯保持单一事实源。
-- **FUTURE.md §8** — authenticated-fetch 方向标注为"部分被 v0.14.0 的 render 档覆盖"：Booking/Ctrip 的失败经取证是反指纹（抗指纹渲染零凭证可破），不是登录墙；真正需要用户 cookie 的认证抓取仍 gated（仅当 render 档也验证失败、且用户已为其他原因配置 cookie 时）。§1 测试用例计数 24→25。
+- **`deep/dining-rules.md §2`** — 明示 Google Maps 横幅需 JS 渲染才可达；静态抓取失败时横幅缺失为 non-signal，不得读成"营业中"。
+- **`hotel-selection.md §Progressive Search` + §Timeout Degradation** — "价格不可达"fallback 加前置：先爬渲染档再判定；Timeout Degradation 表加守则：静态抓取空白/302 不计入降级触发次数。
+- **`travel-sources.md` Case A / Case B 重构** — Case A 放宽为任意阶梯档拿到的活页都算 §2 验证；Case B 为所有可达档都被墙才走 snippet 弱档，"Maps 横幅不可达"限定到静态档。
+- **`knowledge-layers.md §6` exhaustion gate** — 升级为"先爬渠道阶梯（JS/抗指纹渲染档），再 ≥2 channels（≥1 聚合器）"。
+- **FUTURE.md §8** — authenticated-fetch 方向标注为"部分被 v0.14.0 render 档覆盖"；§1 测试用例计数 24→25。
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.13.0 → 0.14.0。
-
-### Structure guarantee
-
-零规则删除。零既有 anchor 改名（新内容均为 §Login-Wall Fallback 下的 channel-ladder 列表、§2/§Progressive Search/§Timeout Degradation/§6 下的 bullet 改写，不重编号、不改既有 heading 文本）。case 1-24 的 rule_refs 不受影响。SKILL.md 行数 199 不变、Final Check 19 条 invariant 不变——SKILL.md 通过既有的 `§Login-Wall Fallback` 指针自动继承阶梯升级，无需改动。能力分层措辞使 skill 不绑死在任何工具生态。证据来源：两次 live-fetch dry-run（`session-learnings-2026-06-02` Tokyo + 本轮 browse 三路对照），正中 `FUTURE.md §8` 触发条件。
 
 ## [0.13.0] — 2026-06-03
 
 ### Added
 
-- **跨海峡 / 大中华通行证（不是签证）— `trip-prep.md §2` + `deep/trip-prep.md`** — §2 此前把每一次跨境都当成签证案例。大陆↔台湾用 大陆居民往来台湾通行证 + 入台证；港澳↔台湾、大陆↔港澳用 港澳通行证 + 签注——都是 compact 通行证，不是标准旅游签证。这是面向中文用户最高频的缺失入境规则。主文件 §2 加一条 bullet（仿 "Minors crossing borders" 风格），明示"这是通行证不是签证"、列出触发的口岸对、把办理周期当签证周期在 intake 阶段提示；深度文件加 `§Cross-Strait Greater China Permits` 写完整矩阵（含自由行/跟团口径、回程台胞证/回乡证），办理天数为示例性范围 + "research time 复核"，办不出来就标未核实估计 + 指向官方，不编造数字。
-- **脆弱旅客温泉/热浴安全 — `safety-and-emergency.md §6` + deep §6** — §6 此前覆盖扒手/高原/海洋风险，但对儿童温泉安全沉默。对"主题就是温泉 + 带小孩"的行程（原始 Taiwan dry-run brief）这是可预见的安全裂缝，LLM 不会稳定推理出来。抽象为"脆弱旅客的热暴露"（小孩 + 老人/心血管 + 复用既有孕妇 ≥40°C 注，不重复不删除），按 risk→trigger→action 写：短时间、最凉的池、出现脸红/头晕立刻出水、补水、**显示场馆自己张贴的年龄下限/时长上限**；婴儿一般不建议。**不在 skill 里写死儿童水温/分钟阈值**（医疗责任 + 易腐 + 难引用）——把"指向场馆张贴限值"作为具体且不编造的 action。触发条件挂在"行程里出现温泉"而非"wellness 主题"（避免漏掉常见的"住一晚温泉旅馆但没选 wellness 主题"）。
-- **灾害 / 闭店状态复查 — `safety-and-emergency.md §6` + deep §6** — 此前没有规则说"高地震/火山/野火/近期灾害目的地需在出发前复查状态"。太鲁阁震后封闭、冰岛火山、加州野火同属一类，处处隐含、从未成文。新规则按 **具体信号** 触发（具名景点震后状态 / 官方预警窗口 / weather §1 已列的季节灾害窗口），不在所有地震国触发（否则变成 §6 自己禁止的"通用废话"）。动作：通过**政府旅游局/国家公园管理局/灾害机构**这一权威源类（不是给餐厅/店铺用的 venue operating-status）复查官方闭店状态，出发前 3–5 天，并作为**一行并入已有的出发前复查块**（dining §8），不另起第二块；天气/AQI 复查仍归 weather §1（1–2 周），本规则只管闭店状态、不重复。把东京 dry-run 的"紧邻假期后窗口"（F9）并入季节窗口触发条件一并关闭。
-- **test-prompts.json case 21–24** — 21 跨海峡通行证（断言不当签证处理 + 具名通行证）、22 儿童温泉安全（断言显示场馆限值 + 不出现编造儿童阈值）、23 太鲁阁震后灾害复查（断言权威源类 + 并入单一复查块）、24 集成案例（原始 Taiwan 黄金周 brief，三条规则一起跑）。3 个隔离回归 + 1 个集成，避免单一合并案例靠巧合通过却掩盖单条回归。
+- **跨海峡 / 大中华通行证（不是签证）— `trip-prep.md §2` + `deep/trip-prep.md`** — 主文件 §2 加一条 bullet：大陆↔台湾、港澳↔台湾、大陆↔港澳用通行证 + 签注，不是旅游签证；列出触发口岸对，办理周期当签证周期在 intake 提示。深度文件加 `§Cross-Strait Greater China Permits` 完整矩阵（自由行/跟团口径、回程台胞证/回乡证）。
+- **脆弱旅客温泉/热浴安全 — `safety-and-emergency.md §6` + deep §6** — 新增"脆弱旅客热暴露"规则（小孩 + 老人/心血管 + 复用既有孕妇 ≥40°C 注），按 risk→trigger→action 写：短时间、最凉的池、脸红/头晕立刻出水、补水、显示场馆张贴的年龄下限/时长上限。不写死儿童水温/分钟阈值。触发条件挂"行程里出现温泉"。
+- **灾害 / 闭店状态复查 — `safety-and-emergency.md §6` + deep §6** — 新增规则：按具体信号触发（具名景点震后状态 / 官方预警窗口 / weather §1 季节灾害窗口），通过政府旅游局/国家公园管理局/灾害机构复查官方闭店状态，出发前 3–5 天，并入已有出发前复查块（dining §8）。
+- **test-prompts.json case 21–24** — 21 跨海峡通行证、22 儿童温泉安全、23 太鲁阁震后灾害复查、24 集成案例。
 
 ### Changed
 
-- **SKILL.md §Final Check — 零新增 invariant（19 条不变）** — onsen carry-forward 并入既有 Intake carry-forward 行；灾害复查改写既有 Pre-trip recheck 行的触发条件（"peak period **or** disaster/closure-status signal，两者合一块"），不新增 bullet。守住把 SKILL.md 从 331→199 行瘦身那条 rule-fatigue 红线。
-- **intake.md §7 Child carry-forward rule** 加一条"行程出现温泉 → 带入 safety §6 热浴安全"的挂钩。
-- **FUTURE.md** — 修正 §2 第41行与新现实矛盾的措辞（此前写"cross-strait 不在 trip-prep §2"）；写入 `destinations/` 迁移触发器（跨海峡内容超过一屏 / 第二次 Greater-China dry-run 复现 F6/F9/F11 → 拆 `destinations/cross-strait.md`）；§1 测试用例计数 19→24。
+- **SKILL.md §Final Check** — 零新增 invariant（19 条不变）：onsen carry-forward 并入既有 Intake carry-forward 行；灾害复查改写既有 Pre-trip recheck 行的触发条件。
+- **intake.md §7 Child carry-forward rule** — 加"行程出现温泉 → 带入 safety §6 热浴安全"挂钩。
+- **FUTURE.md** — 修正 §2 第41行措辞；写入 `destinations/` 迁移触发器；§1 测试用例计数 19→24。
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.1 → 0.13.0。
-
-### Structure guarantee
-
-零规则删除。零既有 anchor 改名（新内容均为 §2/§6/§7 下的 bullet 或 deep 文件的新具名 heading `§Cross-Strait Greater China Permits`，不重编号既有 §）。case 1-20 的 rule_refs 不受影响。SKILL.md 行数 199 不变，Final Check 19 条 invariant 不变。`check-all.sh` 全绿（versions / sizes / links / 80 rule_refs 全解析）。证据来源：Taiwan dry-run（`session-learnings-2026-04-23`）实际踩中全部三个缺口；Tokyo dry-run（`session-learnings-2026-06-02`）经检视确认三者仍 open。本版经 /autoplan 三阶段（CEO / Eng / DX）双模型对抗式 review——其中 Eng 阶段抓到两个会让计划根本做不成的 CRITICAL（深度文件指针指向错误的 §2 Transit 段、孕妇 ≥40°C 数字与"无医疗数字"决定冲突），均在落地前解决。
 
 ## [0.12.1] — 2026-06-02
 
 ### Fixed
 
-- **snippet 级 §2 门槛在实战中过严 → 重构为 Case A / Case B（real-fetch dry-run 暴露）** — v0.12.0 的门槛第①条要求"≥2 个聚合器给出同一店名"。实际抓取发现 DuckDuckGo 与 Bing 对同一查询返回**完全不相交**的结果（Bing 对惠比寿查询甚至返回大阪），导致一家真实开业、Tabelog 3.58 的好店会被降级成搜索建议卡——**反而覆盖了权威平台自己的判断**。重构：
-  - **Case A（先判）** — 若匿名抓取权威平台（Tabelog/点评）本就拿到 name+rating+price+ward，这**就是** §2 验证，正常引用、不加"非活页"限定、不跑更弱的聚合器门槛。登录墙机制是 fallback，不是默认路径。
-  - **Case B（权威页被挡）** — 第①条放宽为"**一个权威来源的 snippet（DDG/Bing 携带 Tabelog/点评店名+评分）或 ≥2 个独立聚合器命中**"，因为跨聚合器精确一致是例外而非常态。
-- **§2 信号#3"Google Maps 关停横幅"对匿名抓取不可达 → 明示** — Maps 对匿名 fetch 返回空白，该信号实践中拿不到。门槛改为"用可达渠道做最强关停检查，并标注残余不确定性"，不再暗示做了一个根本没法做的横幅检查。
-- **hotel-selection.md §Progressive Search 补"价格拿不到"分支** — 价格是平台最常对匿名抓取隐藏的字段（Booking 空白、Ctrip 给名字+评分但不给价）。新增 partial-scout fallback：name+area+rating 齐全但无价时，价格字段标 `价格需登录查询`，而非丢弃候选或编造数字；仅当连 name+rating 都拿不到才升级为建议卡。
-- **test-prompts.json case 20** 同步重构为 Case A / Case B 断言，匹配修正后的行为。
+- **snippet 级 §2 门槛重构为 Case A / Case B** — 修正过严的 snippet 门槛：
+  - **Case A（先判）** — 匿名抓取权威平台（Tabelog/点评）拿到 name+rating+price+ward 即算 §2 验证，正常引用、不加"非活页"限定、不跑聚合器门槛。
+  - **Case B（权威页被挡）** — 第①条放宽为"一个权威来源的 snippet 或 ≥2 个独立聚合器命中"。
+- **§2 信号#3"Google Maps 关停横幅"对匿名抓取不可达 → 明示** — 门槛改为"用可达渠道做最强关停检查，并标注残余不确定性"。
+- **hotel-selection.md §Progressive Search 补"价格拿不到"分支** — name+area+rating 齐全但无价时，价格字段标 `价格需登录查询`，而非丢弃候选或编造数字。
+- **test-prompts.json case 20** — 同步重构为 Case A / Case B 断言。
 
 ### Changed
 
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.12.0 → 0.12.1。
 
-### Structure guarantee
-
-零规则删除。零既有 anchor 改名。case 1-20 的 rule_refs 不受影响（case 20 内部断言重写，anchor 不变）。§2 绝对禁令保持不变。本次为 real-fetch dry-run（`session-learnings-2026-06-02`）证据驱动的 patch——v0.12.0 通过了所有静态检查与两轮对抗式 plan-review，却在第一次真实抓取时暴露 snippet 门槛失效。
-
 ## [0.12.0] — 2026-06-02
 
 ### Added
 
-- **`travel-sources.md` §Login-Wall Fallback — snippet 级 §2 证据门槛（本版核心）** — 补上 v0.11.0 没写的那块：活页被登录墙挡住时，`dining-rules.md §2` 的四个信号（关停通知 / 404 跳转 / Google Maps 横幅 / 页面完整性）拿不到，但 case 19 又要求"聚合器有数据就出 verified 餐厅卡"。新规则明确：靠聚合器快照放行一家餐厅，必须**四条全满**——①≥2 个聚合器给出同一店名+地址（单源仅作候选）②快照显示当年/近期活跃 ③任一快照无停业词 ④店名与地址行政区一致（§4）。放行后必须带可见限定 `（经聚合器快照核实，非活页）`；不满足则降级为搜索建议卡。§2 对训练数据店名的绝对禁令不变且被加固。
-- **国际平台对称覆盖** — §Login-Wall Fallback 的触发条件从"中国平台登录墙"泛化为**访问失败模式**（登录墙 / 302 / 空白 / captcha / cookie 同意墙 / 限流 / 地域封锁），明确同样适用于 Booking.com / TripAdvisor / Google Maps / Tabelog。规则按失败模式而非品牌清单生效，品牌只作示例（避免清单腐烂）。
-- **test-prompts.json case 20**（`international-login-wall-snippet-bar`）— 东京惠比寿居酒屋场景，模拟 Tabelog 302 + Google Maps 同意墙，断言国际平台同样走聚合器 retry、强制 snippet 级 §2 四点门槛、输出带"非活页"限定、不出训练数据店名。补上 v0.12.0 国际覆盖的测试缺口（case 19 只覆盖中国路径）。
+- **`travel-sources.md` §Login-Wall Fallback — snippet 级 §2 证据门槛** — 活页被登录墙挡住时，靠聚合器快照放行一家餐厅必须四条全满：①≥2 个聚合器给出同一店名+地址 ②快照显示当年/近期活跃 ③任一快照无停业词 ④店名与地址行政区一致（§4）。放行后带可见限定 `（经聚合器快照核实，非活页）`；不满足则降级为搜索建议卡。
+- **国际平台对称覆盖** — §Login-Wall Fallback 触发条件从"中国平台登录墙"泛化为访问失败模式（登录墙 / 302 / 空白 / captcha / cookie 同意墙 / 限流 / 地域封锁），适用于 Booking.com / TripAdvisor / Google Maps / Tabelog。
+- **test-prompts.json case 20**（`international-login-wall-snippet-bar`）— 东京惠比寿居酒屋场景，模拟 Tabelog 302 + Google Maps 同意墙。
 
 ### Changed
 
-- **渠道顺序归一（去重）** — 登录墙渠道顺序此前在 `travel-sources.md` 重复出现 3 处（触发句 :31、DuckDuckGo 单元格 :35、Source-Selection 表 :82）外加 `knowledge-layers.md §6`。本版把 `§Login-Wall Fallback` 定为**唯一权威来源**：:82 表行与 §6:98 改为指针，不再各自复述顺序。DuckDuckGo 单元格改为工具无关措辞——"有原生 web-search 工具就用，HTML 端点是保底，永不假设有更强工具"，消除对未记录工具的硬依赖。
+- **渠道顺序归一（去重）** — 把 `§Login-Wall Fallback` 定为唯一权威来源：Source-Selection 表行与 `knowledge-layers.md §6` 改为指针；DuckDuckGo 单元格改为工具无关措辞。
 - **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.11.0 → 0.12.0。
-
-### Structure guarantee
-
-零规则删除。零既有 anchor 改名（`§Login-Wall Fallback (Search Aggregators)`、`§6 (exhaustion gate)`、`§Per-Person Price Tiers` 名称不变）。现有 rule_refs（case 1-19）不受影响；case 20 新增。`dining-rules.md §2` 绝对禁令保持不变并被 snippet 门槛加固（门槛是附加约束，非放松）。本版为 in-place 编辑去重（非 append-only）——这是对 v2 方案"只加不改"误判的修正。
 
 ## [0.11.0] — 2026-05-30
 
 ### Added
 
-- **`travel-sources.md` §Login-Wall Fallback (Search Aggregators)** — 新增一类来源：通用搜索聚合器（DuckDuckGo HTML 端点 / Bing）。中国平台（点评/携程/马蜂窝/小红书/高德）对匿名抓取普遍返回登录墙 / 302 / 空白，但这些聚合器**重新索引了同样的内容**，店名·地址·人均·评分常直接出现在结果摘要里。明确标注为 retry 渠道（底层数据仍归属原平台并如此引用），不是 primary source。
-- **`knowledge-layers.md` §6 Exhaustion gate（穷尽闸）** — 在 behavior flows 顶部新增硬规则：单平台登录墙 / 302 / 超时 / 空白 **≠ search failed**。降级为搜索建议卡之前，必须先试 **≥2 个渠道（其中至少 1 个搜索聚合器）**；搜索建议卡是 **last resort**，且须注明已试渠道与失败原因。两条 hotel flow 的 `IF search fails` 分支同步改写。
-- **`dining-rules.md` §11 反合理化表 + red flag** — 钉死两个借口（"平台要登录=无法核实=出建议卡"、"我已试了点评+高德两个平台"），并加 STOP red-flag：写餐厅搜索建议卡前自问"试了几个渠道、有没有聚合器"，<2 或零聚合器 → 继续搜。
-- **`dining-rules.md` §3 营业时段闸** — 新增"开门时段必须覆盖排入的餐段"：16:30 才开的店不能排进午餐；单品/易售罄店同理，窗口不覆盖就只作 flagged optional detour，不作正餐主选。
-- **test-prompts.json case 19**（`login-wall-exhaustion-gate`）— 顺德午餐场景，模拟点评 302 + 高德登录墙，断言坚持聚合器 retry、不过早降级、不用训练数据店名。
-- **provenance.md** — 新增缺失的 `knowledge-layers.md` 段（补登 case 16/17/18 + 新 case 19），并登记 case 19 跨 5 个 anchor 的覆盖。
+- **`travel-sources.md` §Login-Wall Fallback (Search Aggregators)** — 新增一类来源：通用搜索聚合器（DuckDuckGo HTML 端点 / Bing），标注为 retry 渠道（底层数据仍归属原平台），不是 primary source。
+- **`knowledge-layers.md` §6 Exhaustion gate（穷尽闸）** — 新增硬规则：单平台登录墙 / 302 / 超时 / 空白 ≠ search failed；降级为搜索建议卡前必须先试 ≥2 个渠道（≥1 个搜索聚合器）。两条 hotel flow 的 `IF search fails` 分支同步改写。
+- **`dining-rules.md` §11 反合理化表 + red flag** — 钉死两个借口，并加 STOP red-flag：写餐厅搜索建议卡前自问试了几个渠道、有没有聚合器。
+- **`dining-rules.md` §3 营业时段闸** — 新增"开门时段必须覆盖排入的餐段"。
+- **test-prompts.json case 19**（`login-wall-exhaustion-gate`）— 顺德午餐场景，模拟点评 302 + 高德登录墙。
+- **provenance.md** — 新增缺失的 `knowledge-layers.md` 段，登记 case 19 的 anchor 覆盖。
 
 ### Changed
 
 - **SKILL.md §Fallback Rules（Web verification stalls）** — 补充"登录墙 / 302 / 空白 ≠ 失败，先经 §6 穷尽闸用聚合器 retry 再降级"。
 - **SKILL.md Version** — 0.10.0 → 0.11.0（VERSION / plugin.json / marketplace.json 同步）。
-
-### Structure guarantee
-
-零规则内容删除。零既有 anchor 改名。现有 rule_refs（case 1-18）不受影响。dining-rules.md §2 absolute ban 保持不变并被 §11 反合理化表进一步加固。新 anchor：travel-sources.md §Login-Wall Fallback (Search Aggregators)、knowledge-layers.md §6 (exhaustion gate)。
 
 ## [0.10.0] — 2026-05-26
 
@@ -114,11 +94,11 @@
   - §4 Destination matching framework（7 个客观维度，无具体名称）
   - §5 Search advisory card template（平台 + 关键词 + 筛选 + 判断标准 + 避坑）
   - §6 Behavior flows（4 种用户场景的完整决策路径）
-- **hotel-selection.md §Progressive Search** — 两阶段渐进式酒店搜索：Phase 1 单平台侦察（2-3 分钟出初步结果）→ Phase 2 用户确认后才交叉验证。消除 80% 的无效搜索。
-- **hotel-selection.md §Timeout Degradation** — 3 次连续 WebFetch 失败 OR 单酒店搜索超 3 分钟 → 自动降级为搜索建议卡。永不无限搜索，永不需要用户手动终止。
-- **dining-rules.md §11** — Search advisory fallback：web search 不可用时输出搜索建议卡，保持 §2 absolute ban（餐厅/菜品永不允许 approximate 标签降级）。
-- **local-specialties.md §Search Advisory Fallback** — 同 pattern：验证失败时输出搜索建议卡，category-level guidance 保持 Reasoning Layer 直出。
-- **test-prompts.json cases 16-18** — 三个新测试：(16) 国内目的地推荐无 web search 断言无命名实体；(17) 酒店搜索超时降级断言搜索建议卡输出；(18) 用户提供酒店名验证流程。
+- **hotel-selection.md §Progressive Search** — 两阶段渐进式酒店搜索：Phase 1 单平台侦察 → Phase 2 用户确认后才交叉验证。
+- **hotel-selection.md §Timeout Degradation** — 3 次连续 WebFetch 失败 OR 单酒店搜索超 3 分钟 → 自动降级为搜索建议卡。
+- **dining-rules.md §11** — Search advisory fallback：web search 不可用时输出搜索建议卡，保持 §2 absolute ban。
+- **local-specialties.md §Search Advisory Fallback** — 同 pattern：验证失败时输出搜索建议卡。
+- **test-prompts.json cases 16-18** — (16) 国内目的地推荐无 web search；(17) 酒店搜索超时降级；(18) 用户提供酒店名验证流程。
 
 ### Changed
 
@@ -128,30 +108,22 @@
 - **SKILL.md §Fallback Rules** — hotel 和 specialty 降级条目加搜索建议卡指向。
 - **SKILL.md §Final Check** — 新增 Knowledge layers 审计行。
 
-### Structure guarantee
-
-零规则内容删除。零 anchor 改名。现有 rule_refs（case 1-15）不受影响。dining-rules.md §2 absolute ban 保持不变且被显式加固。
-
 ## [0.9.0] — 2026-05-25
 
 ### Changed
 
-- **SKILL.md description 重写** — 从 workflow-summary 格式改为 "Use when..." 触发条件格式，修复 writing-skills 框架标注的最危险反模式（LLM 读 description 就觉得够了，跳过规则体）。
-- **trip-prep.md 瘦身 -55%** — "Transit Visa Rules" 5 国展开 + "Practical Payment Friction" 7 国展开 + "Religious and Festival Sensitivities" 5 节展开移入新建 `references/deep/trip-prep.md`。主文件只保留 Rule statement + trigger pointer + 一行摘要。
-- **intake.md §6-§7 瘦身 -60%** — Accessibility 6 类详细说明 + Child Age Bands 5 段展开移入新建 `references/deep/intake.md`。主文件保留精简列表/表格 + carry-forward rule + deep pointer。
+- **SKILL.md description 重写** — 从 workflow-summary 格式改为 "Use when..." 触发条件格式。
+- **trip-prep.md 瘦身 -55%** — Transit Visa Rules / Practical Payment Friction / Religious and Festival Sensitivities 的展开移入新建 `references/deep/trip-prep.md`；主文件保留 Rule statement + trigger pointer + 一行摘要。
+- **intake.md §6-§7 瘦身 -60%** — Accessibility 6 类详细说明 + Child Age Bands 5 段展开移入新建 `references/deep/intake.md`；主文件保留精简列表/表格 + carry-forward rule + deep pointer。
 - **SKILL.md deep-references 段** — 更新文件列表（+intake.md, +trip-prep.md）和 depth trigger 示例。
 
 ### Added
 
 - **`references/deep/trip-prep.md`** — transit visa 国家细节、destination-specific 支付摩擦 7 国、宗教节日 situation→action 全文。
 - **`references/deep/intake.md`** — accessibility/medical-needs 6 类全量说明 + child age-bands 5 段全量约束表。
-- **test-prompts.json case 15** — `hotel-selection-multi-tier`：京都 3 天 2 晚住宿推荐，覆盖 hotel-selection.md 的 Evidence Standard / Tiering / Output Card Format / Check-In-Out / Comparison Format 5 个 anchor。填补 provenance 唯一的零覆盖 reference。
+- **test-prompts.json case 15** — `hotel-selection-multi-tier`：京都 3 天 2 晚住宿推荐，覆盖 hotel-selection.md 的 5 个 anchor。
 - **provenance.md** — hotel-selection.md 段从 "_No cases_" 更新为 case 15 的 5 个 anchor 覆盖。
 - **FUTURE.md §5** — 新增 "Attractions / activities reference" 方向 + 触发条件。
-
-### Structure guarantee
-
-零规则内容删除。零 anchor 改名。所有深度内容原地迁移到 deep/。现有 rule_refs 不受影响（case 14 仍引用 trip-prep.md §3，指向 main 的 Rule statement 仍在）。
 
 ## [0.8.0] — 2026-04-23
 
@@ -161,21 +133,17 @@
   - `budget.md`: 88 → 52 行（-40%）
   - `dining-rules.md`: 190 → 110 行（-42%）
   - `safety-and-emergency.md`: 205 → 104 行（-49%）
-  - 所有 anchor（§1-§10 / §3 / §6 / §9 等）保留，provenance 40/40 仍通过，不破坏任何现有 rule_refs。
-- **引入 `references/deep/` opt-in 子目录** — 被瘦身掉的深度内容（表格、destination-specific 示例、swap cascade 细节、ethical guardrails 6 类、partial-number ban 论证、allergen card 模板等）全部迁到 `references/deep/{budget,dining-rules,safety-and-emergency}.md`。LLM 默认不读；只在主 reference 显式 pointer 命中 depth trigger 时才 read。
-- **SKILL.md 增加 "Deep references (opt-in)" 说明段**（3 行，放在 Navigation 后），明确 deep/ 的读取规则。
-- `scripts/check-size.sh` 增加 deep/ 子目录检查 + 放宽阈值（> 400 warn / > 500 error，因为 deep 就是该胖的地方）。
-- `FUTURE.md` 重写 —— 从"5 条条件触发的技术未来"改为**战略定位 + 生态 roadmap**：主 skill 保持大而全 + 通用；专精领域（宠物 / 商务 / LGBTQ safety / cross-strait / destination-specific）未来通过**独立 skill + trigger 词路由**实现，而不是继续往主 skill 里塞内容。
-
-### Structure guarantee
-
-零规则内容删除。零 anchor 改名。零 rule_refs 失效。所有 check（links / provenance / version / size）保持 4/4 全绿。
+  - 所有 anchor 保留。
+- **引入 `references/deep/` opt-in 子目录** — 被瘦身掉的深度内容全部迁到 `references/deep/{budget,dining-rules,safety-and-emergency}.md`，只在主 reference pointer 命中 depth trigger 时才读。
+- **SKILL.md 增加 "Deep references (opt-in)" 说明段**（3 行，放在 Navigation 后）。
+- `scripts/check-size.sh` 增加 deep/ 子目录检查 + 放宽阈值（> 400 warn / > 500 error）。
+- `FUTURE.md` 重写 —— 从"5 条条件触发的技术未来"改为战略定位 + 生态 roadmap：专精领域通过独立 skill + trigger 词路由实现。
 
 ## [0.7.2] — 2026-04-23
 
 ### Added
 
-- **`references/budget.md`** — 4 节填补 skill 最高频盲区（每次规划都经过预算，但之前只有"15% 超标提醒"一条规则）。
+- **`references/budget.md`** — 新增 4 节预算 reference。
   - §1 按 region band 的类目占比默认表（东亚 / 中国+SEA / 西欧 / 北欧冰岛 / 美国 / 中东 / 南亚SEA 乡村，7 档本币占比），每档 6 个类目（交通/住宿/餐饮/景点/购物/buffer）。
   - §2 Hidden costs 清单 situation→line item 格式：入境离境税、小费层、IC 押金、FX 手续费、DCC 陷阱、免税液体、自驾隐藏成本、旺季溢价、归国关税。
   - §3 Refundable vs non-refundable 决策：7 个买 refundable 触发（老人 / 孕晚期 / 低龄娃 / 风险窗 / 待签 / 窄连接 / 商务）+ 4 个跳过场景（单人 / 短低风险 / 本身灵活多段 / 溢价超 20% 时买保险更划算）。
@@ -187,23 +155,23 @@
 
 ### Fixed
 
-- **Plugin 元数据版本漂移** — `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.json`（两处）原本还停留在 `0.5.2`，本版统一到 `0.7.1`。之前的 `/plugin install` 流程会读到陈旧元数据。
+- **Plugin 元数据版本漂移** — `.claude-plugin/plugin.json` 和 `.claude-plugin/marketplace.json`（两处）从 `0.5.2` 统一到 `0.7.1`。
 
 ### Added
 
-- **Release hygiene 三件套** —— 四个 check 形成完整守门员：
-  - `scripts/check-version.sh` — VERSION 与 SKILL.md、plugin.json、marketplace.json 的版本号必须一致，漂移即退 1。
-  - `scripts/check-size.sh` — SKILL.md > 250 行 → error；reference/*.md > 220 行 → warn，> 260 行 → error。阈值对齐 v0.6.0 "规则疲劳"的历史教训（当时 SKILL.md 从 331 行砍到 190）。
-  - `scripts/check-all.sh` — 聚合跑 `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh`，一键替代手动 checklist。
+- **Release hygiene 三件套** —— 四个 check：
+  - `scripts/check-version.sh` — VERSION 与 SKILL.md、plugin.json、marketplace.json 版本号必须一致，漂移即退 1。
+  - `scripts/check-size.sh` — SKILL.md > 250 行 → error；reference/*.md > 220 行 → warn，> 260 行 → error。
+  - `scripts/check-all.sh` — 聚合跑 `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh`。
 - README / README_CN 的 Release checklist 指向 `scripts/check-all.sh`。
 
 ### Added
 
-- **规则溯源机制（Rule Provenance）** — 让"规则为什么存在"可机器校验、可反向查询。
-  - `scripts/check-provenance.sh` — 校验 `test-prompts.json` 里每个 case 的 `rule_refs` 锚点真实指向规则文件里的 heading。零依赖（pure bash + POSIX awk），有 jq 时走 jq 快路径。正用例 34/34 通过，负用例（故意注入坏 ref）正确退出码 1。
-  - `skills/jhins-trip-planner/references/provenance.md` — 反向索引（rule → 覆盖它的 cases）。规则改动前可查"谁在测它"，未被引用的 heading 是加测试的信号。
-  - SKILL.md 顶部 meta 行加 provenance.md 指针，不污染 Navigation 表。
-  - FUTURE.md §1（自动化测试）更新：ground truth 已结构化就绪，harness 真做时不用再建语料库。
+- **规则溯源机制（Rule Provenance）**
+  - `scripts/check-provenance.sh` — 校验 `test-prompts.json` 里每个 case 的 `rule_refs` 锚点真实指向规则文件里的 heading。零依赖，有 jq 时走 jq 快路径。
+  - `skills/jhins-trip-planner/references/provenance.md` — 反向索引（rule → 覆盖它的 cases）。
+  - SKILL.md 顶部 meta 行加 provenance.md 指针。
+  - FUTURE.md §1（自动化测试）更新。
 
 ## [0.6.4] — 2026-04-22
 
@@ -216,30 +184,30 @@
 
 ### Added
 
-- `.gitignore` — 显式声明 `session-learnings-*.md`（个人会话笔记）和本地生成的缓存目录不进 git。取代"靠遗忘不 track"的软约束。
-- `FUTURE.md` 第 1 条补一句说明：`test-prompts.json` 的 `rule_refs` 字段是"给人看的注释"而非机器 assertion，`check-links.sh` 不扫 JSON。避免未来把这些引用误当成 harness 依赖。
+- `.gitignore` — 显式声明 `session-learnings-*.md`（个人会话笔记）和本地生成的缓存目录不进 git。
+- `FUTURE.md` 第 1 条补一句说明：`test-prompts.json` 的 `rule_refs` 字段是给人看的注释而非机器 assertion，`check-links.sh` 不扫 JSON。
 
 ## [0.6.2] — 2026-04-22
 
 ### Added
 
 - `VERSION` 文件、本 `CHANGELOG.md`、`FUTURE.md` — 建立版本化机制。SKILL.md 顶部显示当前版本号。
-- CHANGELOG 向前回溯到 v0.3.0（从 git log 挖掘）。
-- FUTURE.md 记录 5 个"条件触发的未来方向"（自动化测试 / thresholds.json / destinations/ 拆分 / triggers 矩阵 / agent 化），每一项带触发条件。
+- CHANGELOG 向前回溯到 v0.3.0。
+- FUTURE.md 记录 5 个条件触发的未来方向（自动化测试 / thresholds.json / destinations/ 拆分 / triggers 矩阵 / agent 化）。
 
 ## [0.6.1] — 2026-04-22
 
 ### Added
 
-- `scripts/check-links.sh` — bash 脚本，扫描所有 skill 包，验证跨文件引用一致性：每个 `[text](file.md)` 指向真实存在的文件、每个 `§Anchor` 匹配目标文件里的 heading、孤立的 reference 文件给出 warning。零依赖，pure bash + POSIX 工具，1 秒内跑完。
-- Smart anchor 解析：能正确区分 "`(dining-rules.md) §5 for how they combine with meal`" 里的 anchor 是 `§5` 而不是整句续写。
+- `scripts/check-links.sh` — bash 脚本，扫描所有 skill 包，验证跨文件引用一致性：每个 `[text](file.md)` 指向真实文件、每个 `§Anchor` 匹配目标文件 heading、孤立 reference 文件给出 warning。
+- Smart anchor 解析。
 
 ## [0.6.0] — 2026-04-22
 
 ### Added
 
 - **Accessibility 捕获**：`intake.md §6` — 轮椅 / 透析 / 机舱氧气 / 孕期 / 服务动物 / 过敏 carry-forward，每类在 hotel / attraction / transport 下游卡片必须显式 resolve，不再"later verify"。
-- **儿童年龄分段**：`intake.md §7` — 0-2 / 3-5 / 6-9 / 10-14 / 15-17 五段，每段对应不同的 attraction / 住宿 / 餐厅约束。替代之前笼统的 "young children"。
+- **儿童年龄分段**：`intake.md §7` — 0-2 / 3-5 / 6-9 / 10-14 / 15-17 五段，每段对应不同的 attraction / 住宿 / 餐厅约束。
 - **转机签证盲区**：`trip-prep.md §2` — US 无 sterile transit、香港 24/72/168h、迪拜 stopover、新加坡 VFTF、Schengen ATV-required 国家。
 - **联程行李冲突**：`transportation.md` — piece-vs-weight 制式冲突、self-transfer 时间预算、免税液体重新安检、cabin-bag 规格不匹配。
 - **气候偏移风险**：`weather-and-output.md §1` — 欧洲夏季热浪、樱花前移、晚季台风、北美野火烟霾、珊瑚季节紊乱。使用 seasonal averages 时必须加免责声明。
@@ -247,18 +215,18 @@
 - **宗教节日扩展**：`trip-prep.md §6` — Ramadan 之外补 Holi / Songkran / Shabbat / Buddhist Lent，每个 "situation → specific action" 格式。
 - **跟团 vs 自由行决策**：`weather-and-output.md §4` — 7 个触发跟团建议的条件 + 4 个保持独立行的场景。
 - **支付实操摩擦**：`trip-prep.md §3` — 中国 / 日本 / 冰岛 / 德奥 / 印度 / 阿根廷 / 美国 destination-specific 摩擦点。
-- **最小可用 brief 门槛**：`intake.md §2` — destination + dates + party + budget 四项齐备就可以进入细节规划，pace/theme 有默认不阻塞。
-- **Capture relevance rule**：`intake.md` 顶部 — 无关的 capture 不要机械地追问（两个成人不问 accessibility、不带儿童不问年龄段）。
-- **Peak-period pre-trip recheck 覆盖 planning-only**：SKILL.md Mode-Specific Scope 新增一行，堵住国内五一 / 十一等场景的系统性漏洞。
+- **最小可用 brief 门槛**：`intake.md §2` — destination + dates + party + budget 四项齐备即可进入细节规划，pace/theme 有默认不阻塞。
+- **Capture relevance rule**：`intake.md` 顶部 — 无关的 capture 不机械追问（两个成人不问 accessibility、不带儿童不问年龄段）。
+- **Peak-period pre-trip recheck 覆盖 planning-only**：SKILL.md Mode-Specific Scope 新增一行。
 
 ### Changed
 
-- **SKILL.md 瘦身 44%**（331 → 190 行）。新增 North Star + Navigation 表。规则细节下沉到对应 reference，SKILL.md 只保留 pointer。
-- **拆 `planning-rules.md`** (205 行 trash-can) 成三个专门文件：
+- **SKILL.md 瘦身 44%**（331 → 190 行）。新增 North Star + Navigation 表，规则细节下沉到 reference，SKILL.md 只保留 pointer。
+- **拆 `planning-rules.md`** 成三个专门文件：
   - `intake.md` (142 行) — §1-§10 编号，capture + carry-forward
   - `trip-prep.md` (108 行) — §1-§7 编号，visa + payment + SIM + insurance + etiquette + safety-pointer
   - `weather-and-output.md` (70 行) — weather + output + downstream pointers + independent-vs-guided
-- **test-prompts.json 结构化**：从散文 `expected` 改为机器可检查的 `assertions` 字段（13 个 case，每个有 mode / must_contain / must_cite_source_for / rule_refs 等字段）。
+- **test-prompts.json 结构化**：从散文 `expected` 改为机器可检查的 `assertions` 字段（13 个 case）。
 
 ## [0.5.2] — 2026-04-22
 

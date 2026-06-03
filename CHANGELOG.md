@@ -8,6 +8,26 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.14.0] — 2026-06-03
+
+### Added
+
+- **抓取渠道阶梯：JS 渲染 + 抗指纹渲染层 — `travel-sources.md §Login-Wall Fallback`** — 此前的反爬 fallback 只有两档：静态抓取 → 搜索聚合器 snippet。两次 live-fetch dry-run（Tokyo 6-02 + 本轮三路对照）证明这个模型选错了赛道：很多平台的"抓不到"不是登录墙，是**内容靠 JS 渲染**（静态抓取不跑 JS，只回页面框架）。把渠道顺序升级为**四档能力阶梯**：① 静态抓取（无 JS）② JS 渲染无头浏览器（若环境具备）③ 抗指纹渲染（若环境具备）④ 搜索聚合器（保底）。**按能力分层描述，不点名任何具体工具**——缺某一档的环境直接跳到下一档，保持 skill 跨环境可用。取证：Google Maps 在静态抓取下零数据，JS 渲染后拿到 6 个真实店名 + 评分 + `営業中` 状态横幅；Booking 静态抓取空白、JS 渲染仍空，抗指纹渲染后拿到 25 个房源 + 真实日元价格（APA ¥27,300 等）。两档都零凭证。
+- **test-prompts.json case 25** — channel-ladder JS-render 层回归：断言静态抓取的空白/框架是"该爬的下一档"而非验证失败、断言按阶梯顺序爬升、断言 JS 渲染恢复 Maps 状态横幅（§2 信号）、抗指纹渲染恢复 OTA 价格、断言 render 档拿到的活页算 Case A（正常引用、不加 snippet 限定词）。全部 rule_refs 指向既有 anchor，零新增 anchor。
+
+### Changed
+
+- **`deep/dining-rules.md §2` 修 F4（Google Maps 横幅可达性）** — 此前 §2 把"Google Maps 永久关闭横幅"当四个共一级的信号，但 6-02 取证发现它对静态抓取**结构上不可达**（Maps 是 JS 渲染，静态抓取只回框架）。改写：明示横幅需 JS 渲染才可达；**静态抓取失败时横幅的缺失是 non-signal，绝不能读成"营业中"**；JS 渲染档（阶梯 rung 2）是拿到这个信号的标准方式。修掉了"抓取失败 → 误判营业中"的隐性假阳性。
+- **`hotel-selection.md §Progressive Search` + §Timeout Degradation 修 F7/F8** — Progressive Search 的"价格不可达"fallback 加一条前置："Booking 空白/Ctrip 无价多半是 JS 渲染或 headless 指纹拦截，不是登录墙——先爬渲染档再判定价格不可达"。Timeout Degradation 表加一行守则：静态抓取的空白/302 是"该爬的下一档"，不计入降级触发次数，与 knowledge-layers §6 exhaustion gate 对齐（同时关闭 6-02 标记的 F8 hotel-side gap）。
+- **`travel-sources.md` Case A / Case B 重构** — Case A 从"静态抓取成功"放宽为"**任意阶梯档**拿到的活页都算 §2 验证、正常引用"；Case B 明确为"所有可达档都被墙才走 snippet 弱档"，并把"Maps 横幅不可达"的说法精确限定到**静态档**（有 JS 渲染档的环境拿到横幅就落进 Case A）。
+- **`knowledge-layers.md §6` exhaustion gate** — 从"≥2 channels（≥1 聚合器）"升级为"先爬渠道阶梯（JS/抗指纹渲染档若有），再 ≥2 channels（≥1 聚合器）"，与 travel-sources 阶梯保持单一事实源。
+- **FUTURE.md §8** — authenticated-fetch 方向标注为"部分被 v0.14.0 的 render 档覆盖"：Booking/Ctrip 的失败经取证是反指纹（抗指纹渲染零凭证可破），不是登录墙；真正需要用户 cookie 的认证抓取仍 gated（仅当 render 档也验证失败、且用户已为其他原因配置 cookie 时）。§1 测试用例计数 24→25。
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.13.0 → 0.14.0。
+
+### Structure guarantee
+
+零规则删除。零既有 anchor 改名（新内容均为 §Login-Wall Fallback 下的 channel-ladder 列表、§2/§Progressive Search/§Timeout Degradation/§6 下的 bullet 改写，不重编号、不改既有 heading 文本）。case 1-24 的 rule_refs 不受影响。SKILL.md 行数 199 不变、Final Check 19 条 invariant 不变——SKILL.md 通过既有的 `§Login-Wall Fallback` 指针自动继承阶梯升级，无需改动。能力分层措辞使 skill 不绑死在任何工具生态。证据来源：两次 live-fetch dry-run（`session-learnings-2026-06-02` Tokyo + 本轮 browse 三路对照），正中 `FUTURE.md §8` 触发条件。
+
 ## [0.13.0] — 2026-06-03
 
 ### Added

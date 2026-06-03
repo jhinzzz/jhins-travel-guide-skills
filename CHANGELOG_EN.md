@@ -8,6 +8,26 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.14.0] — 2026-06-03
+
+### Added
+
+- **Channel ladder: JS-render + fingerprint-resistant render tiers — `travel-sources.md §Login-Wall Fallback`** — the anti-scraping fallback previously had two rungs: static fetch → search-aggregator snippet. Two live-fetch dry-runs (Tokyo 6-02 + this round's three-way comparison) proved that model was on the wrong track: for many platforms the "can't fetch" failure is not a login wall, it's **JS-rendered content** (a static fetch doesn't run JS, so it returns only page chrome). The channel order is upgraded to a **four-rung capability ladder**: ① static fetch (no JS) ② JS-rendering headless browser (if available) ③ fingerprint-resistant render (if available) ④ search aggregators (guaranteed floor). **Described by capability, never naming a specific tool** — a runtime missing a rung just skips to the next, keeping the skill cross-environment portable. Evidence: Google Maps returned zero data on static fetch, but after JS render gave 6 real shop names + ratings + the `営業中` status banner; Booking was blank on static fetch and still blank with JS, but a fingerprint-resistant render gave 25 properties + real JPY prices (APA ¥27,300, etc.). Both rungs used zero credentials.
+- **test-prompts.json case 25** — channel-ladder JS-render-tier regression: asserts a static-fetch blank/chrome is "the next rung to climb" not a verification failure, asserts climbing in ladder order, asserts JS render recovers the Maps status banner (the §2 signal), fingerprint-resistant render recovers OTA price, and a live page from a render rung counts as Case A (cite normally, no snippet qualifier). All rule_refs point to existing anchors, zero new anchors.
+
+### Changed
+
+- **`deep/dining-rules.md §2` fixes F4 (Google Maps banner reachability)** — §2 previously listed the "Google Maps Permanently-closed banner" as one of four co-equal signals, but the 6-02 dry-run found it is **structurally unreachable to a static fetch** (Maps is JS-rendered; a static fetch returns only chrome). Reworded: the banner needs a JS-rendering rung to reach; **on a failed static fetch its absence is non-signal — never read as "open"**; the JS-render rung (ladder rung 2) is the canonical way to obtain this signal. Closes the silent "fetch failed → false-positive open" hole.
+- **`hotel-selection.md §Progressive Search` + §Timeout Degradation fix F7/F8** — Progressive Search's "price unreachable" fallback gains a precondition: "a blank Booking / price-hidden Ctrip is usually a JS-render or headless-fingerprint block, not a login wall — climb the render rungs before declaring price unreachable." The Timeout Degradation table gains a guard line: a static-fetch blank/302 is a rung to climb, not a failure counted toward degradation, mirroring the knowledge-layers §6 exhaustion gate (also closing the F8 hotel-side gap flagged in 6-02).
+- **`travel-sources.md` Case A / Case B refactor** — Case A widened from "static fetch succeeded" to "a live page recovered at **any ladder rung** is §2 verification, cited normally"; Case B clarified as "the authoritative page stayed walled at every available rung, only then the weak snippet bar," scoping the "Maps banner unreachable" claim precisely to the **static rung** (an environment with a JS-render rung that recovers the banner lands in Case A).
+- **`knowledge-layers.md §6` exhaustion gate** — upgraded from "≥2 channels (≥1 aggregator)" to "climb the channel ladder (JS / fingerprint-resistant render rungs when available), then ≥2 channels (≥1 aggregator)," keeping a single source of truth with the travel-sources ladder.
+- **FUTURE.md §8** — the authenticated-fetch direction is marked "partially addressed by v0.14.0's render rungs": the Booking/Ctrip failure was proven to be anti-fingerprint (defeated by a zero-credential fingerprint-resistant render), not a login wall; genuine cookie-based authenticated fetch stays gated (only when the render rungs also fail to verify AND the user has cookies configured for another reason). §1 test-case count 24→25.
+- **SKILL.md / VERSION / plugin.json / marketplace.json** — 0.13.0 → 0.14.0.
+
+### Structure guarantee
+
+Zero rule deletions. Zero existing-anchor renames (new content is the channel-ladder list under §Login-Wall Fallback and reworded bullets under §2 / §Progressive Search / §Timeout Degradation / §6 — no renumbering, no existing heading text changed). rule_refs for cases 1-24 unaffected. SKILL.md stays 199 lines; Final Check stays 19 invariants — SKILL.md inherits the ladder upgrade for free through its existing `§Login-Wall Fallback` pointer, no edit needed. The capability-tiered wording keeps the skill un-bound to any tool ecosystem. Evidence: two live-fetch dry-runs (`session-learnings-2026-06-02` Tokyo + this round's three-way browse comparison), hitting `FUTURE.md §8`'s trigger condition squarely.
+
 ## [0.13.0] — 2026-06-03
 
 ### Added

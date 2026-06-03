@@ -9,3 +9,4 @@ session-learnings-*.md
 *.swp
 *.swo
 Thumbs.db
+.gstack/

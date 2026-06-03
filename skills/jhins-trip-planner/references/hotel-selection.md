@@ -87,7 +87,8 @@ Hotel verification uses a two-phase progressive approach to avoid long search ti
 - Pick the best platform for the destination per [travel-sources.md](travel-sources.md) (e.g., Ctrip for China domestic, Booking.com for international).
 - Search for 3-5 candidates matching the user's constraints (area, budget, party).
 - Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · source.
-- **Partial-scout fallback (price unreachable):** nightly rate is the field platforms most often withhold from anonymous fetch (Booking blank, Ctrip name+rating-but-no-price). A scout that has name + area + rating but **no verifiable price** is still useful — present it with the rate field marked `价格需登录查询 / price requires login — verify on booking` rather than dropping the candidate or inventing a number. Do **not** backfill a price from a single stale or wrong-currency aggregator snippet. A scout missing *only* price is not a verification failure; only escalate to the Timeout Degradation advisory card when name **and** rating are also unobtainable.
+- **Climb the channel ladder before declaring price unreachable.** A blank Booking / price-hidden Ctrip from a *static* fetch is usually a JS-render or headless-fingerprint block, **not** a login wall — climb [travel-sources.md](travel-sources.md) §Login-Wall Fallback: a JS-rendering rung, then (for OTAs that silently degrade on a headless fingerprint) a fingerprint-resistant render rung, recovers OTA listings + nightly prices with no credentials. Only after the available render rungs fail does price count as genuinely unreachable.
+- **Partial-scout fallback (price still unreachable after the ladder):** nightly rate is the field platforms most often withhold from a static fetch. A scout that has name + area + rating but **no verifiable price** is still useful — present it with the rate field marked `价格需登录查询 / price requires login — verify on booking` rather than dropping the candidate or inventing a number. Do **not** backfill a price from a single stale or wrong-currency aggregator snippet. A scout missing *only* price is not a verification failure; only escalate to the Timeout Degradation advisory card when name **and** rating are also unobtainable.
 - Ask user to pick 1-2 hotels for deep verification.
 
 ### Phase 2: Deep Verify (cross-reference, only on user's picks)
@@ -100,7 +101,7 @@ This eliminates 80% of wasted verification: only user-selected hotels get full t
 
 ## Timeout Degradation
 
-If hotel search stalls at any phase, degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5:
+If hotel search stalls at any phase, degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. **First climb the channel ladder** ([travel-sources.md](travel-sources.md) §Login-Wall Fallback): a static-fetch blank/302 is a rung to climb (render rungs, then aggregator), not a "failure" to count toward degradation. The triggers below count only failures that persist *after* the available rungs are exhausted, mirroring the [knowledge-layers.md](knowledge-layers.md) §6 exhaustion gate.
 
 | Trigger | Action |
 |---|---|

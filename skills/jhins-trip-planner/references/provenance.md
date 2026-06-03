@@ -65,7 +65,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | §1 | 1 |
-| §2 | 8, 19, 20 |
+| §2 | 8, 19, 20, 25 |
 | §3 (Spring Festival / New Year peak) | 5 |
 | §4 | 20 |
 | §8 | 23, 24 |
@@ -92,6 +92,8 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Output Card Format | 15 |
 | §Check-In / Check-Out and Luggage | 15 |
 | §Comparison Format | 15 |
+| §Progressive Search | 25 |
+| §Timeout Degradation | 25 |
 
 ### local-specialties.md
 
@@ -123,7 +125,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §4 (destination matching) | 16 |
 | §5 (search advisory card) | 16, 17 |
 | §6 (user-supplied hotel name flow) | 18 |
-| §6 (exhaustion gate) | 19, 20 |
+| §6 (exhaustion gate) | 19, 20, 25 |
 
 ### travel-sources.md
 
@@ -131,7 +133,13 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 |---|---|
 | §Per-Person Price Tiers | 7 |
 | §Source Selection Rules | 23 |
-| §Login-Wall Fallback (Search Aggregators) | 19, 20 |
+| §Login-Wall Fallback (Search Aggregators) | 19, 20, 25 |
+
+### deep/dining-rules.md
+
+| Anchor | Cases |
+|---|---|
+| §2 | 25 |
 
 ### deep/trip-prep.md
 

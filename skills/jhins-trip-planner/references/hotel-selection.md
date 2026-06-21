@@ -54,6 +54,17 @@ Each tier is an AND-list, not a vibe. A hotel earns a tier only if it meets ever
 
 "Weak evidence" (promote no further than `niche`, or omit): <2 independent sources **OR** rating below the platform floor **OR** a negative last-12-month hardware trend with no offsetting renovation evidence.
 
+## Hardware Weighting
+
+Disclosure is unconditional; weighting adapts to the traveler.
+
+- **Always disclose:** the Hardware field (§Output Card Format) appears on **every** card and scout card, regardless of stated preference. This is the safety net — it protects the traveler even when no preference was captured.
+- **Weight by intake preference** ([intake.md](intake.md) §10):
+  - `modern-hardware-preferred` → a dated-hardware caution (negative recent-hardware trend, or >10-year unrenovated per §Hardware-Freshness Signal) **blocks the silent top `first pick` / `recommended` slot**: the hotel drops one tier and carries a visible warning chip.
+  - `heritage-OK` → dated hardware is **disclosed but not penalized** in ranking.
+  - `no-preference`, **or the preference was not captured** → **disclose + mild caution**: show the warning chip and do not let the hotel be the silent sole `first pick`; do **not** auto-downrank to `avoid`.
+- **The proxy never forces `avoid`.** Being blindsided by dated hardware is the documented harm; over-penalizing a heritage hotel a traveler would have loved is also a harm. Caution, not exclusion.
+
 ## Check-In / Check-Out and Luggage
 
 - Standard check-in: 14:00–15:00. Standard check-out: 10:00–12:00. Varies by hotel — always verify.

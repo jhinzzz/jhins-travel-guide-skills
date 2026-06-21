@@ -81,6 +81,7 @@ For each hotel, present these fields in a compact card or table row:
 5. **Budget fit**: within / stretch / over budget
 6. **Why this tier**: one sentence on the key strength or weakness
 7. **Verdict**: `first pick`, `backup`, `niche`, or `avoid`
+8. **Hardware / 硬件**: opened or last-renovated year if known (Tier 1), else recent-review hardware sentiment (Tier 2), else `未能核实` — per §Hardware-Freshness Signal. Show a dated-hardware caution chip when §Hardware Weighting triggers it.
 
 Keep cards compact. Use tables or chip-style labels, not paragraphs.
 
@@ -88,10 +89,10 @@ Keep cards compact. Use tables or chip-style labels, not paragraphs.
 
 When presenting multiple options across budget tiers, use a comparison table:
 
-| Hotel | Tier | Area | Nightly Rate | Transit | Verdict |
-|---|---|---|---|---|---|
-| (name) | recommended | (area) | ¥X–¥Y | (minutes to hub) | first pick |
-| (name) | mass-market | (area) | ¥X–¥Y | (minutes to hub) | backup |
+| Hotel | Tier | Area | Nightly Rate | Transit | Hardware | Verdict |
+|---|---|---|---|---|---|---|
+| (name) | recommended | (area) | ¥X–¥Y | (minutes to hub) | reno. 2021 | first pick |
+| (name) | mass-market | (area) | ¥X–¥Y | (minutes to hub) | dated · 近评设施旧 | backup |
 
 Put the recommended first pick at the top of each budget group.
 
@@ -109,7 +110,7 @@ Hotel verification uses a two-phase progressive approach to avoid long search ti
 
 - Pick the best platform for the destination per [travel-sources.md](travel-sources.md) (e.g., Ctrip for China domestic, Booking.com for international).
 - Search for 3-5 candidates matching the user's constraints (area, budget, party).
-- Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · source.
+- Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · opened/renovated year if the listing shows it · source. A dated building should be visible **here**, at first-pass filtering — not discovered only after the user spends a deep-verify pick on it.
 - **Climb the channel ladder before declaring price unreachable.** A blank Booking / price-hidden Ctrip from a *static* fetch is usually a JS-render or headless-fingerprint block, **not** a login wall — climb [travel-sources.md](travel-sources.md) §Login-Wall Fallback: a JS-rendering rung, then (for OTAs that silently degrade on a headless fingerprint) a fingerprint-resistant render rung, recovers OTA listings + nightly prices with no credentials. Only after the available render rungs fail does price count as genuinely unreachable.
 - **Partial-scout fallback (price still unreachable after the ladder):** nightly rate is the field platforms most often withhold from a static fetch. A scout that has name + area + rating but **no verifiable price** is still useful — present it with the rate field marked `价格需登录查询 / price requires login — verify on booking` rather than dropping the candidate or inventing a number. Do **not** backfill a price from a single stale or wrong-currency aggregator snippet. A scout missing *only* price is not a verification failure; only escalate to the Timeout Degradation advisory card when name **and** rating are also unobtainable.
 - Ask user to pick 1-2 hotels for deep verification.

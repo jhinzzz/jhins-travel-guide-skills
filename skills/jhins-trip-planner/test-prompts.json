@@ -909,6 +909,7 @@
       "must_capture_hardware_preference": "intake asks modern-hardware-preferred / heritage-OK / no-preference before ranking hotels (user already signalled modern)",
       "must_surface_hardware_signal_per_hotel": "every hotel card carries a hardware-freshness read: Tier-1 opened/renovated year if known, else Tier-2 recent-review hardware sentiment, else 未能核实",
       "must_recency_weight_reviews": "a hotel with a high lifetime score but a negative last-12-month hardware trend is flagged, not promoted on the aggregate",
+      "must_have_hardware_card_field": "each hotel card and the comparison table expose the Hardware field; the scout card includes opened/renovated year when the listing shows it",
       "must_not": [
         "promote a hotel to silent first pick on star-class + lifetime rating alone",
         "invent an opening or renovation year",

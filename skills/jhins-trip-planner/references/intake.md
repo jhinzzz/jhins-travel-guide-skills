@@ -145,4 +145,5 @@ When the user uses "or" between two cuisines ("izakaya or sashimi"), capture bot
 ## 10. Hotel Room Style and Transport Preference
 
 - If hotel suggestions are needed and room style is missing, ask after the core inputs.
+- If hotel suggestions are in scope, capture **hardware preference** once: `modern-hardware-preferred` / `heritage-OK` / `no-preference`. Ask only when relevant (per the Capture Relevance Rule at the top of this file). This bends hotel *ranking weight* per [hotel-selection.md](hotel-selection.md) §Hardware Weighting — it does **not** change what is disclosed on the card.
 - If the user has not mentioned transport preferences, ask after budget: "Do you have a preferred transport mode for getting there and back (flight, high-speed rail, rental car, etc.)?"

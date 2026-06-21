@@ -900,4 +900,25 @@
       ]
     }
   }
+  ,{
+    "id": 26,
+    "scenario": "hotel-dated-hardware-high-rating",
+    "prompt": "下个月去顺德玩2晚，想住五星级酒店，预算每晚600元，有什么推荐？我比较在意房间和装修是不是够新。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_capture_hardware_preference": "intake asks modern-hardware-preferred / heritage-OK / no-preference before ranking hotels (user already signalled modern)",
+      "must_surface_hardware_signal_per_hotel": "every hotel card carries a hardware-freshness read: Tier-1 opened/renovated year if known, else Tier-2 recent-review hardware sentiment, else 未能核实",
+      "must_recency_weight_reviews": "a hotel with a high lifetime score but a negative last-12-month hardware trend is flagged, not promoted on the aggregate",
+      "must_not": [
+        "promote a hotel to silent first pick on star-class + lifetime rating alone",
+        "invent an opening or renovation year",
+        "auto-mark a hotel 'avoid' on the recent-review hardware proxy alone"
+      ],
+      "rule_refs": [
+        "hotel-selection.md §Hardware vs Service",
+        "hotel-selection.md §Hardware-Freshness Signal",
+        "hotel-selection.md §Recency-Weighted Reviews"
+      ]
+    }
+  }
 ]

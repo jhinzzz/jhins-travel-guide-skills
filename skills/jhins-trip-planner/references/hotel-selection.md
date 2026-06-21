@@ -21,6 +21,29 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 - Do not rely on a single source when the choice is important.
 - If the evidence is weak, label the hotel as avoid or omit it.
 
+## Hardware vs Service
+
+A hotel has two products, and they are rated independently. A high blended score hides mismatches — a real five-star with attentive service but rooms last renovated fifteen years ago is the canonical "great service, tired rooms" trap.
+
+- **Hard product**: room condition, bed, bathroom, AC / heating, soundproofing, décor, building age / last renovation.
+- **Soft product**: service, F&B, loyalty program, location, amenities.
+
+Evaluate and report both. Never let a strong soft product paper over a weak hard product — surface the split and let the user decide.
+
+## Hardware-Freshness Signal
+
+Star class and brand say nothing about how fresh the rooms are. Establish a hardware-freshness read for every hotel, hard fact first:
+
+- **Tier 1 — dated fact (use when obtainable):** opening year and/or last major renovation year, cited (hotel "About" / press page, a renovation announcement, or an OTA fact-sheet field). State it, e.g. `开业2009 · 翻新2021 (Booking.com, 2026-06)`.
+- **Tier 2 — recent-review proxy (the common case, year not published):** read the **last ~12 months** of reviews for hardware complaints — 设施陈旧 / 老旧 / 装修旧 / 隔音差 / 霉味 / dated / worn / tired / "needs refurb". Flag the hotel when recent reviews cluster on dated hardware **even though the lifetime score is high**.
+- **Neither obtainable:** state `硬件新旧未能核实 / hardware age unverified`. Never invent a year or a sentiment.
+
+Caution threshold: a hotel whose last opening / renovation is **more than 10 years** before the travel date, with no offsetting renovation evidence, carries the dated-hardware caution (see §Hardware Weighting).
+
+## Recency-Weighted Reviews
+
+Aggregate OTA scores are lifetime averages — an aging hotel keeps a high score earned in its fresh years while recent guests drift down. Weight the **last-12-month** reviews at least as heavily as the lifetime aggregate. A **negative delta** between recent hardware sentiment and the lifetime score **is the signal** — surface it; do not let the average bury it. (This is the only review-recency rule; the 3-month flag in [travel-sources.md](travel-sources.md) is for research-data staleness, not review weighting.)
+
 ## Tiering
 
 - `mass-market`: practical, broad appeal, reliable value

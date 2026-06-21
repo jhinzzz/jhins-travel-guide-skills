@@ -163,14 +163,7 @@ Do not infer a renovation year from the listing's overall vibe — if it is not 
 
 ## Operating-Status Detection
 
-Every venue must have its current operating status verified before appearing in the output. Treat these signals as hard disqualifiers, regardless of destination:
-
-- **Google Maps** page shows "Permanently closed" or "Temporarily closed" banner.
-- **Official website** returns 404, shows a closure / on-hold / relocation / rebuild notice in the destination's language (examples: 閉店・休業・移転・建替 in Japan; 停业・歇业・搬迁 in China; "chiuso" in Italy; "cerrado" in Spanish-speaking countries), or redirects to a "new location" link.
-- **Authoritative platform page** (Tabelog / Dianping / TheFork / TripAdvisor, etc.) has been repurposed — the name on the current page does not match the name you searched for.
-- **Multiple independent searches** for the same venue ID return different businesses — strong signal that the original closed or relocated.
-
-When verification is ambiguous (WebFetch fails, pages conflict), do not guess. Either retry with a different source, or batch the venue into a parallel sub-agent sweep per the SKILL.md Fallback Rules.
+The canonical operating-status signals (closure notice in destination language · 404 / "new store" redirect · Google Maps "Permanently closed" banner · platform-page name/address integrity) live in [dining-rules.md](dining-rules.md) §2 — they apply to **every** venue type, not only restaurants. When verification is ambiguous, retry a different source or batch into a parallel sub-agent sweep per the SKILL.md Fallback Rules.
 
 ## Citation Format
 

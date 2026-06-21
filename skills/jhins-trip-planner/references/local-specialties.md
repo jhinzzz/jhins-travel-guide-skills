@@ -13,7 +13,7 @@ Does not cover: generic airport duty-free goods, mass-produced tourist trinkets 
 ## Evidence Standard
 
 - Only recommend specialties that appear repeatedly across mainstream travel sources (see [travel-sources.md](travel-sources.md) for the full source list).
-- Cross-reference at least two independent sources before labeling an item as a "must-buy" or "signature" specialty.
+- Cross-reference ≥2 independent sources per [travel-sources.md](travel-sources.md) §Evidence Principle before labeling an item as a "must-buy" or "signature" specialty.
 - Never fabricate brand names, shop names, prices, or availability — if data is unavailable, state "verify locally" and mark as approximate.
 - Label each recommendation with the source and research date (e.g., "小红书 + 马蜂窝, checked 2026-04").
 - Prefer items sold at well-known, established shops or official outlets over random vendors.

@@ -16,8 +16,6 @@
 
 当前仓库已经改成 plugin-first 结构：Claude plugin 就在仓库根目录，真正的 skill 内容在 [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/) 下。
 
-以下安装与 marketplace 说明基于 2026-04-19 查阅的 Codex 与 Claude Code 官方文档整理。
-
 ## 仓库结构
 
 - [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json)：Claude plugin manifest
@@ -51,7 +49,7 @@
 - Claude plugin
 - 自定义 marketplace source
 
-所以用户现在就可以通过 Claude Code 的 marketplace 机制安装，而不需要你先上官方 marketplace。
+用户可以通过 Claude Code 的 marketplace 机制直接安装，无需等待上架官方 marketplace。
 
 安装命令：
 
@@ -69,41 +67,7 @@ claude plugin install jhins-trip-planner@jhins-travel-guide-skills
 
 安装完成后，这个 skill 会通过 plugin 提供给 Claude Code。
 
-## Claude Code：本地测试 plugin
-
-在正式发布或更新前，建议按 Claude Code 官方文档先做本地测试：
-
-```bash
-claude --plugin-dir .
-```
-
-然后在 Claude Code 内执行：
-
-```text
-/reload-plugins
-/jhins-trip-planner:jhins-trip-planner
-```
-
-如果你本机没有安装 `claude` CLI，那就无法在本机直接跑官方 plugin 验证流程。此时至少应在有 Claude Code 环境的机器上做一次真实测试，再让用户安装更新。
-
-## Claude Code：发布到官方 marketplace
-
-这个仓库现在已经可以通过“自定义 marketplace”安装，但还不等于已经进入 Anthropic 官方 marketplace。
-
-如果你想让用户通过官方 marketplace 安装，还需要：
-
-1. 持续维护 [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json)
-2. 每次发布前提升版本号
-3. 通过 Anthropic 官方入口提交：
-   - `claude.ai/settings/plugins/submit`
-   - `platform.claude.com/plugins/submit`
-4. 审核通过后，用户可以使用：
-
-```text
-/plugin install jhins-trip-planner@claude-plugins-official
-```
-
-在官方审核通过之前，当前真正可用的安装方式仍然是上面的自定义 marketplace 命令。
+> 维护者：本地 plugin 测试、官方 marketplace 提交流程，以及每次发布的检查清单都在 [RELEASING_CN.md](./RELEASING_CN.md)。
 
 ## Codex：使用内置 skill installer 安装
 
@@ -117,7 +81,7 @@ OpenAI 的 Codex skills 文档明确写到，`$skill-installer` 可以安装 cur
 Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/jhins-trip-planner
 ```
 
-我没有查到一个单独文档化的 shell 子命令，类似 `codex skill install ...`。当前有文档依据的方式，是在 Codex 中调用 `$skill-installer`。
+目前没有单独文档化的 shell 子命令，类似 `codex skill install ...`。当前有文档依据的方式，是在 Codex 中调用 `$skill-installer`。
 
 ## Codex：手动安装兜底方案
 
@@ -159,15 +123,6 @@ OpenAI 文档当前列出的 Codex skill 路径包括：
 - 做旅行页面或交付物重构时：同时产出 markdown 和 HTML
 - 需要单页面时：输出单个 HTML 文件
 - 需要可维护项目时：按情况拆分 HTML、CSS、JS
-
-## 发布检查清单
-
-每次更新前：
-
-1. 先 bump `VERSION`，然后跑 [`scripts/check-all.sh`](./scripts/check-all.sh) —— 它会依次跑 `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh`，任何一项回归（跨文件引用断链、test_refs 锚点漂移、版本号不对齐、规则疲劳膨胀）都会退出 1。
-2. 核对 [`agents/openai.yaml`](./agents/openai.yaml) 是否仍与当前 skill 行为一致。
-3. 在 [`CHANGELOG.md`](./CHANGELOG.md) + [`CHANGELOG_EN.md`](./CHANGELOG_EN.md) 里加新版本条目（改了什么、为什么）。
-4. 如条件允许，先在 Claude Code 本地跑一次 plugin 测试。
 
 ## 版本变动
 

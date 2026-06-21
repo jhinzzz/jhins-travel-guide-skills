@@ -16,8 +16,6 @@ End-to-end trip-planning plugin and custom marketplace repository for Claude Cod
 
 This repository now has a plugin-first layout. The Claude plugin lives at the repository root, and the actual skill payload is under [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/).
 
-The install and marketplace notes below were checked on 2026-04-19 against the current Codex and Claude Code documentation.
-
 ## Repository layout
 
 - [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json): Claude plugin manifest
@@ -64,41 +62,7 @@ claude plugin install jhins-trip-planner@jhins-travel-guide-skills
 
 After installation, the skill is available through the plugin.
 
-## Claude Code: local plugin testing
-
-Before publishing or updating marketplace users, test locally with Claude Code's documented plugin workflow:
-
-```bash
-claude --plugin-dir .
-```
-
-Then inside Claude Code:
-
-```text
-/reload-plugins
-/jhins-trip-planner:jhins-trip-planner
-```
-
-If you do not have the `claude` CLI installed locally, you can still review the plugin files and publish from GitHub, but you should test on a machine that has Claude Code available before asking users to install updates.
-
-## Claude Code: publish to the official marketplace
-
-This repository is ready for custom marketplace installation now. It is not automatically in Anthropic's official marketplace.
-
-To make it installable from the official marketplace:
-
-1. Keep `.claude-plugin/plugin.json` updated.
-2. Bump the plugin version before each release.
-3. Submit the plugin through Anthropic's official submission flow:
-   - `claude.ai/settings/plugins/submit`
-   - `platform.claude.com/plugins/submit`
-4. After approval, users can install it from the official marketplace with:
-
-```text
-/plugin install jhins-trip-planner@claude-plugins-official
-```
-
-Until that approval happens, the working install path is your custom marketplace command shown above.
+> Maintainers: local plugin testing, official-marketplace submission, and the per-release checklist live in [RELEASING.md](./RELEASING.md).
 
 ## Codex: install with the built-in skill installer
 
@@ -112,7 +76,7 @@ Prompt pattern inside Codex:
 Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/jhins-trip-planner
 ```
 
-I did not find a separately documented package-manager-style shell command such as `codex skill install ...`. The documented path is to invoke `$skill-installer` from within Codex.
+There is no separately documented package-manager-style shell command such as `codex skill install ...`. The documented path is to invoke `$skill-installer` from within Codex.
 
 ## Codex: manual install fallback
 
@@ -154,15 +118,6 @@ Expected outputs:
 - Redesign/page-build requests: both markdown and HTML deliverables
 - Standalone page requests: a single HTML file
 - Maintainable project requests: split HTML, CSS, and JS when appropriate
-
-## Release checklist
-
-Before publishing an update:
-
-1. Bump `VERSION`, then run [`scripts/check-all.sh`](./scripts/check-all.sh) — this runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` and fails if any of them flag a regression (stale anchors, version drift, rule-fatigue bloat, broken cross-file references).
-2. Verify [`agents/openai.yaml`](./agents/openai.yaml) still matches the current skill behavior.
-3. Add a [`CHANGELOG.md`](./CHANGELOG.md) + [`CHANGELOG_EN.md`](./CHANGELOG_EN.md) entry for the new version (what changed, why).
-4. Test in Claude Code locally if possible.
 
 ## Changelog
 

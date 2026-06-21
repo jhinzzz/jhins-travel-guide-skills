@@ -21,7 +21,8 @@ Read references lazily, based on what the request actually needs:
 |---|---|
 | Intake order, minimum viable brief, theme / pace / medication / accessibility / child / self-drive / food captures | [intake.md](references/intake.md) |
 | Visa + transit visa, payment, SIM, insurance, etiquette, religious / festival overlap, multi-country parallel verification | [trip-prep.md](references/trip-prep.md) |
-| Weather (incl. climate-shift risk), output format (markdown / HTML), independent-travel-vs-guided decision | [weather-and-output.md](references/weather-and-output.md) |
+| Weather (incl. climate-shift risk), output format (markdown / HTML) | [weather-and-output.md](references/weather-and-output.md) |
+| Independent-travel-vs-guided decision, tour / private-guide inserts, licensed-operator vetting | [travel-mode.md](references/travel-mode.md) |
 | Round-trip transport, booking windows, arrival times, transfers, self-drive route-book, multi-carrier luggage | [transportation.md](references/transportation.md) |
 | Budget category split by region, hidden costs, refundable-vs-not, FX / payment timing | [budget.md](references/budget.md) |
 | Hotel tiering, evidence, check-in/out, luggage | [hotel-selection.md](references/hotel-selection.md) |

@@ -26,7 +26,8 @@
 - [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md)：主技能文件
 - [`skills/jhins-trip-planner/references/intake.md`](./skills/jhins-trip-planner/references/intake.md)：行程需求采集 — 必要输入、提问顺序、最小可用 brief 阈值、主题/节奏/用药/无障碍/儿童/自驾/餐饮三元组采集
 - [`skills/jhins-trip-planner/references/trip-prep.md`](./skills/jhins-trip-planner/references/trip-prep.md)：行前准备 — 签证 + 过境签、支付/货币、SIM、保险、当地礼仪、宗教/节庆重叠、多国并行验证
-- [`skills/jhins-trip-planner/references/weather-and-output.md`](./skills/jhins-trip-planner/references/weather-and-output.md)：天气感知规划（含气候漂移风险）、输出格式选择、自由行 vs 跟团决策
+- [`skills/jhins-trip-planner/references/weather-and-output.md`](./skills/jhins-trip-planner/references/weather-and-output.md)：天气感知规划（含气候漂移风险）、输出格式选择
+- [`skills/jhins-trip-planner/references/travel-mode.md`](./skills/jhins-trip-planner/references/travel-mode.md)：自由行 vs 跟团决策——何时建议私导/混合插入、持牌运营商甄别
 - [`skills/jhins-trip-planner/references/hotel-selection.md`](./skills/jhins-trip-planner/references/hotel-selection.md)：酒店证据标准、分层、渐进式搜索、超时降级与输出规则
 - [`skills/jhins-trip-planner/references/transportation.md`](./skills/jhins-trip-planner/references/transportation.md)：往返交通购票时间、到站时间、票价指导、换乘规划与输出格式
 - [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md)：当地手信/特产推荐规则（选品标准、分层、海关/运输约束）

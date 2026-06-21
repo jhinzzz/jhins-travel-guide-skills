@@ -919,6 +919,7 @@
         "invent an opening or renovation year",
         "auto-mark a hotel 'avoid' on the recent-review hardware proxy alone"
       ],
+      "notes": "Pins the modern-hardware-preferred branch — the prompt appends '我比较在意房间和装修是不是够新', an explicit modern signal. The no-preference default branch is covered by case 28.",
       "rule_refs": [
         "hotel-selection.md §Hardware vs Service",
         "hotel-selection.md §Hardware-Freshness Signal",
@@ -941,10 +942,33 @@
         "apply the dated-hardware caution chip as a ranking penalty when heritage-OK is set",
         "auto-mark an old machiya 'avoid' for being old"
       ],
+      "notes": "Pins the heritage-OK branch — user explicitly does not care about hardware freshness ('不在乎设施新不新'). Dated hardware must be disclosed but not penalized.",
       "rule_refs": [
         "hotel-selection.md §Hardware Weighting",
         "hotel-selection.md §Hardware-Freshness Signal",
         "intake.md §10"
+      ]
+    }
+  }
+  ,{
+    "id": 28,
+    "scenario": "hotel-no-preference-default-protects-user",
+    "prompt": "下个月去顺德玩2晚，预算每晚600元，帮我推荐一家五星级酒店。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_surface_hardware_signal_per_hotel": "even though the user stated NO hardware preference, every hotel card still carries the hardware-freshness read (Tier-1 year / Tier-2 recent-review proxy / 未能核实) — disclosure is unconditional",
+      "must_apply_mild_caution_when_preference_absent": "with no hardware preference captured, a dated high-rated 5-star (e.g. a 2009-built one with recent 设施陈旧 reviews) is shown with a warning chip and is NOT presented as the silent sole first pick",
+      "must_not": [
+        "present a dated high-lifetime-rating 5-star as the silent sole first pick when no hardware preference was stated",
+        "auto-mark a hotel 'avoid' on the recent-review hardware proxy alone",
+        "fabricate an opening or renovation year",
+        "interrogate the user with a rote modern-vs-heritage question before giving any recommendation"
+      ],
+      "notes": "Pins the no-preference / preference-not-captured default branch — this is the EXACT scenario that triggered v0.15.0 (user asked for a hotel without stating a hardware preference and got a dated 5-star as a confident pick). The safety net is disclose + mild caution, not silence and not avoid.",
+      "rule_refs": [
+        "hotel-selection.md §Hardware Weighting",
+        "hotel-selection.md §Hardware-Freshness Signal",
+        "hotel-selection.md §Recency-Weighted Reviews"
       ]
     }
   }

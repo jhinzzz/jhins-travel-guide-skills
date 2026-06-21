@@ -96,9 +96,9 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Progressive Search | 25 |
 | §Timeout Degradation | 25 |
 | §Hardware vs Service | 26 |
-| §Hardware-Freshness Signal | 15, 26, 27 |
-| §Recency-Weighted Reviews | 26 |
-| §Hardware Weighting | 17, 26, 27 |
+| §Hardware-Freshness Signal | 15, 26, 27, 28 |
+| §Recency-Weighted Reviews | 26, 28 |
+| §Hardware Weighting | 17, 26, 27, 28 |
 
 ### local-specialties.md
 

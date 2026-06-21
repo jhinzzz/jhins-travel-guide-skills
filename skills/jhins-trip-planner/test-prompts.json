@@ -505,7 +505,8 @@
         "nightly rate range (JPY, with source + research date)",
         "budget fit (within / stretch / over)",
         "why this tier (one sentence)",
-        "verdict (first pick / backup / niche / avoid)"
+        "verdict (first pick / backup / niche / avoid)",
+        "hardware / 硬件 (opened or last-renovated year, else recent-review hardware sentiment, else 未能核实)"
       ],
       "must_cross_reference_sources": "≥2 independent sources (e.g., Booking.com + TripAdvisor, or Trip.com + Google Maps)",
       "must_include_check_in_out": "standard times + luggage storage note for early arrival or late departure",
@@ -526,7 +527,8 @@
         "hotel-selection.md §Tiering",
         "hotel-selection.md §Output Card Format",
         "hotel-selection.md §Check-In / Check-Out and Luggage",
-        "hotel-selection.md §Comparison Format"
+        "hotel-selection.md §Comparison Format",
+        "hotel-selection.md §Hardware-Freshness Signal"
       ]
     }
   },
@@ -579,7 +581,8 @@
           "area",
           "nightly rate range",
           "platform rating",
-          "source"
+          "source",
+          "opened/renovated year if the listing shows it"
         ]
       },
       "timeout_degradation_triggers": [
@@ -603,7 +606,8 @@
         "hotel-selection.md §Progressive Search",
         "hotel-selection.md §Timeout Degradation",
         "knowledge-layers.md §3 (tolerated policy for hotels)",
-        "knowledge-layers.md §5 (search advisory card)"
+        "knowledge-layers.md §5 (search advisory card)",
+        "hotel-selection.md §Hardware Weighting"
       ]
     }
   },
@@ -922,6 +926,25 @@
         "hotel-selection.md §Hardware Weighting",
         "intake.md §10",
         "travel-sources.md §Reading OTA Listings for Hardware Condition"
+      ]
+    }
+  }
+  ,{
+    "id": 27,
+    "scenario": "hotel-heritage-ok-no-penalty",
+    "prompt": "去京都住一晚有历史感的老町家（machiya）旅馆，我喜欢有年代感的地方，不在乎设施新不新，预算不限。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_still_disclose_hardware": "hardware-freshness line still shown on the card (disclosure is unconditional)",
+      "must_not_penalize_for_age": "with heritage-OK captured, dated hardware is NOT downranked and does NOT block first pick",
+      "must_not": [
+        "apply the dated-hardware caution chip as a ranking penalty when heritage-OK is set",
+        "auto-mark an old machiya 'avoid' for being old"
+      ],
+      "rule_refs": [
+        "hotel-selection.md §Hardware Weighting",
+        "hotel-selection.md §Hardware-Freshness Signal",
+        "intake.md §10"
       ]
     }
   }

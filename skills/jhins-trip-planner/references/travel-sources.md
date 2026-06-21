@@ -150,6 +150,17 @@ These are illustrative — verify on the platform at research time; adjust for s
 
 When a "High" item is recommended, include a same-category "Mid" backup so the user has a lower-price option.
 
+## Reading OTA Listings for Hardware Condition
+
+OTA listings rarely print a clean "built / renovated" year, but the hardware read is recoverable:
+
+- **Fact-sheet / "About the property"** sometimes carries `Year opened` / `Year renovated` (Booking.com property facts; Ctrip 酒店详情). Use it as the Tier-1 fact.
+- **A "Renovated YYYY" / 新装 / 翻新 tag** in the listing title or highlights is a Tier-1 signal — cite it with the platform + date.
+- **When no year is shown**, filter reviews to **most-recent** and read for hardware language (设施陈旧 / 老旧 / 隔音差 / dated / worn) — this is the Tier-2 proxy in [hotel-selection.md](hotel-selection.md) §Hardware-Freshness Signal.
+- **Photos** that are clearly old (dated furnishings, low-res) alongside a high score are a soft corroborating hint, never the sole basis.
+
+Do not infer a renovation year from the listing's overall vibe — if it is not stated, fall to the Tier-2 proxy or `未能核实`.
+
 ## Operating-Status Detection
 
 Every venue must have its current operating status verified before appearing in the output. Treat these signals as hard disqualifiers, regardless of destination:

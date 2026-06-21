@@ -899,8 +899,8 @@
         "hotel-selection.md §Timeout Degradation"
       ]
     }
-  }
-  ,{
+  },
+  {
     "id": 26,
     "scenario": "hotel-dated-hardware-high-rating",
     "prompt": "下个月去顺德玩2晚，想住五星级酒店，预算每晚600元，有什么推荐？我比较在意房间和装修是不是够新。",
@@ -920,7 +920,8 @@
         "hotel-selection.md §Hardware-Freshness Signal",
         "hotel-selection.md §Recency-Weighted Reviews",
         "hotel-selection.md §Hardware Weighting",
-        "intake.md §10"
+        "intake.md §10",
+        "travel-sources.md §Reading OTA Listings for Hardware Condition"
       ]
     }
   }

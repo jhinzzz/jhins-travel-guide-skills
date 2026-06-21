@@ -19,7 +19,6 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 - Cross-reference at least two independent sources for hotel recommendations (e.g., Booking.com + TripAdvisor, or Ctrip + Google Maps).
 - Cite the source and research date for every price and rating claim (e.g., "Booking.com, checked 2026-04").
 - Do not rely on a single source when the choice is important.
-- If the evidence is weak, label the hotel as avoid or omit it.
 
 ## Hardware vs Service
 
@@ -46,10 +45,14 @@ Aggregate OTA scores are lifetime averages — an aging hotel keeps a high score
 
 ## Tiering
 
-- `mass-market`: practical, broad appeal, reliable value
-- `recommended`: strongest fit for most users
-- `niche`: good but only for a specific use case
-- `avoid`: weak rating, bad location, poor value, or booking friction
+Each tier is an AND-list, not a vibe. A hotel earns a tier only if it meets every condition.
+
+- `recommended`: ≥2 independent sources **AND** rating ≥ the platform floor for its class **AND** transit within the user's stated ceiling **AND** nightly rate within the budget band **AND** no un-caveated dated-hardware caution (§Hardware Weighting).
+- `mass-market`: ≥2 independent sources **AND** rating at/above floor **AND** reasonable transit **AND** within or near budget — solid value, not the top fit.
+- `niche`: meets the evidence + rating bars **AND** fits only a specific use case (heritage character, a particular location need, a special amenity) — name the single reason.
+- `avoid`: rating below floor **OR** verified closure / relocation **OR** a confirmed severe location / value / booking-friction problem. The dated-hardware *proxy alone never lands a hotel here* — it cautions, it does not exclude (§Hardware Weighting).
+
+"Weak evidence" (promote no further than `niche`, or omit): <2 independent sources **OR** rating below the platform floor **OR** a negative last-12-month hardware trend with no offsetting renovation evidence.
 
 ## Check-In / Check-Out and Luggage
 
@@ -118,7 +121,7 @@ Hotel verification uses a two-phase progressive approach to avoid long search ti
 ### Phase 2: Deep Verify (cross-reference, only on user's picks)
 
 - Cross-reference the user's chosen hotel(s) on a second platform.
-- Fill in the full 7-field output card: name+tier · area · transit · rate · budget fit · why · verdict.
+- Fill in the full 8-field output card: name+tier · area · transit · rate · budget fit · why · verdict · hardware.
 - Add check-in/out + luggage info.
 
 This eliminates 80% of wasted verification: only user-selected hotels get full treatment.

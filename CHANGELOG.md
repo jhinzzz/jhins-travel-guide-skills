@@ -8,6 +8,21 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.15.0] — 2026-06-21
+
+### Added
+- Hotel hardware-freshness signal: hard-product vs soft-product split, two-tier read (opening/renovation year → recency-weighted recent-review proxy → 未能核实), and a Hardware field on every card, scout card, and comparison table.
+- Recency-weighted reviews: last-12-month sentiment weighted ≥ lifetime aggregate; a negative hardware delta is surfaced, not averaged away.
+- Intake §10 hardware preference (modern-hardware-preferred / heritage-OK / no-preference) driving §Hardware Weighting: disclose always, weight conditionally, proxy never forces `avoid`.
+- knowledge-layers §3 carve-out: a recognized hotel brand does not get the landmark Reasoning-Layer pass for hardware/recency.
+- travel-sources §Reading OTA Listings for Hardware Condition.
+
+### Changed
+- Hotel tier definitions rewritten as explicit AND-lists (incl. recency); "weak evidence" defined.
+- Split independent-vs-guided out of weather-and-output.md into travel-mode.md (single responsibility).
+- De-duplicated operating-status detection and the ≥2-source rule to single canonical homes.
+- Trimmed SKILL.md restated web-verification body to a pointer.
+
 ## [0.14.0] — 2026-06-03
 
 ### Added

@@ -36,6 +36,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §3, §4 | 11 |
 | §6, §7 | 22 |
 | §8 | 9 |
+| §10 | 26, 27 |
 
 ### trip-prep.md
 
@@ -94,6 +95,10 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Comparison Format | 15 |
 | §Progressive Search | 25 |
 | §Timeout Degradation | 25 |
+| §Hardware vs Service | 26 |
+| §Hardware-Freshness Signal | 15, 26, 27, 28 |
+| §Recency-Weighted Reviews | 26, 28 |
+| §Hardware Weighting | 17, 26, 27, 28 |
 
 ### local-specialties.md
 
@@ -134,6 +139,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Per-Person Price Tiers | 7 |
 | §Source Selection Rules | 23 |
 | §Login-Wall Fallback (Search Aggregators) | 19, 20, 25 |
+| §Reading OTA Listings for Hardware Condition | 26 |
 
 ### deep/dining-rules.md
 

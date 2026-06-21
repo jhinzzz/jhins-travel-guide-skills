@@ -16,17 +16,54 @@ Recommend hotels that are actually usable for the trip, not just popular on pape
 ## Evidence Standard
 
 - Prefer hotels that appear repeatedly in mainstream travel guides or have strong ratings on major OTAs. See [travel-sources.md](travel-sources.md) for the canonical source list and which platforms to use for hotel research.
-- Cross-reference at least two independent sources for hotel recommendations (e.g., Booking.com + TripAdvisor, or Ctrip + Google Maps).
+- Cross-reference ≥2 independent sources per [travel-sources.md](travel-sources.md) §Evidence Principle (e.g., Booking.com + TripAdvisor, or Ctrip + Google Maps).
 - Cite the source and research date for every price and rating claim (e.g., "Booking.com, checked 2026-04").
 - Do not rely on a single source when the choice is important.
-- If the evidence is weak, label the hotel as avoid or omit it.
+
+## Hardware vs Service
+
+A hotel has two products, and they are rated independently. A high blended score hides mismatches — a real five-star with attentive service but rooms last renovated fifteen years ago is the canonical "great service, tired rooms" trap.
+
+- **Hard product**: room condition, bed, bathroom, AC / heating, soundproofing, décor, building age / last renovation.
+- **Soft product**: service, F&B, loyalty program, location, amenities.
+
+Evaluate and report both. Never let a strong soft product paper over a weak hard product — surface the split and let the user decide.
+
+## Hardware-Freshness Signal
+
+Star class and brand say nothing about how fresh the rooms are. Establish a hardware-freshness read for every hotel, hard fact first:
+
+- **Tier 1 — dated fact (use when obtainable):** opening year and/or last major renovation year, cited (hotel "About" / press page, a renovation announcement, or an OTA fact-sheet field). State it, e.g. `开业2009 · 翻新2021 (Booking.com, 2026-06)`.
+- **Tier 2 — recent-review proxy (the common case, year not published):** read the **last ~12 months** of reviews for hardware complaints — 设施陈旧 / 老旧 / 装修旧 / 隔音差 / 霉味 / dated / worn / tired / "needs refurb". Flag the hotel when recent reviews cluster on dated hardware **even though the lifetime score is high**.
+- **Neither obtainable:** state `硬件新旧未能核实 / hardware age unverified`. Never invent a year or a sentiment.
+
+Caution threshold: a hotel whose last opening / renovation is **more than 10 years** before the travel date, with no offsetting renovation evidence, carries the dated-hardware caution (see §Hardware Weighting).
+
+## Recency-Weighted Reviews
+
+Aggregate OTA scores are lifetime averages — an aging hotel keeps a high score earned in its fresh years while recent guests drift down. Weight the **last-12-month** reviews at least as heavily as the lifetime aggregate. A **negative delta** between recent hardware sentiment and the lifetime score **is the signal** — surface it; do not let the average bury it. (This is the only review-recency rule; the 3-month flag in [travel-sources.md](travel-sources.md) is for research-data staleness, not review weighting.)
 
 ## Tiering
 
-- `mass-market`: practical, broad appeal, reliable value
-- `recommended`: strongest fit for most users
-- `niche`: good but only for a specific use case
-- `avoid`: weak rating, bad location, poor value, or booking friction
+Each tier is an AND-list, not a vibe. A hotel earns a tier only if it meets every condition.
+
+- `recommended`: ≥2 independent sources **AND** rating ≥ the platform floor for its class **AND** transit within the user's stated ceiling **AND** nightly rate within the budget band **AND** no un-caveated dated-hardware caution (§Hardware Weighting).
+- `mass-market`: ≥2 independent sources **AND** rating at/above floor **AND** reasonable transit **AND** within or near budget — solid value, not the top fit.
+- `niche`: meets the evidence + rating bars **AND** fits only a specific use case (heritage character, a particular location need, a special amenity) — name the single reason.
+- `avoid`: rating below floor **OR** verified closure / relocation **OR** a confirmed severe location / value / booking-friction problem. The dated-hardware *proxy alone never lands a hotel here* — it cautions, it does not exclude (§Hardware Weighting).
+
+"Weak evidence" (promote no further than `niche`, or omit): <2 independent sources **OR** rating below the platform floor **OR** a negative last-12-month hardware trend with no offsetting renovation evidence.
+
+## Hardware Weighting
+
+Disclosure is unconditional; weighting adapts to the traveler.
+
+- **Always disclose:** the Hardware field (§Output Card Format) appears on **every** card and scout card, regardless of stated preference. This is the safety net — it protects the traveler even when no preference was captured.
+- **Weight by intake preference** ([intake.md](intake.md) §10):
+  - `modern-hardware-preferred` → a dated-hardware caution (negative recent-hardware trend, or >10-year unrenovated per §Hardware-Freshness Signal) **blocks the silent top `first pick` / `recommended` slot**: the hotel drops one tier and carries a visible warning chip.
+  - `heritage-OK` → dated hardware is **disclosed but not penalized** in ranking.
+  - `no-preference`, **or the preference was not captured** → **disclose + mild caution**: show the warning chip and do not let the hotel be the silent sole `first pick`; do **not** auto-downrank to `avoid`.
+- **The proxy never forces `avoid`.** Being blindsided by dated hardware is the documented harm; over-penalizing a heritage hotel a traveler would have loved is also a harm. Caution, not exclusion.
 
 ## Check-In / Check-Out and Luggage
 
@@ -58,6 +95,7 @@ For each hotel, present these fields in a compact card or table row:
 5. **Budget fit**: within / stretch / over budget
 6. **Why this tier**: one sentence on the key strength or weakness
 7. **Verdict**: `first pick`, `backup`, `niche`, or `avoid`
+8. **Hardware / 硬件**: opened or last-renovated year if known (Tier 1), else recent-review hardware sentiment (Tier 2), else `未能核实` — per §Hardware-Freshness Signal. Show a dated-hardware caution chip when §Hardware Weighting triggers it.
 
 Keep cards compact. Use tables or chip-style labels, not paragraphs.
 
@@ -65,10 +103,10 @@ Keep cards compact. Use tables or chip-style labels, not paragraphs.
 
 When presenting multiple options across budget tiers, use a comparison table:
 
-| Hotel | Tier | Area | Nightly Rate | Transit | Verdict |
-|---|---|---|---|---|---|
-| (name) | recommended | (area) | ¥X–¥Y | (minutes to hub) | first pick |
-| (name) | mass-market | (area) | ¥X–¥Y | (minutes to hub) | backup |
+| Hotel | Tier | Area | Nightly Rate | Transit | Hardware | Verdict |
+|---|---|---|---|---|---|---|
+| (name) | recommended | (area) | ¥X–¥Y | (minutes to hub) | reno. 2021 | first pick |
+| (name) | mass-market | (area) | ¥X–¥Y | (minutes to hub) | dated · 近评设施旧 | backup |
 
 Put the recommended first pick at the top of each budget group.
 
@@ -86,7 +124,7 @@ Hotel verification uses a two-phase progressive approach to avoid long search ti
 
 - Pick the best platform for the destination per [travel-sources.md](travel-sources.md) (e.g., Ctrip for China domestic, Booking.com for international).
 - Search for 3-5 candidates matching the user's constraints (area, budget, party).
-- Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · source.
+- Present **scout cards** (reduced fields): name · area · nightly rate range · platform rating · opened/renovated year if the listing shows it · source. A dated building should be visible **here**, at first-pass filtering — not discovered only after the user spends a deep-verify pick on it.
 - **Climb the channel ladder before declaring price unreachable.** A blank Booking / price-hidden Ctrip from a *static* fetch is usually a JS-render or headless-fingerprint block, **not** a login wall — climb [travel-sources.md](travel-sources.md) §Login-Wall Fallback: a JS-rendering rung, then (for OTAs that silently degrade on a headless fingerprint) a fingerprint-resistant render rung, recovers OTA listings + nightly prices with no credentials. Only after the available render rungs fail does price count as genuinely unreachable.
 - **Partial-scout fallback (price still unreachable after the ladder):** nightly rate is the field platforms most often withhold from a static fetch. A scout that has name + area + rating but **no verifiable price** is still useful — present it with the rate field marked `价格需登录查询 / price requires login — verify on booking` rather than dropping the candidate or inventing a number. Do **not** backfill a price from a single stale or wrong-currency aggregator snippet. A scout missing *only* price is not a verification failure; only escalate to the Timeout Degradation advisory card when name **and** rating are also unobtainable.
 - Ask user to pick 1-2 hotels for deep verification.
@@ -94,7 +132,7 @@ Hotel verification uses a two-phase progressive approach to avoid long search ti
 ### Phase 2: Deep Verify (cross-reference, only on user's picks)
 
 - Cross-reference the user's chosen hotel(s) on a second platform.
-- Fill in the full 7-field output card: name+tier · area · transit · rate · budget fit · why · verdict.
+- Fill in the full 8-field output card: name+tier · area · transit · rate · budget fit · why · verdict · hardware.
 - Add check-in/out + luggage info.
 
 This eliminates 80% of wasted verification: only user-selected hotels get full treatment.

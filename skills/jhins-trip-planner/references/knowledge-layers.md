@@ -33,6 +33,8 @@ Two policies govern what happens when web search evidence is unavailable:
 
 The strict policy for restaurants preserves [dining-rules.md](dining-rules.md) §2 absolute ban. The strict policy for ticket prices reflects that prices change frequently and training data is unreliable.
 
+**Hotel brand-recognition carve-out:** a hotel brand recognized from training data (Sheraton, Hilton, Marriott, etc.) does **not** qualify for the "well-known landmark → Reasoning Layer" exception **for hardware condition or renovation recency**. Brand recognition is evidence the chain exists — not evidence the rooms are fresh. Hardware / recency claims require live verification per [hotel-selection.md](hotel-selection.md) §Hardware-Freshness Signal.
+
 ## 4. Destination Matching Framework
 
 For "推荐个地方" / "有什么建议" flows, use **objective dimensions only**:

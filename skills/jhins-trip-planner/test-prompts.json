@@ -505,7 +505,8 @@
         "nightly rate range (JPY, with source + research date)",
         "budget fit (within / stretch / over)",
         "why this tier (one sentence)",
-        "verdict (first pick / backup / niche / avoid)"
+        "verdict (first pick / backup / niche / avoid)",
+        "hardware / 硬件 (opened or last-renovated year, else recent-review hardware sentiment, else 未能核实)"
       ],
       "must_cross_reference_sources": "≥2 independent sources (e.g., Booking.com + TripAdvisor, or Trip.com + Google Maps)",
       "must_include_check_in_out": "standard times + luggage storage note for early arrival or late departure",
@@ -526,7 +527,8 @@
         "hotel-selection.md §Tiering",
         "hotel-selection.md §Output Card Format",
         "hotel-selection.md §Check-In / Check-Out and Luggage",
-        "hotel-selection.md §Comparison Format"
+        "hotel-selection.md §Comparison Format",
+        "hotel-selection.md §Hardware-Freshness Signal"
       ]
     }
   },
@@ -579,7 +581,8 @@
           "area",
           "nightly rate range",
           "platform rating",
-          "source"
+          "source",
+          "opened/renovated year if the listing shows it"
         ]
       },
       "timeout_degradation_triggers": [
@@ -603,7 +606,8 @@
         "hotel-selection.md §Progressive Search",
         "hotel-selection.md §Timeout Degradation",
         "knowledge-layers.md §3 (tolerated policy for hotels)",
-        "knowledge-layers.md §5 (search advisory card)"
+        "knowledge-layers.md §5 (search advisory card)",
+        "hotel-selection.md §Hardware Weighting"
       ]
     }
   },
@@ -897,6 +901,74 @@
         "deep/dining-rules.md §2",
         "hotel-selection.md §Progressive Search",
         "hotel-selection.md §Timeout Degradation"
+      ]
+    }
+  },
+  {
+    "id": 26,
+    "scenario": "hotel-dated-hardware-high-rating",
+    "prompt": "下个月去顺德玩2晚，想住五星级酒店，预算每晚600元，有什么推荐？我比较在意房间和装修是不是够新。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_capture_hardware_preference": "intake asks modern-hardware-preferred / heritage-OK / no-preference before ranking hotels (user already signalled modern)",
+      "must_surface_hardware_signal_per_hotel": "every hotel card carries a hardware-freshness read: Tier-1 opened/renovated year if known, else Tier-2 recent-review hardware sentiment, else 未能核实",
+      "must_recency_weight_reviews": "a hotel with a high lifetime score but a negative last-12-month hardware trend is flagged, not promoted on the aggregate",
+      "must_have_hardware_card_field": "each hotel card and the comparison table expose the Hardware field; the scout card includes opened/renovated year when the listing shows it",
+      "must_not": [
+        "promote a hotel to silent first pick on star-class + lifetime rating alone",
+        "invent an opening or renovation year",
+        "auto-mark a hotel 'avoid' on the recent-review hardware proxy alone"
+      ],
+      "notes": "Pins the modern-hardware-preferred branch — the prompt appends '我比较在意房间和装修是不是够新', an explicit modern signal. The no-preference default branch is covered by case 28.",
+      "rule_refs": [
+        "hotel-selection.md §Hardware vs Service",
+        "hotel-selection.md §Hardware-Freshness Signal",
+        "hotel-selection.md §Recency-Weighted Reviews",
+        "hotel-selection.md §Hardware Weighting",
+        "intake.md §10",
+        "travel-sources.md §Reading OTA Listings for Hardware Condition"
+      ]
+    }
+  }
+  ,{
+    "id": 27,
+    "scenario": "hotel-heritage-ok-no-penalty",
+    "prompt": "去京都住一晚有历史感的老町家（machiya）旅馆，我喜欢有年代感的地方，不在乎设施新不新，预算不限。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_still_disclose_hardware": "hardware-freshness line still shown on the card (disclosure is unconditional)",
+      "must_not_penalize_for_age": "with heritage-OK captured, dated hardware is NOT downranked and does NOT block first pick",
+      "must_not": [
+        "apply the dated-hardware caution chip as a ranking penalty when heritage-OK is set",
+        "auto-mark an old machiya 'avoid' for being old"
+      ],
+      "notes": "Pins the heritage-OK branch — user explicitly does not care about hardware freshness ('不在乎设施新不新'). Dated hardware must be disclosed but not penalized.",
+      "rule_refs": [
+        "hotel-selection.md §Hardware Weighting",
+        "hotel-selection.md §Hardware-Freshness Signal",
+        "intake.md §10"
+      ]
+    }
+  }
+  ,{
+    "id": 28,
+    "scenario": "hotel-no-preference-default-protects-user",
+    "prompt": "下个月去顺德玩2晚，预算每晚600元，帮我推荐一家五星级酒店。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_surface_hardware_signal_per_hotel": "even though the user stated NO hardware preference, every hotel card still carries the hardware-freshness read (Tier-1 year / Tier-2 recent-review proxy / 未能核实) — disclosure is unconditional",
+      "must_apply_mild_caution_when_preference_absent": "with no hardware preference captured, a dated high-rated 5-star (e.g. a 2009-built one with recent 设施陈旧 reviews) is shown with a warning chip and is NOT presented as the silent sole first pick",
+      "must_not": [
+        "present a dated high-lifetime-rating 5-star as the silent sole first pick when no hardware preference was stated",
+        "auto-mark a hotel 'avoid' on the recent-review hardware proxy alone",
+        "fabricate an opening or renovation year",
+        "interrogate the user with a rote modern-vs-heritage question before giving any recommendation"
+      ],
+      "notes": "Pins the no-preference / preference-not-captured default branch — this is the EXACT scenario that triggered v0.15.0 (user asked for a hotel without stating a hardware preference and got a dated 5-star as a confident pick). The safety net is disclose + mild caution, not silence and not avoid.",
+      "rule_refs": [
+        "hotel-selection.md §Hardware Weighting",
+        "hotel-selection.md §Hardware-Freshness Signal",
+        "hotel-selection.md §Recency-Weighted Reviews"
       ]
     }
   }

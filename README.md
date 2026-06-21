@@ -16,8 +16,6 @@ End-to-end trip-planning plugin and custom marketplace repository for Claude Cod
 
 This repository now has a plugin-first layout. The Claude plugin lives at the repository root, and the actual skill payload is under [`./skills/jhins-trip-planner/`](./skills/jhins-trip-planner/).
 
-The install and marketplace notes below were checked on 2026-04-19 against the current Codex and Claude Code documentation.
-
 ## Repository layout
 
 - [`.claude-plugin/plugin.json`](./.claude-plugin/plugin.json): Claude plugin manifest
@@ -26,7 +24,8 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/jhins-trip-planner/SKILL.md`](./skills/jhins-trip-planner/SKILL.md): main skill file
 - [`skills/jhins-trip-planner/references/intake.md`](./skills/jhins-trip-planner/references/intake.md): trip-brief intake — required inputs, question order, minimum-viable-brief threshold, theme/pace/medication/accessibility/child/self-drive/food captures
 - [`skills/jhins-trip-planner/references/trip-prep.md`](./skills/jhins-trip-planner/references/trip-prep.md): pre-trip prep — visa + transit visa, payment/currency, SIM, insurance, local etiquette, religious/festival overlap, multi-country parallel verification
-- [`skills/jhins-trip-planner/references/weather-and-output.md`](./skills/jhins-trip-planner/references/weather-and-output.md): weather-aware planning (incl. climate-shift risk), output-format selection, and the independent-vs-guided travel decision
+- [`skills/jhins-trip-planner/references/weather-and-output.md`](./skills/jhins-trip-planner/references/weather-and-output.md): weather-aware planning (incl. climate-shift risk) and output-format selection
+- [`skills/jhins-trip-planner/references/travel-mode.md`](./skills/jhins-trip-planner/references/travel-mode.md): independent travel vs guided tours — when to suggest a private-guide / hybrid insert, licensed-operator vetting
 - [`skills/jhins-trip-planner/references/hotel-selection.md`](./skills/jhins-trip-planner/references/hotel-selection.md): hotel evidence, tiering, progressive search, timeout degradation, and output rules
 - [`skills/jhins-trip-planner/references/transportation.md`](./skills/jhins-trip-planner/references/transportation.md): round-trip transport booking, timing, pricing, transfer planning, and arrival time rules
 - [`skills/jhins-trip-planner/references/local-specialties.md`](./skills/jhins-trip-planner/references/local-specialties.md): local souvenir and specialty recommendation rules (selection criteria, tiering, customs/transport constraints)
@@ -36,7 +35,7 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md): safety and emergency rules — destination-specific emergency numbers, medical access, consular support, insurance claim path, theft / loss response, and destination-specific risk notes
 - [`skills/jhins-trip-planner/references/budget.md`](./skills/jhins-trip-planner/references/budget.md): budget rules — category split by region band, hidden costs, refundable-vs-non decision triggers, FX / payment timing
 - [`skills/jhins-trip-planner/references/deep/`](./skills/jhins-trip-planner/references/deep/): opt-in deep references (extended tables + examples for `budget` / `dining-rules` / `intake` / `safety-and-emergency` / `trip-prep`). LLM reads only when a main reference's pointer crosses a depth trigger.
-- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md): reverse index — which test-prompts.json case covers which rule heading
+- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md): reverse index — which test-prompts.json case covers which rule heading _(metadata: reverse test-coverage index, not a rule reference)_
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh): validates every `rule_refs` anchor in `test-prompts.json` resolves to a real heading
 - [`scripts/check-version.sh`](./scripts/check-version.sh): `VERSION` must match `SKILL.md` / `plugin.json` / `marketplace.json`
 - [`scripts/check-size.sh`](./scripts/check-size.sh): `SKILL.md` and reference files must stay under the rule-fatigue thresholds
@@ -63,41 +62,7 @@ claude plugin install jhins-trip-planner@jhins-travel-guide-skills
 
 After installation, the skill is available through the plugin.
 
-## Claude Code: local plugin testing
-
-Before publishing or updating marketplace users, test locally with Claude Code's documented plugin workflow:
-
-```bash
-claude --plugin-dir .
-```
-
-Then inside Claude Code:
-
-```text
-/reload-plugins
-/jhins-trip-planner:jhins-trip-planner
-```
-
-If you do not have the `claude` CLI installed locally, you can still review the plugin files and publish from GitHub, but you should test on a machine that has Claude Code available before asking users to install updates.
-
-## Claude Code: publish to the official marketplace
-
-This repository is ready for custom marketplace installation now. It is not automatically in Anthropic's official marketplace.
-
-To make it installable from the official marketplace:
-
-1. Keep `.claude-plugin/plugin.json` updated.
-2. Bump the plugin version before each release.
-3. Submit the plugin through Anthropic's official submission flow:
-   - `claude.ai/settings/plugins/submit`
-   - `platform.claude.com/plugins/submit`
-4. After approval, users can install it from the official marketplace with:
-
-```text
-/plugin install jhins-trip-planner@claude-plugins-official
-```
-
-Until that approval happens, the working install path is your custom marketplace command shown above.
+> Maintainers: local plugin testing, official-marketplace submission, and the per-release checklist live in [RELEASING.md](./RELEASING.md).
 
 ## Codex: install with the built-in skill installer
 
@@ -111,7 +76,7 @@ Prompt pattern inside Codex:
 Use $skill-installer to install the skill from jhinzzz/jhins-travel-guide-skills, path skills/jhins-trip-planner
 ```
 
-I did not find a separately documented package-manager-style shell command such as `codex skill install ...`. The documented path is to invoke `$skill-installer` from within Codex.
+There is no separately documented package-manager-style shell command such as `codex skill install ...`. The documented path is to invoke `$skill-installer` from within Codex.
 
 ## Codex: manual install fallback
 
@@ -153,15 +118,6 @@ Expected outputs:
 - Redesign/page-build requests: both markdown and HTML deliverables
 - Standalone page requests: a single HTML file
 - Maintainable project requests: split HTML, CSS, and JS when appropriate
-
-## Release checklist
-
-Before publishing an update:
-
-1. Bump `VERSION`, then run [`scripts/check-all.sh`](./scripts/check-all.sh) — this runs `check-links.sh` / `check-provenance.sh` / `check-version.sh` / `check-size.sh` and fails if any of them flag a regression (stale anchors, version drift, rule-fatigue bloat, broken cross-file references).
-2. Verify [`agents/openai.yaml`](./agents/openai.yaml) still matches the current skill behavior.
-3. Add a [`CHANGELOG.md`](./CHANGELOG.md) + [`CHANGELOG_EN.md`](./CHANGELOG_EN.md) entry for the new version (what changed, why).
-4. Test in Claude Code locally if possible.
 
 ## Changelog
 

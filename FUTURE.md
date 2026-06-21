@@ -139,6 +139,14 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 - A dry-run or real session shows the **render rungs themselves failing to verify** restaurants/hotels the user actually wants (a true login wall that survives a fingerprint-resistant render — not the anti-fingerprint blocks v0.14.0 already defeats).
 - The cookie/auth mechanism is already set up for another reason, making the marginal cost of wiring it into the skill small.
 
+### 9. Backfill test coverage for uncovered reference sections
+
+**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), and the new `travel-mode.md` §§1–3. The v0.15.0 audit flagged these as having no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
+
+**Why not now**: these are pre-existing gaps, out of scope of the v0.15.0 hotel-hardware change; adding cases for rules this change did not touch would be scope creep.
+
+**Worth doing when**: the next time any of these sections is edited (touch-it-test-it), or when a real dry-run surfaces a regression in one of them.
+
 ---
 
 ## Recording principle

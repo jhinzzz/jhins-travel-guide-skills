@@ -125,7 +125,7 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 - **Conflicting constraints** (luxury-on-tight-budget, 10-attractions-in-2-days) → surface conflict; offer 2–3 prioritization choices; do not silently compromise.
 - **Thin specialty data** → category guidance + "verify locally"; no specific shops without source per [local-specialties.md](references/local-specialties.md). Output search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5 when verification unavailable.
 - **Contradictory existing content** → preserve source facts; flag; don't resolve by invention.
-- **Web verification stalls** → retry via a different source in [travel-sources.md](references/travel-sources.md); a login wall / 302 / blank on one platform is **not** a failure — retry via a search aggregator (≥2 channels) per [knowledge-layers.md](references/knowledge-layers.md) §6 exhaustion gate **before** degrading to a search advisory card; repeated mismatches on the same ID = closed/relocated; never "please verify yourself".
+- **Web verification stalls** → a login wall / 302 / blank on one platform is **not** a failure. Climb the channel ladder and apply the exhaustion gate ([knowledge-layers.md](references/knowledge-layers.md) §6) before degrading to a search advisory card.
 - **Batch verification** — parallel sub-agents when the batch crosses:
   - Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10
   - Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification
@@ -169,7 +169,7 @@ Verify each area against its canonical checklist — do not re-check rules in re
 - **Trip prep**: international trips pass [trip-prep.md](references/trip-prep.md) (visa + transit · payment · SIM · insurance · etiquette · religious-festival overlap) + accessibility carry-forward from [intake.md](references/intake.md) §6.
 - **Weather**: assumptions visible and practical per [weather-and-output.md](references/weather-and-output.md) §1; climate-shift disclaimer present when using historicals.
 - **Fallback labels**: visible where evidence or inputs were incomplete.
-- **Hotels**: pass [hotel-selection.md](references/hotel-selection.md) card checklist (incl. check-in/out + luggage).
+- **Hotels**: pass [hotel-selection.md](references/hotel-selection.md) card checklist (incl. check-in/out + luggage + the **Hardware** line — Tier-1 year / Tier-2 recent-review proxy / 未能核实 — and hardware weighting per the intake preference).
 - **Transport**: both legs present; each card passes the 9-field checklist in [transportation.md](references/transportation.md); arrival/departure correctly anchored.
 - **Budget**: category split cites a region band per [budget.md](references/budget.md) §1 (theme adjustment stated if applied); hidden costs from §2 surfaced where triggered; refundable-vs-non decisions stated per §3 when the party mix triggers it; FX assumption + rate date stated for cross-currency trips per §4; >15% overage triggered the checkpoint.
 - **Local context**: booking lead times stated; buffer times follow the tier above; off-peak suggestions cited or omitted.

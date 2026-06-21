@@ -37,7 +37,7 @@
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md)：安全与应急规则 — 目的地紧急号码、医疗就近、领事支持、保险理赔路径、失窃/丢失响应、目的地特定风险
 - [`skills/jhins-trip-planner/references/budget.md`](./skills/jhins-trip-planner/references/budget.md)：预算规则 — 按区域 band 分类目占比、隐性成本、refundable 取舍触发、汇率与支付时机
 - [`skills/jhins-trip-planner/references/deep/`](./skills/jhins-trip-planner/references/deep/)：opt-in 深度 reference（`budget` / `dining-rules` / `intake` / `safety-and-emergency` / `trip-prep` 的表格 + 示例扩展）。LLM 只在主 reference 的 pointer 命中 depth trigger 时才读。
-- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md)：反向索引 — 每条规则 heading 被 test-prompts.json 的哪些 case 覆盖
+- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md)：反向索引 — 每条规则 heading 被 test-prompts.json 的哪些 case 覆盖（元数据：测试覆盖反向索引，非规则参考）
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh)：校验 `test-prompts.json` 里每个 `rule_refs` 锚点指向的 heading 真实存在
 - [`scripts/check-version.sh`](./scripts/check-version.sh)：`VERSION` 必须和 `SKILL.md` / `plugin.json` / `marketplace.json` 对齐
 - [`scripts/check-size.sh`](./scripts/check-size.sh)：`SKILL.md` 和 reference 文件必须落在规则疲劳阈值之下

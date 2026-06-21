@@ -37,7 +37,7 @@ The install and marketplace notes below were checked on 2026-04-19 against the c
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md): safety and emergency rules — destination-specific emergency numbers, medical access, consular support, insurance claim path, theft / loss response, and destination-specific risk notes
 - [`skills/jhins-trip-planner/references/budget.md`](./skills/jhins-trip-planner/references/budget.md): budget rules — category split by region band, hidden costs, refundable-vs-non decision triggers, FX / payment timing
 - [`skills/jhins-trip-planner/references/deep/`](./skills/jhins-trip-planner/references/deep/): opt-in deep references (extended tables + examples for `budget` / `dining-rules` / `intake` / `safety-and-emergency` / `trip-prep`). LLM reads only when a main reference's pointer crosses a depth trigger.
-- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md): reverse index — which test-prompts.json case covers which rule heading
+- [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md): reverse index — which test-prompts.json case covers which rule heading _(metadata: reverse test-coverage index, not a rule reference)_
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh): validates every `rule_refs` anchor in `test-prompts.json` resolves to a real heading
 - [`scripts/check-version.sh`](./scripts/check-version.sh): `VERSION` must match `SKILL.md` / `plugin.json` / `marketplace.json`
 - [`scripts/check-size.sh`](./scripts/check-size.sh): `SKILL.md` and reference files must stay under the rule-fatigue thresholds

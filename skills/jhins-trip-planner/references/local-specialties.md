@@ -28,10 +28,22 @@ Recommend items that meet **all three** conditions:
 
 ### Tiering
 
-- `signature`: iconic specialty with strong consensus — most travelers should consider it.
-- `recommended`: well-regarded local item, good gift or personal purchase.
-- `niche`: appeals to specific interests (tea enthusiasts, craft collectors, foodies).
-- `skip`: overpriced tourist trap, poor quality-to-price ratio, or widely available elsewhere.
+Each tier is an AND-list, not a vibe (same discipline as [hotel-selection.md](hotel-selection.md) §Tiering). An item earns a tier only if it meets every condition.
+
+- `signature`: strong local identity **AND** ≥2 reputable-source consensus **AND** reasonably transportable home — the item a traveler would regret not bringing back. Mirrors the dining "destination signature" idea ([dining-rules.md](dining-rules.md) §12): the edible signatures of a place often have a take-home form (a 章鱼烧 snack pack, a ramen gift box, a regional tea) — surface that bridge when it exists.
+- `recommended`: local identity **AND** ≥1 source **AND** transportable — a good gift or personal purchase, not quite the must-bring.
+- `niche`: local identity **AND** ≥1 source **AND** appeals only to a specific interest (tea enthusiasts, craft collectors, foodies) — name the single interest.
+- `skip`: no real local identity **OR** overpriced tourist trap **OR** poor quality-to-price **OR** widely available elsewhere.
+
+"Weak evidence" (promote no further than `niche`, or omit): <2 sources for a "must-buy" claim, or no verifiable shop/price.
+
+### Seasonal Availability
+
+Some signatures are only sold in season — and a traveler who plans around them and arrives off-season is let down.
+
+- Flag season-bound items against the **trip date**: fresh seasonal produce (matcha-new-tea spring, regional fruit windows), festival-only or holiday-limited editions, harvest-timed goods (new-crop rice, first-flush tea, seasonal sake).
+- If a signature item is out of season for the trip date, say so and offer the year-round form if one exists (e.g. fresh seasonal sweet → its shelf-stable version), rather than recommending something unbuyable.
+- Do not present a season-limited item as always-available — state the window with a source.
 
 ## Customs and Transport Constraints
 
@@ -105,3 +117,4 @@ When web search is unavailable or verification fails for specific shop names, br
 - Do not recommend customs-restricted items without a clear warning.
 - Do not pad the list with generic items that have no local identity.
 - Do not prioritize expensive items — value-for-money matters.
+- Do not present a season-limited specialty as always-available — flag the window against the trip date per §Seasonal Availability.

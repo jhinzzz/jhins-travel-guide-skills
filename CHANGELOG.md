@@ -8,6 +8,18 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.18.0] — 2026-06-26
+
+### Added
+- **dining-rules.md §12 Destination Signature Priority** — 先问「这地方最该吃什么」：目的地招牌品类（大阪粉物、博多拉面、圣塞 pintxos）优先占位，再谈多样性。招牌可重复（大阪两餐粉物是对的，不算违规）；时段绑定的招牌（筑地朝食、深夜拉面）按真实时段排。修正了「多样性把人推离该吃的东西」这一审视发现的偏差。
+- **local-specialties.md §Seasonal Availability** — 季节限定特产按行程日期核查（春茶、节庆限定、应季物产）；过季则给常售替代形态，不推不可买的东西。Scope 早提了 seasonal items，规则此前缺失。
+- **test-prompts.json case 31 + 32** — case 31 dining 招牌优先压过多样性（大阪「最有名最地道」应允许粉物重复）；case 32 specialty AND-list tiering + 季节限定 + 招牌连接（京都 3 月手信）。
+
+### Changed
+- **dining-rules.md §1** — 多样性从「硬规则」降为「招牌满足后的默认」：先按 §12 放招牌，其余 slot 才避免重复；多样性永不阻止招牌。Non-Goals 同步澄清。
+- **local-specialties.md §Tiering** — 改写为 AND-list（对标 hotel/dining 的严谨度）：`signature` = 强本地身份 AND ≥2 源 AND 可携带；加「弱证据」上限；连接 dining §12（吃的招牌常有带得走的形态）。
+- **provenance.md** — dining §1→加 31、新增 §12→31；specialties 新增 §Tiering→32、§Seasonal Availability→32。
+
 ## [0.17.0] — 2026-06-26
 
 ### Added

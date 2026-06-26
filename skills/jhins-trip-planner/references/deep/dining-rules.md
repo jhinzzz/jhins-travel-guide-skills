@@ -12,7 +12,8 @@ Build a matrix keyed by `day × meal` tagged with cuisine category. Use the natu
 - US: steakhouse, BBQ, seafood, brunch, diner, New American…
 
 Rules:
-- A given category appears at most once across the full trip unless the user explicitly asks for repetition ("ramen every day").
+- **Signatures first** (per [dining-rules.md](../dining-rules.md) §12): place the destination's signature categories before applying diversity. A repeated signature category is **not** a matrix violation (two 粉物 meals in Osaka is correct). The no-repeat rule below governs only the *remaining* slots after signatures are placed.
+- After signatures are placed, a given category appears at most once across the rest of the trip unless the user explicitly asks for repetition ("ramen every day").
 - Backup picks count against the matrix — a backup cannot share a category with any main line.
 - Check the matrix before drafting each meal, not after.
 - On swap, re-check the whole matrix — replacing one meal can free or re-occupy categories.

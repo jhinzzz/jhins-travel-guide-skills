@@ -204,7 +204,8 @@
       ],
       "rule_refs": [
         "dining-rules.md §§1-10"
-      ]
+      ],
+      "notes": "no_repeats holds here because no single category dominates this destination's dining; §12 signature-priority would not require repetition for this trip. The no-repeat rule governs only the slots remaining after any signatures are placed."
     }
   },
   {
@@ -248,7 +249,8 @@
       "rule_refs": [
         "dining-rules.md §§1-10",
         "travel-sources.md §Per-Person Price Tiers"
-      ]
+      ],
+      "notes": "no_repeats holds here because no single category dominates this destination's dining; §12 signature-priority would not require repetition for this trip. The no-repeat rule governs only the slots remaining after any signatures are placed."
     }
   },
   {
@@ -1017,6 +1019,51 @@
         "attractions.md §2",
         "attractions.md §3",
         "intake.md §4"
+      ]
+    }
+  },
+  {
+    "id": 31,
+    "scenario": "dining-signature-priority-over-diversity",
+    "prompt": "大阪玩2天，我就想吃当地最有名最地道的，帮我安排每天的午餐和晚餐。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_place_destination_signature_first": "Osaka's signature 粉物 (takoyaki / okonomiyaki) and other local icons (kushikatsu, etc.) must be placed before optimizing for variety — the plan leads with what Osaka is famous for",
+      "must_allow_signature_repetition": "a signature category may appear more than once (e.g. two 粉物 meals across 2 days is correct here, not a diversity violation) — the §1 matrix must not block it",
+      "must_verify_famous_claim": "'famous for X' is verified per §2 / travel-sources, not asserted from training data; every restaurant still passes operating-status verification",
+      "must_not": [
+        "skip Osaka's signature dishes in order to show a diverse cuisine matrix",
+        "flag a repeated signature category as a §1 diversity violation",
+        "assert 'most famous' from training data without source",
+        "output a restaurant that fails operating-status verification"
+      ],
+      "notes": "Pins dining §12 (destination signature priority) and the §1 carve-out that signatures override diversity. The user explicitly wants 'most famous + authentic', so signatures clearly win; diversity applies only to remaining slots.",
+      "rule_refs": [
+        "dining-rules.md §12",
+        "dining-rules.md §1"
+      ]
+    }
+  },
+  {
+    "id": 32,
+    "scenario": "specialty-seasonal-and-signature-bridge",
+    "prompt": "我3月去京都，想带点当地特产和手信回来，最好是京都最有代表性的那种。",
+    "assertions": {
+      "mode": "planning-only",
+      "specialty_recommendations_required": true,
+      "must_apply_and_list_tiering": "signature tier requires local identity AND ≥2 sources AND transportability — not a vibe; weak-evidence items capped at niche or omitted",
+      "must_flag_seasonal_availability_against_trip_date": "season-bound items (e.g. spring new-tea / seasonal wagashi) flagged against the March trip date; if out of season, offer the year-round form rather than an unbuyable item",
+      "must_bridge_edible_signature_to_takehome": "where Kyoto's edible signatures have a take-home form (matcha sweets, tea), surface that bridge per the §Tiering link to dining §12",
+      "must_not": [
+        "label an item 'signature' without ≥2 sources and clear local identity",
+        "present a season-limited specialty as always-available",
+        "fabricate a shop name, brand, or price",
+        "recommend a customs-restricted edible without a warning (note: domestic trip — fresh-food border customs not applicable, but transport/shelf-life still flagged)"
+      ],
+      "notes": "Pins local-specialties §Tiering (AND-list) and §Seasonal Availability, plus the signature-bridge to dining §12. Domestic trip, so border-customs note is not required — distinct from case 4 (Chengdu) which tests the airline-liquid branch.",
+      "rule_refs": [
+        "local-specialties.md §Tiering",
+        "local-specialties.md §Seasonal Availability"
       ]
     }
   }

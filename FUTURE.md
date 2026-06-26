@@ -141,7 +141,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 9. Backfill test coverage for uncovered reference sections
 
-**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), and the new `travel-mode.md` §§1–3. The v0.15.0 audit flagged these as having no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
+**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), the `travel-mode.md` §§1–3, and the `dining-rules.md` §12 **user-override branch** ("if the user says 'no repeats,' honor it" — case 31 covers the signature-wins path but not the user-overrides-signature path). These have no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
 
 **Why not now**: these are pre-existing gaps, out of scope of the v0.15.0 hotel-hardware change; adding cases for rules this change did not touch would be scope creep.
 

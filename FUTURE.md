@@ -78,20 +78,19 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 **Worth doing when**:
 - A machine-readable trigger map is needed (e.g., pre-invocation filter in a routing skill that decides which specialist skill to call).
 
-### 5. Attractions / activities reference
+### 5. Destination-specific attraction capacity database
 
-**Current state**: attractions are mentioned in Core Workflow step 4 ("attractions with booking windows") but have no dedicated reference file. Booking lead times, height/age minimums, capacity limits, seasonal closures, timed-entry slots, and peak-hour avoidance are all ad-hoc.
+**Current state**: `references/attractions.md` shipped in v0.17.0 (advance-booking by category, capacity-capped sell-out logic, last-admission ≠ closing, seasonal closure, anchor-per-day density). It deliberately teaches the *category logic* with named examples (Alhambra / teamLab / Ghibli / Uffizi) rather than embedding a per-destination database of which sites cap at what lead time — see attractions.md §Non-Goals.
 
-**What it could look like**: `references/attractions.md` with rules for: advance-booking lead times by category (theme park / museum / guided tour / activity), capacity-limited attractions (Alhambra, teamLab, Ghibli Museum, Anne Frank House), seasonal closures (mountain huts, polar regions, monsoon closures), peak-hour strategies, and the relationship between attraction density and pace.
+**What it could look like**: a structured lookup of specific capacity-capped sites by destination with their real release windows / batch-release schedules, so the skill can name "book this exact slot N months out" rather than "capacity-capped → verify the booking page."
 
 **Why not now**:
-- Most attraction logistics are destination-specific — a generic reference risks being either too thin to be useful or too fat to be general.
-- The current per-day-card approach ("booking lead times stated") works for most cases.
-- Dining, hotel, transport, and budget each had clear *repeated failure modes* that justified a reference. Attractions haven't yet shown the same pattern in test-prompt traces.
+- Such a database is exactly what attractions.md §Non-Goals declines: it dates fast (release windows shift yearly), bloats, and the live booking page is already the source of truth.
+- The category logic in attractions.md handles the failure mode (it forces the booking-lead-time question) without a static table to maintain.
 
 **Worth doing when**:
-- A dry-run trace (or real user session) shows repeated failure on attraction booking (missed capacity, wrong timed entry, seasonal closure surprise) across 3+ different trips.
-- A specific test case would need `rule_refs` pointing to attraction rules — and there's no file to point at.
+- A live external source for capacity/release data exists to sync against (so it isn't hand-maintained and stale).
+- A dry-run shows the category logic alone repeatedly under-warning on a specific high-demand site across multiple trips.
 
 ### 6. Agentic trip companion
 
@@ -141,7 +140,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 9. Backfill test coverage for uncovered reference sections
 
-**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), the `travel-mode.md` §§1–3, and the `dining-rules.md` §12 **user-override branch** ("if the user says 'no repeats,' honor it" — case 31 covers the signature-wins path but not the user-overrides-signature path). These have no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
+**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), the `travel-mode.md` §§1–3, the `dining-rules.md` §12 **user-override branch** ("if the user says 'no repeats,' honor it" — case 31 covers the signature-wins path but not the user-overrides-signature path), and `attractions.md` §4 / §Verification and Fallback (the "Attractions ≥5" batch threshold + return fields — uncovered like the peer batch sections in hotel / specialties / trip-prep). These have no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
 
 **Why not now**: these are pre-existing gaps, out of scope of the v0.15.0 hotel-hardware change; adding cases for rules this change did not touch would be scope creep.
 

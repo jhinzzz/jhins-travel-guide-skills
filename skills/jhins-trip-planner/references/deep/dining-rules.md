@@ -12,7 +12,8 @@ Build a matrix keyed by `day × meal` tagged with cuisine category. Use the natu
 - US: steakhouse, BBQ, seafood, brunch, diner, New American…
 
 Rules:
-- A given category appears at most once across the full trip unless the user explicitly asks for repetition ("ramen every day").
+- **Signatures first** (per [dining-rules.md](../dining-rules.md) §12): place the destination's signature categories before applying diversity. A repeated signature category is **not** a matrix violation (two 粉物 meals in Osaka is correct). The no-repeat rule below governs only the *remaining* slots after signatures are placed.
+- After signatures are placed, a given category appears at most once across the rest of the trip unless the user explicitly asks for repetition ("ramen every day").
 - Backup picks count against the matrix — a backup cannot share a category with any main line.
 - Check the matrix before drafting each meal, not after.
 - On swap, re-check the whole matrix — replacing one meal can free or re-occupy categories.
@@ -36,7 +37,7 @@ Authoritative platform per destination: see [travel-sources.md](../travel-source
 
 ### If verification keeps failing
 
-Do not downgrade to guessing. See the parallel sub-agent protocol in SKILL.md Fallback Rules.
+Do not downgrade to guessing. See the parallel sub-agent skeleton in SKILL.md §Batch Verification.
 
 ## 3. Target-Date Operating Calendar — Extended
 
@@ -117,14 +118,10 @@ Use a grep-first flow: list every occurrence of the outgoing name, update one by
 
 ## 10. Parallel Batch Verification Workflow
 
-For trips with 5+ dining picks, verification runs as a batch:
+For trips with 5+ dining picks, verification runs as a batch per the skeleton in SKILL.md §Batch Verification.
 
-- List every restaurant requiring verification, grouped by day / ward / category.
-- Spawn **2–3 parallel sub-agents**. Each returns a structured row per venue: operating status · address · regular closures · peak-season notes · reservation channel · source URL.
-- Main conversation synthesizes + decides.
-- Give user a status line: "Dispatched N sub-agents for venue verification".
-
-See SKILL.md Fallback Rules for the general parallel sub-agent pattern.
+- **Domain slicing axis**: group every restaurant requiring verification by day / ward / category before fanning out.
+- **Per-venue return fields**: operating status · address · regular closures · peak-season notes · reservation channel · source URL.
 
 ## Edge: Markets and stall clusters as destination
 

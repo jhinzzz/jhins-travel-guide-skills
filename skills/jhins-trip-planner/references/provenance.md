@@ -34,6 +34,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 |---|---|
 | (whole file) | 3 |
 | §3, §4 | 11 |
+| §4 | 30 |
 | §6, §7 | 22 |
 | §8 | 9 |
 | §10 | 26, 27 |
@@ -65,7 +66,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 
 | Anchor | Cases |
 |---|---|
-| §1 | 1 |
+| §1 | 1, 31 |
 | §2 | 8, 19, 20, 25 |
 | §3 (Spring Festival / New Year peak) | 5 |
 | §4 | 20 |
@@ -73,7 +74,16 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §9 | 8 |
 | §10 | 8 |
 | §11 | 19, 20 |
+| §12 | 31 |
 | §§1-10 | 6, 7 |
+
+### attractions.md
+
+| Anchor | Cases |
+|---|---|
+| §1 | 29 |
+| §2 | 30 |
+| §3 | 30 |
 
 ### budget.md
 
@@ -106,6 +116,8 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 |---|---|
 | §Evidence Standard | 1 |
 | §Selection Criteria | 4 |
+| §Tiering | 32 |
+| §Seasonal Availability | 32 |
 | §Integration with Daily Itinerary | 4 |
 | §Customs and Transport Constraints | 2, 10 |
 

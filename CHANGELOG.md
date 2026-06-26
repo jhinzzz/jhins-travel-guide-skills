@@ -8,6 +8,35 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.18.0] — 2026-06-26
+
+### Added
+- **dining-rules.md §12 Destination Signature Priority** — 先问「这地方最该吃什么」：目的地招牌品类（大阪粉物、博多拉面、圣塞 pintxos）优先占位，再谈多样性。招牌可重复（大阪两餐粉物是对的，不算违规）；时段绑定的招牌（筑地朝食、深夜拉面）按真实时段排。修正了「多样性把人推离该吃的东西」这一审视发现的偏差。
+- **local-specialties.md §Seasonal Availability** — 季节限定特产按行程日期核查（春茶、节庆限定、应季物产）；过季则给常售替代形态，不推不可买的东西。Scope 早提了 seasonal items，规则此前缺失。
+- **test-prompts.json case 31 + 32** — case 31 dining 招牌优先压过多样性（大阪「最有名最地道」应允许粉物重复）；case 32 specialty AND-list tiering + 季节限定 + 招牌连接（京都 3 月手信）。
+
+### Changed
+- **dining-rules.md §1** — 多样性从「硬规则」降为「招牌满足后的默认」：先按 §12 放招牌，其余 slot 才避免重复；多样性永不阻止招牌。Non-Goals 同步澄清。
+- **local-specialties.md §Tiering** — 改写为 AND-list（对标 hotel/dining 的严谨度）：`signature` = 强本地身份 AND ≥2 源 AND 可携带；加「弱证据」上限；连接 dining §12（吃的招牌常有带得走的形态）。
+- **provenance.md** — dining §1→加 31、新增 §12→31；specialties 新增 §Tiering→32、§Seasonal Availability→32。
+
+## [0.17.0] — 2026-06-26
+
+### Added
+- **`attractions.md` — 景点 / 活动规则（填补最大的结构性空白）** — 行程的本质是景点，但此前「做什么」只是 Core Workflow step 4 的一行字。新文件四节：§1 提前预约与限量（按类别前置期表 · 限量售罄清单逻辑 teamLab/Uffizi/Alhambra/Vatican/Ghibli · 开票即抢 · 不可订即 checkpoint）· §2 营业日历与时段匹配（末次入场≠闭馆 · 每周休 + 季节性关闭 · 时段票排程）· §3 anchor-per-day 与密度（每天一个主角 · 不叠两个重头时段锚 · 密度随 pace 校准）· §4 输出卡片。薄文件、大量复用既有规则（验证→knowledge-layers · 灾后关闭→safety §6 · 目标日期纪律→dining §3 · 批量→§Batch Verification · 源→travel-sources），不重造、不建 deep。
+- **test-prompts.json case 29 + 30** — case 29 限量售罄/提前预约分支（Alhambra）；case 30 末次入场 + 季节关闭 + leisurely 密度分支（少女峰冬季）。两者正交。
+
+### Changed
+- **SKILL.md 集成** — Navigation 表加 attractions 行；Core Workflow step 4 把「attractions with booking windows」展开为指针；Confirmation Checkpoints 加「限量/时段票目标日期不可订」；Final Check 加景点检查行。
+- **provenance.md** — 新增 attractions.md 段（§1→29 · §2→30 · §3→30）；intake §4 追加 case 30。
+
+## [0.16.0] — 2026-06-26
+
+### Changed
+- **并行批量验证去重 → `SKILL.md §Batch Verification`** — "spawn 2–3 子代理 / 各返回结构化行 / 主对话综合 / 状态行 Dispatched N" 这套编排骨架原先在 7 处逐字重复（dining §10、deep/dining §10、hotel §Parallel、specialties §Parallel、safety §9、deep/safety §8、trip-prep §1）。抽成 `SKILL.md` 单一骨架，各 domain 文件只保留**触发阈值** + **专属返回字段** + 指针。改协议从改 7 处变改 1 处。
+- 修复 `deep/dining-rules.md` 的悬空引用——原先指向 "SKILL.md Fallback Rules" 的并行协议本体从未写入 SKILL.md，现指向真实的 §Batch Verification 锚点。
+- 纯结构性去重：每个触发阈值和返回字段契约逐字保留，**零行为变化**。Provenance 三个带 case 的锚点（dining §10 / safety §9 / trip-prep §1）标题不变，test-prompts.json 与 provenance.md 无需改动。
+
 ## [0.15.0] — 2026-06-21
 
 ### Added

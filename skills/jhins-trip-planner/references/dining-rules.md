@@ -9,7 +9,7 @@ Applies to `planning-only`, `guide-redesign`, and `existing-page-refactor` whene
 ### Rule
 
 - Track every main meal (lunch + dinner) on a `day × meal × cuisine` matrix.
-- Each cuisine category appears at most once unless the user explicitly asks for repetition.
+- **Signatures first, variety for the rest.** Place the destination's signature categories per §12 before applying diversity. After signatures are placed, each *remaining* cuisine category appears at most once unless the user explicitly asks for repetition. Diversity never blocks a §12 signature (a repeated signature is not a violation).
 - Backup picks count against the matrix.
 - Check the matrix before drafting each meal; on swap, re-check the whole matrix.
 
@@ -99,9 +99,9 @@ Trigger: any restaurant / hotel / anchor swap after first draft. Flow: [deep/din
 
 ### Rule
 
-Trips with 5+ dining picks: verification runs as a batch via 2–3 parallel sub-agents, not serial inline.
+Trigger: trips with 5+ dining picks. Run the fan-out per SKILL.md §Batch Verification.
 
-Each sub-agent returns: operating status · address · regular closures · peak-season notes · reservation channel · source URL. Status line to user: "Dispatched N sub-agents for venue verification." Pointer: [deep/dining-rules.md](deep/dining-rules.md) §10.
+Per-venue return fields: operating status · address · regular closures · peak-season notes · reservation channel · source URL. Pointer: [deep/dining-rules.md](deep/dining-rules.md) §10.
 
 ## 11. Search Advisory Fallback
 
@@ -116,10 +116,23 @@ When web search is unavailable or all verification attempts fail for restaurant 
 
 🚩 **Red flag — STOP before writing a restaurant search advisory card:** ask "how many channels did I try, and was one an aggregator?" Fewer than 2, or zero aggregators → keep searching, do not degrade.
 
+## 12. Destination Signature Priority
+
+### Rule
+
+Before optimizing for variety, ask the real question: **what is this place best at?** A trip to Osaka that never eats 粉物 (takoyaki / okonomiyaki), or to San Sebastián that skips pintxos, or to Hakata that misses tonkotsu ramen, has failed the traveler — however "diverse" the matrix looks. The goal is the food worth traveling for, not a rule-satisfying spread.
+
+- **Place the destination's signature categories first.** Identify the 1–3 dishes/categories the destination is genuinely known for (verify the claim per §2 / [travel-sources.md](travel-sources.md) — do not assert "famous for X" from training data alone) and give them meal slots before filling the rest.
+- **Signatures may repeat; variety yields to them.** A signature category is allowed to appear more than once when the destination justifies it (two 粉物 meals in Osaka is correct, not a violation). The §1 diversity rule applies only to the *remaining* slots after signatures are placed — it never blocks a signature.
+- **Respect the slot the signature belongs to.** Some signatures are time-bound: a fish-market breakfast (Tsukiji 朝食), a late-night ramen, a morning-only 朝粥, a night-market crawl. Place it in its real slot per §3 opening hours — a breakfast signature is not a dinner pick.
+
+Trigger: any destination with a recognized signature cuisine (almost all). Defer to explicit user preference when it conflicts (if the user says "no repeats," honor it).
+
 ## Non-Goals
 
 - Do not rely on general training-data restaurant knowledge. Every pick passes §2.
 - Do not present a restaurant without the four required fields in §5.
-- Do not ignore the cuisine matrix to squeeze a favorite category twice unless user asked.
+- Do not ignore the cuisine matrix to squeeze a favorite category twice unless user asked — but a destination signature placed per §12 is not a "favorite squeeze"; it takes priority over diversity.
+- Do not optimize for a diverse matrix at the cost of skipping what the destination is actually famous for — signatures come first (§12).
 - Do not skip pre-trip recheck for peak-season trips.
 - Do not update only the day card on swap — always run §9 cascade.

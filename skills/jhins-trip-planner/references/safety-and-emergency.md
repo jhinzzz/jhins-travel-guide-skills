@@ -95,11 +95,11 @@ All safety info follows skill-wide traceability rules — cite source (official 
 
 ### Rule
 
-Trip crosses ≥ 2 cities or ≥ 2 countries → spawn 2–3 parallel sub-agents, each covering one city or country's full safety block.
+Trigger: trip crosses ≥ 2 cities or ≥ 2 countries. Run the fan-out per SKILL.md §Batch Verification — slicing axis: one city or country's full safety block per sub-agent.
 
-Each sub-agent returns: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination risks with §6 phrasing · source URLs · research date.
+Per-destination return fields: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination risks with §6 phrasing · source URLs · research date.
 
-Same batch pattern as [dining-rules.md](dining-rules.md) §10. Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §8.
+Domain-specific rule: the main conversation de-duplicates shared facts across cities before final placement. Pointer: [deep/safety-and-emergency.md](deep/safety-and-emergency.md) §8.
 
 ## Non-Goals
 

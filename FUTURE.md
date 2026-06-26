@@ -141,11 +141,28 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 9. Backfill test coverage for uncovered reference sections
 
-**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), and the new `travel-mode.md` §§1–3. The v0.15.0 audit flagged these as having no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
+**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), the `travel-mode.md` §§1–3, and the `dining-rules.md` §12 **user-override branch** ("if the user says 'no repeats,' honor it" — case 31 covers the signature-wins path but not the user-overrides-signature path). These have no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
 
 **Why not now**: these are pre-existing gaps, out of scope of the v0.15.0 hotel-hardware change; adding cases for rules this change did not touch would be scope creep.
 
 **Worth doing when**: the next time any of these sections is edited (touch-it-test-it), or when a real dry-run surfaces a regression in one of them.
+
+### 10. Bounded-edit discipline (借鉴自 SkillOpt)
+
+**Current state**: edits per release are unbounded — a version can rewrite any number of rules at once. Rejected proposals (a rule change considered during review and turned down) live only in the reviewer's head or a `session-learnings-*` aside; nothing stops the same rejected edit from being re-proposed next cycle. The existing discipline is the *provenance* loop (every rule ↔ a test case) and persona review — strong on "is this rule covered," silent on "how much should one version change, and what did we already decide not to do."
+
+**What it could look like** — borrow two ideas from SkillOpt's text-space optimizer, as **manual** discipline (no Python, no auto-edit harness):
+- **Textual learning-rate**: cap rule changes per release (e.g., ≤3 substantive rule edits per minor version unless the version is explicitly a "refactor" release). Forces each change to clear the provenance + test bar before the next lands, instead of batching many half-verified edits.
+- **Rejected-edit log**: a short committed list of rule changes that were proposed and turned down, with the one-line reason. The v0.12.0 "≥2 aggregators agree" gate (FUTURE §7) is exactly the kind of edit that looked good, got reverted, and should be on record so it isn't re-proposed blind.
+
+**Why not now**:
+- SkillOpt's value is the *automated* accept-only-if-score-improves loop; that needs a cheap reliable scorer, which the skill's live-fetch / fabrication failure modes don't have (see §1, §7). Adopting the wrapper without the scorer would be cargo-culting.
+- The cap is only worth formalizing once a release actually gets into trouble from over-batching — so far versions have stayed small enough that review caught regressions.
+- A rejected-edit log overlaps with `git log` + `session-learnings-*`; it earns its keep only when a rejected edit actually recurs.
+
+**Worth doing when**:
+- A release ships ≥4 rule edits and a regression slips through that smaller batches would have isolated (motivates the learning-rate cap).
+- The same rejected edit is proposed twice across sessions (motivates the rejected-edit log — write it the second time, not the first).
 
 ---
 

@@ -153,11 +153,8 @@ When degrading, output the search advisory card with: platform + keywords + filt
 
 ## Parallel Verification for Hotel Shortlists
 
-When the shortlist exceeds **4 candidates** (typical when the trip spans multiple cities, or when the user wants options across 3 budget tiers), verification runs as a batch — not serial WebFetch calls in the main conversation.
+Trigger: shortlist exceeds **4 candidates** (typical when the trip spans multiple cities, or the user wants options across 3 budget tiers). Run the fan-out per SKILL.md §Batch Verification — slicing axis: by city, by budget tier, or by platform.
 
-- Spawn **2–3 parallel sub-agents**, each covering a slice of the shortlist (by city, by budget tier, or by platform).
-- Each sub-agent returns a structured row per hotel: **current nightly rate range · rating on two platforms · transit time to main hub · check-in / check-out policy · luggage storage availability · refund policy · source URL · research date**.
-- The main conversation synthesizes the rows into the comparison table and decides first-pick / backup / niche / avoid.
-- Each sub-agent independently follows the Timeout Degradation rules above.
+Per-hotel return fields: **current nightly rate range · rating on two platforms · transit time to main hub · check-in / check-out policy · luggage storage availability · refund policy · source URL · research date**.
 
-This follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.
+Domain-specific rule: each sub-agent independently follows the §Timeout Degradation rules above. The main conversation synthesizes the rows into the comparison table and decides first-pick / backup / niche / avoid.

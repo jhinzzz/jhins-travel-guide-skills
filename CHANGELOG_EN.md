@@ -8,6 +8,35 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.18.0] — 2026-06-26
+
+### Added
+- **dining-rules.md §12 Destination Signature Priority** — ask the real question first: *what is this place best at?* The destination's signature categories (Osaka 粉物, Hakata ramen, San Sebastián pintxos) take meal slots before variety is optimized. Signatures may repeat (two 粉物 meals in Osaka is correct, not a violation); time-bound signatures (fish-market breakfast, late-night ramen) are placed in their real slot. Corrects the review finding that diversity was pushing the traveler away from what they should actually eat.
+- **local-specialties.md §Seasonal Availability** — season-bound specialties checked against the trip date (spring new-tea, festival-limited editions, harvest-timed goods); if out of season, offer the year-round form rather than an unbuyable item. Scope mentioned seasonal items; the rule was missing.
+- **test-prompts.json case 31 + 32** — case 31 dining signature priority over diversity (Osaka "most famous + authentic" must allow 粉物 repetition); case 32 specialty AND-list tiering + seasonal availability + signature bridge (Kyoto March souvenirs).
+
+### Changed
+- **dining-rules.md §1** — diversity demoted from a hard rule to "the default after signatures are placed": signatures go first per §12, only the remaining slots avoid repetition; diversity never blocks a signature. Non-Goals clarified to match.
+- **local-specialties.md §Tiering** — rewritten as an AND-list (same discipline as hotel/dining): `signature` = strong local identity AND ≥2 sources AND transportable; "weak evidence" cap added; bridged to dining §12 (edible signatures often have a take-home form).
+- **provenance.md** — dining §1 gains 31, new §12→31; specialties gains §Tiering→32 and §Seasonal Availability→32.
+
+## [0.17.0] — 2026-06-26
+
+### Added
+- **`attractions.md` — attraction / activity rules (fills the biggest structural gap)** — the trip exists *for* its attractions, yet "what to do" was a single line in Core Workflow step 4. New file, four sections: §1 Advance Booking & Capacity (per-category lead-time table · capacity-capped sell-out logic for teamLab/Uffizi/Alhambra/Vatican/Ghibli · release-day rush · unbookable target date = checkpoint) · §2 Operating Calendar & Time-Slot Fit (last-admission ≠ closing · weekly + seasonal closures · timed-slot scheduling) · §3 Anchor-Per-Day & Density (one lead anchor/day · no two heavy timed anchors stacked · density calibrated to pace) · §4 Output Card. Thin file, heavy reuse of existing rules (verification→knowledge-layers · post-disaster closure→safety §6 · target-date discipline→dining §3 · batch→§Batch Verification · sources→travel-sources); no re-implementation, no deep file.
+- **test-prompts.json case 29 + 30** — case 29 capacity-capped advance-booking branch (Alhambra); case 30 last-admission + seasonal-closure + leisurely-density branch (Jungfrau region, winter). Orthogonal.
+
+### Changed
+- **SKILL.md integration** — Navigation table gains an attractions row; Core Workflow step 4 expands "attractions with booking windows" into a pointer; Confirmation Checkpoints gains "capacity/timed-entry not bookable for target date"; Final Check gains an attractions line.
+- **provenance.md** — new attractions.md section (§1→29 · §2→30 · §3→30); intake §4 gains case 30.
+
+## [0.16.0] — 2026-06-26
+
+### Changed
+- **Parallel batch-verification de-duplication → `SKILL.md §Batch Verification`** — the orchestration skeleton ("spawn 2–3 sub-agents / each returns a structured row / main conversation synthesizes / status line Dispatched N") was repeated verbatim in 7 places (dining §10, deep/dining §10, hotel §Parallel, specialties §Parallel, safety §9, deep/safety §8, trip-prep §1). Extracted to a single skeleton in `SKILL.md`; each domain file now keeps only its **trigger threshold** + **domain-specific return fields** + a pointer. Editing the protocol drops from seven edits to one.
+- Fixed a dangling reference in `deep/dining-rules.md` — it pointed to a "SKILL.md Fallback Rules" parallel protocol whose body was never actually written into SKILL.md; it now resolves to the real §Batch Verification anchor.
+- Pure structural de-duplication: every trigger threshold and return-field contract preserved verbatim, **zero behavior change**. The three provenance-backed anchors (dining §10 / safety §9 / trip-prep §1) keep their headings, so test-prompts.json and provenance.md need no changes.
+
 ## [0.15.0] — 2026-06-21
 
 ### Added

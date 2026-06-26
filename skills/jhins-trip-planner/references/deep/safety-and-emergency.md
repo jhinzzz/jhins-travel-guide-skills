@@ -159,10 +159,10 @@ Some popular activities are not safe for animals, communities, or the traveller'
 
 ## 8. Parallel Verification for Multi-City / Multi-Country — Extended
 
-A multi-city international trip easily generates 15+ independent research tasks (per city: emergency numbers × medical facility × consulate × insurer hotline × destination-specific risks).
+Why this batches: a multi-city international trip easily generates 15+ independent research tasks (per city: emergency numbers × medical facility × consulate × insurer hotline × destination-specific risks) — serializing them in the main conversation is the failure mode this rule prevents.
 
-When trip crosses ≥ 2 cities or ≥ 2 countries, spawn 2–3 parallel sub-agents. Each returns a structured row per destination: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination-specific risks with §6 phrasing · source URLs · research date.
+Trigger: trip crosses ≥ 2 cities or ≥ 2 countries. Run the fan-out per SKILL.md §Batch Verification — slicing axis: one destination per sub-agent.
 
-Main conversation: synthesis + de-duplication across cities + final placement. Give user a status line: "Dispatched 3 sub-agents for safety verification."
+Per-destination return fields: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination-specific risks with §6 phrasing · source URLs · research date.
 
-Same batch pattern as [dining-rules.md](../dining-rules.md) §10.
+Domain-specific rule: the main conversation de-duplicates facts shared across cities (e.g. one embassy serving multiple cities, one nationwide emergency number) before final placement.

@@ -163,7 +163,7 @@ Do not infer a renovation year from the listing's overall vibe — if it is not 
 
 ## Operating-Status Detection
 
-The canonical operating-status signals (closure notice in destination language · 404 / "new store" redirect · Google Maps "Permanently closed" banner · platform-page name/address integrity) live in [dining-rules.md](dining-rules.md) §2 — they apply to **every** venue type, not only restaurants. When verification is ambiguous, retry a different source or batch into a parallel sub-agent sweep per the SKILL.md Fallback Rules.
+The canonical operating-status signals (closure notice in destination language · 404 / "new store" redirect · Google Maps "Permanently closed" banner · platform-page name/address integrity) live in [dining-rules.md](dining-rules.md) §2 — they apply to **every** venue type, not only restaurants. When verification is ambiguous, retry a different source or batch into a parallel sub-agent sweep per SKILL.md §Batch Verification.
 
 ## Citation Format
 

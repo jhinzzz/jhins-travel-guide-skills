@@ -36,7 +36,7 @@ Authoritative platform per destination: see [travel-sources.md](../travel-source
 
 ### If verification keeps failing
 
-Do not downgrade to guessing. See the parallel sub-agent protocol in SKILL.md Fallback Rules.
+Do not downgrade to guessing. See the parallel sub-agent skeleton in SKILL.md §Batch Verification.
 
 ## 3. Target-Date Operating Calendar — Extended
 
@@ -117,14 +117,10 @@ Use a grep-first flow: list every occurrence of the outgoing name, update one by
 
 ## 10. Parallel Batch Verification Workflow
 
-For trips with 5+ dining picks, verification runs as a batch:
+For trips with 5+ dining picks, verification runs as a batch per the skeleton in SKILL.md §Batch Verification.
 
-- List every restaurant requiring verification, grouped by day / ward / category.
-- Spawn **2–3 parallel sub-agents**. Each returns a structured row per venue: operating status · address · regular closures · peak-season notes · reservation channel · source URL.
-- Main conversation synthesizes + decides.
-- Give user a status line: "Dispatched N sub-agents for venue verification".
-
-See SKILL.md Fallback Rules for the general parallel sub-agent pattern.
+- **Domain slicing axis**: group every restaurant requiring verification by day / ward / category before fanning out.
+- **Per-venue return fields**: operating status · address · regular closures · peak-season notes · reservation channel · source URL.
 
 ## Edge: Markets and stall clusters as destination
 

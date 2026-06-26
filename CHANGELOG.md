@@ -8,6 +8,13 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.16.0] — 2026-06-26
+
+### Changed
+- **并行批量验证去重 → `SKILL.md §Batch Verification`** — "spawn 2–3 子代理 / 各返回结构化行 / 主对话综合 / 状态行 Dispatched N" 这套编排骨架原先在 7 处逐字重复（dining §10、deep/dining §10、hotel §Parallel、specialties §Parallel、safety §9、deep/safety §8、trip-prep §1）。抽成 `SKILL.md` 单一骨架，各 domain 文件只保留**触发阈值** + **专属返回字段** + 指针。改协议从改 7 处变改 1 处。
+- 修复 `deep/dining-rules.md` 的悬空引用——原先指向 "SKILL.md Fallback Rules" 的并行协议本体从未写入 SKILL.md，现指向真实的 §Batch Verification 锚点。
+- 纯结构性去重：每个触发阈值和返回字段契约逐字保留，**零行为变化**。Provenance 三个带 case 的锚点（dining §10 / safety §9 / trip-prep §1）标题不变，test-prompts.json 与 provenance.md 无需改动。
+
 ## [0.15.0] — 2026-06-21
 
 ### Added

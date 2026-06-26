@@ -88,13 +88,11 @@ When presenting multiple specialties for a destination:
 
 ## Parallel Verification for Specialty Shortlists
 
-When the shortlist exceeds **5 candidate specialties** (typical when the destination has multiple well-known categories — tea + silk + crafts + snacks, etc.), verification runs as a batch.
+Trigger: shortlist exceeds **5 candidate specialties** (typical when the destination has multiple well-known categories — tea + silk + crafts + snacks, etc.). Run the fan-out per SKILL.md §Batch Verification — slicing axis: by category or sub-region.
 
-- Spawn **2–3 parallel sub-agents**, each covering a category or sub-region.
-- Each sub-agent returns a structured row per item: **tier · shop or outlet · address · current price range · customs / transport flag · source URLs · research date**.
-- The main conversation synthesizes the rows into the recommended / signature / niche / skip buckets and embeds them into the relevant day cards.
+Per-item return fields: **tier · shop or outlet · address · current price range · customs / transport flag · source URLs · research date**.
 
-This follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.
+Domain-specific rule: the main conversation synthesizes the rows into the recommended / signature / niche / skip buckets and embeds them into the relevant day cards.
 
 ## Search Advisory Fallback
 

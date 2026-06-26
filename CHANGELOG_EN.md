@@ -8,6 +8,13 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.16.0] — 2026-06-26
+
+### Changed
+- **Parallel batch-verification de-duplication → `SKILL.md §Batch Verification`** — the orchestration skeleton ("spawn 2–3 sub-agents / each returns a structured row / main conversation synthesizes / status line Dispatched N") was repeated verbatim in 7 places (dining §10, deep/dining §10, hotel §Parallel, specialties §Parallel, safety §9, deep/safety §8, trip-prep §1). Extracted to a single skeleton in `SKILL.md`; each domain file now keeps only its **trigger threshold** + **domain-specific return fields** + a pointer. Editing the protocol drops from seven edits to one.
+- Fixed a dangling reference in `deep/dining-rules.md` — it pointed to a "SKILL.md Fallback Rules" parallel protocol whose body was never actually written into SKILL.md; it now resolves to the real §Batch Verification anchor.
+- Pure structural de-duplication: every trigger threshold and return-field contract preserved verbatim, **zero behavior change**. The three provenance-backed anchors (dining §10 / safety §9 / trip-prep §1) keep their headings, so test-prompts.json and provenance.md need no changes.
+
 ## [0.15.0] — 2026-06-21
 
 ### Added

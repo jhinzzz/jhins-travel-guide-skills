@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.15.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.16.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -126,12 +126,21 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 - **Thin specialty data** → category guidance + "verify locally"; no specific shops without source per [local-specialties.md](references/local-specialties.md). Output search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5 when verification unavailable.
 - **Contradictory existing content** → preserve source facts; flag; don't resolve by invention.
 - **Web verification stalls** → a login wall / 302 / blank on one platform is **not** a failure. Climb the channel ladder and apply the exhaustion gate ([knowledge-layers.md](references/knowledge-layers.md) §6) before degrading to a search advisory card.
-- **Batch verification** — parallel sub-agents when the batch crosses:
-  - Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10
-  - Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification
-  - Specialties >5 → [local-specialties.md](references/local-specialties.md) §Parallel Verification
-  - Safety ≥2 cities/countries → [safety-and-emergency.md](references/safety-and-emergency.md) §9
-  - Trip prep ≥2 countries → [trip-prep.md](references/trip-prep.md) §1
+- **Batch verification** — when a batch crosses a per-domain threshold, fan out parallel sub-agents per §Batch Verification below.
+
+## Batch Verification
+
+When a verification batch crosses a per-domain threshold, do **not** serialize the fetches in the main conversation — fan out. The orchestration skeleton is the same everywhere; only the trigger threshold and the per-item return fields differ (each domain file defines its own fields).
+
+Thresholds: Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10 · Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification · Specialties >5 → [local-specialties.md](references/local-specialties.md) §Parallel Verification · Safety ≥2 cities/countries → [safety-and-emergency.md](references/safety-and-emergency.md) §9 · Trip prep ≥2 countries → [trip-prep.md](references/trip-prep.md) §1.
+
+Skeleton (every batch follows this):
+
+1. Spawn **2–3 parallel sub-agents**, each covering one slice of the batch along the domain's natural axis (by city, ward, budget tier, country, or category).
+2. Each sub-agent returns **one structured row per item** — the row's fields are domain-specific, defined in the domain file's section.
+3. Each sub-agent independently obeys its domain's degradation / timeout rules (e.g. hotel Timeout Degradation, the channel-ladder exhaustion gate).
+4. The main conversation synthesizes the rows, de-duplicates across slices, and decides the final output.
+5. Emit one status line to the user: `Dispatched N sub-agents for <domain> verification`.
 
 ## Core Workflow
 

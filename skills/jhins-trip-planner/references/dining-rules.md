@@ -99,9 +99,9 @@ Trigger: any restaurant / hotel / anchor swap after first draft. Flow: [deep/din
 
 ### Rule
 
-Trips with 5+ dining picks: verification runs as a batch via 2–3 parallel sub-agents, not serial inline.
+Trigger: trips with 5+ dining picks. Run the fan-out per SKILL.md §Batch Verification.
 
-Each sub-agent returns: operating status · address · regular closures · peak-season notes · reservation channel · source URL. Status line to user: "Dispatched N sub-agents for venue verification." Pointer: [deep/dining-rules.md](deep/dining-rules.md) §10.
+Per-venue return fields: operating status · address · regular closures · peak-season notes · reservation channel · source URL. Pointer: [deep/dining-rules.md](deep/dining-rules.md) §10.
 
 ## 11. Search Advisory Fallback
 

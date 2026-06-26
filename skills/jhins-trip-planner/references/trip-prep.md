@@ -6,12 +6,11 @@ Applies when the trip is international, or when a domestic trip crosses non-triv
 
 ## 1. Parallel Verification for Multi-Country / Multi-Stop Trips
 
-When the trip crosses **2+ countries** (or includes a long transit country — Schengen transfers, UAE stopovers, Hong Kong transit, etc.), do **not** serialize visa / entry / payment / SIM / insurance / etiquette research in the main conversation.
+Trigger: trip crosses **2+ countries** (or includes a long transit country — Schengen transfers, UAE stopovers, Hong Kong transit, etc.). Do **not** serialize visa / entry / payment / SIM / insurance / etiquette research in the main conversation — run the fan-out per SKILL.md §Batch Verification.
 
-- Spawn **2 parallel sub-agents**, grouped by country (not by topic). Each sub-agent receives the intake-captured chronic-medication generics (if any) and returns a structured row per country: **visa requirement + processing time · entry requirements (passport validity, return ticket proof, minors-with-one-parent documents where applicable) · primary currency + dominant payment methods · recommended SIM / eSIM option · destination-specific etiquette red flags · chronic-medication legality flag (per the intake generic list) · source URLs · research date**.
-- The main conversation consolidates the rows into the trip-prep checklist and the etiquette section, flagging any cross-country conflicts (e.g., Schengen visa covers France but not UK; pseudoephedrine legal in EU but restricted in Japan; tramadol legal in US but restricted in UAE).
-
-Follows the same batch-verification pattern as [dining-rules.md](dining-rules.md) §10.
+- **Slicing axis**: group by **country, not by topic** — spawn **one sub-agent per country** (the common 2-country trip uses exactly 2, not the skeleton's default 2–3). Each sub-agent receives the intake-captured chronic-medication generics (if any).
+- **Per-country return fields**: **visa requirement + processing time · entry requirements (passport validity, return ticket proof, minors-with-one-parent documents where applicable) · primary currency + dominant payment methods · recommended SIM / eSIM option · destination-specific etiquette red flags · chronic-medication legality flag (per the intake generic list) · source URLs · research date**.
+- **Domain-specific rule**: the main conversation consolidates the rows into the trip-prep checklist and the etiquette section, flagging any cross-country conflicts (e.g., Schengen visa covers France but not UK; pseudoephedrine legal in EU but restricted in Japan; tramadol legal in US but restricted in UAE).
 
 ## 2. Visa and Entry
 

@@ -7,7 +7,7 @@ description: >
 
 # Jhins Trip Planner
 
-Version: **0.16.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
+Version: **0.17.0** — see [CHANGELOG.md](../../CHANGELOG.md) for history, [FUTURE.md](../../FUTURE.md) for deferred directions, [provenance.md](references/provenance.md) for which test case covers which rule.
 
 ## North Star
 
@@ -27,6 +27,7 @@ Read references lazily, based on what the request actually needs:
 | Budget category split by region, hidden costs, refundable-vs-not, FX / payment timing | [budget.md](references/budget.md) |
 | Hotel tiering, evidence, check-in/out, luggage | [hotel-selection.md](references/hotel-selection.md) |
 | Restaurant selection, cuisine matrix, operating-status, reservation, swap cascade | [dining-rules.md](references/dining-rules.md) |
+| Attraction booking lead times, capacity limits, timed-entry, last-admission, seasonal closure, anchor-per-day density | [attractions.md](references/attractions.md) |
 | Souvenirs, 特产, 手信 | [local-specialties.md](references/local-specialties.md) |
 | Emergency numbers, medical, embassy, insurance claim, theft/loss, destination risks, ethical-tourism guardrails | [safety-and-emergency.md](references/safety-and-emergency.md) |
 | Knowledge layer classification, destination matching, search advisory cards | [knowledge-layers.md](references/knowledge-layers.md) |
@@ -100,6 +101,7 @@ Stop and ask before crossing any of these — rule bodies live in the referenced
 - Dropping existing sections, venues, or notes
 - Budget overage >15% — present overage, suggest trims, confirm
 - Restaurant/hotel/anchor-attraction swap after first draft — run cascade per [dining-rules.md](references/dining-rules.md) §9
+- Capacity-capped or timed-entry attraction not bookable for the target date at planning time — surface it; offer date shift / substitute anchor per [attractions.md](references/attractions.md) §1
 - Publishing a trip overlapping a destination peak without the "3–5 days before departure" recheck block per [dining-rules.md](references/dining-rules.md) §8
 - Self-drive day exceeding the intake-captured driving-time ceiling ([intake.md](references/intake.md) §8)
 - Daily density conflicts with the chosen pace (e.g., 6 anchors on `leisurely`)
@@ -132,7 +134,7 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 
 When a verification batch crosses a per-domain threshold, do **not** serialize the fetches in the main conversation — fan out. The orchestration skeleton is the same everywhere; only the trigger threshold and the per-item return fields differ (each domain file defines its own fields).
 
-Thresholds: Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10 · Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification · Specialties >5 → [local-specialties.md](references/local-specialties.md) §Parallel Verification · Safety ≥2 cities/countries → [safety-and-emergency.md](references/safety-and-emergency.md) §9 · Trip prep ≥2 countries → [trip-prep.md](references/trip-prep.md) §1.
+Thresholds: Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10 · Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification · Specialties >5 → [local-specialties.md](references/local-specialties.md) §Parallel Verification · Attractions ≥5 → [attractions.md](references/attractions.md) §Verification and Fallback · Safety ≥2 cities/countries → [safety-and-emergency.md](references/safety-and-emergency.md) §9 · Trip prep ≥2 countries → [trip-prep.md](references/trip-prep.md) §1.
 
 Skeleton (every batch follows this):
 
@@ -147,7 +149,7 @@ Skeleton (every batch follows this):
 1. **Inventory** the page or brief. Preserve all facts; move, don't delete. For `planning-only`, inventory brief + constraints rather than inventing page structure.
 2. **Plan round-trip transport first** per [transportation.md](references/transportation.md). Anchor arrival day forward from realistic "available in the city" time; anchor departure day backward from the hard cutoff (hotel check-out + luggage per [hotel-selection.md](references/hotel-selection.md)).
 3. **Rebuild around a generic trip timeline** (day archetypes: arrival, city, day-trip, weather-buffer, food-day, departure). Keep day-by-day as the spine; appendices for full reference. Produce a budget breakdown by category per [budget.md](references/budget.md) §1 (apply the region band, adjust by theme, surface hidden costs per §2); compare to the user's stated budget.
-4. **Embed local context into each day** — dining per [dining-rules.md](references/dining-rules.md) (matrix · operating status · target-date · ward · 4 required fields · route · reservations); attractions with booking windows; intra-city transport notes; self-drive day cards carry distance · driving time · longest single segment + route-book app per [transportation.md](references/transportation.md) §Rental Car / Self-Drive. Buffers between activities:
+4. **Embed local context into each day** — dining per [dining-rules.md](references/dining-rules.md) (matrix · operating status · target-date · ward · 4 required fields · route · reservations); attractions per [attractions.md](references/attractions.md) (booking lead time · capacity/timed-entry · last-admission · target-date + seasonal closure · one lead anchor per day); intra-city transport notes; self-drive day cards carry distance · driving time · longest single segment + route-book app per [transportation.md](references/transportation.md) §Rental Car / Self-Drive. Buffers between activities:
    - **Nearby** (15–20 min): within ~1 km / 10-min walk.
    - **Cross-district** (30–45 min): metro/bus/taxi or >1 km walk.
    - **With luggage** (+10–15 min): add to either tier.
@@ -183,6 +185,7 @@ Verify each area against its canonical checklist — do not re-check rules in re
 - **Budget**: category split cites a region band per [budget.md](references/budget.md) §1 (theme adjustment stated if applied); hidden costs from §2 surfaced where triggered; refundable-vs-non decisions stated per §3 when the party mix triggers it; FX assumption + rate date stated for cross-currency trips per §4; >15% overage triggered the checkpoint.
 - **Local context**: booking lead times stated; buffer times follow the tier above; off-peak suggestions cited or omitted.
 - **Dining**: passes [dining-rules.md](references/dining-rules.md) §§1-9.
+- **Attractions** (when present): pass [attractions.md](references/attractions.md) — capacity-capped sites carry booking lead time / status; scheduled against last-admission not closing; target-date + seasonal closure cleared; one lead anchor per day; density matches pace; ticket prices cited or degraded.
 - **Self-drive** (when applicable): passes [transportation.md](references/transportation.md) §Rental Car / Self-Drive + intake triad.
 - **Pace & theme**: daily density matches pace; theme conflicts resolved; high-intensity adventure reconciled per day.
 - **Intake carry-forward**: chronic-medication generics (if any) flow into Trip Preparation per-country legality flags; accessibility/medical needs (wheelchair · dialysis · cabin-O₂ · pregnancy · service animal) flow into transport/hotel/attraction vetting; minors-with-one-parent documents raised where enforced; cross-strait/Greater-China crossings handled as permits not visas per [trip-prep.md](references/trip-prep.md) §2; thermal-immersion safety carried forward when a hot spring/onsen appears with a vulnerable traveller per [safety-and-emergency.md](references/safety-and-emergency.md) §6; Ramadan/moveable-festival dates verified.

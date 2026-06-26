@@ -929,8 +929,8 @@
         "travel-sources.md §Reading OTA Listings for Hardware Condition"
       ]
     }
-  }
-  ,{
+  },
+  {
     "id": 27,
     "scenario": "hotel-heritage-ok-no-penalty",
     "prompt": "去京都住一晚有历史感的老町家（machiya）旅馆，我喜欢有年代感的地方，不在乎设施新不新，预算不限。",
@@ -949,8 +949,8 @@
         "intake.md §10"
       ]
     }
-  }
-  ,{
+  },
+  {
     "id": 28,
     "scenario": "hotel-no-preference-default-protects-user",
     "prompt": "下个月去顺德玩2晚，预算每晚600元，帮我推荐一家五星级酒店。",
@@ -969,6 +969,54 @@
         "hotel-selection.md §Hardware Weighting",
         "hotel-selection.md §Hardware-Freshness Signal",
         "hotel-selection.md §Recency-Weighted Reviews"
+      ]
+    }
+  },
+  {
+    "id": 29,
+    "scenario": "capacity-capped-attraction-advance-booking",
+    "prompt": "我和女朋友想10月去西班牙格拉纳达玩，主要就是冲着阿尔罕布拉宫去的，帮我安排一下，顺便看看还有什么好玩的。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_surface_capacity_booking_risk": "the Alhambra is capacity-capped and timed-entry — the plan must state its advance booking lead time (weeks to 2–3 months, batched release) and treat an unbooked slot as an unconfirmed item, not a sure thing",
+      "must_state_booking_lead_time_or_status": true,
+      "must_treat_unbookable_target_date_as_checkpoint": "if tickets for the target date are not available at planning time, surface it and offer date shift / substitute anchor — do not silently omit or assume walk-up",
+      "must_not": [
+        "present the Alhambra as a confirmed plan item with no booking lead time or status",
+        "assume same-day walk-up entry is possible for a capacity-capped timed-entry site",
+        "fabricate a specific ticket price without a cited source",
+        "schedule it as a casual drop-in like an uncapped free site",
+        "say only 'book ahead' for a batched-release site without naming the release schedule or booking calendar"
+      ],
+      "notes": "Pins attractions §1 — the capacity-capped advance-booking branch, the attraction failure mode with no same-area substitute (the design's origin scenario). Distinct from case 30 which tests the operating-calendar / last-admission / density branch.",
+      "rule_refs": [
+        "attractions.md §1",
+        "knowledge-layers.md §5"
+      ],
+      "must_state_release_schedule_for_batch_release": "for a batched-release capped site, the plan must state the release date/time or direct the user to the official booking calendar — 'book ahead' alone is insufficient (attractions §1 release-day rush)"
+    }
+  },
+  {
+    "id": 30,
+    "scenario": "attraction-last-admission-seasonal-closure-and-density",
+    "prompt": "12月去瑞士少女峰地区4天，想去几个观景台和山区景点，还想逛逛博物馆，帮我按悠闲的节奏排一下每天的行程。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_check_seasonal_closure": "December is winter in the Swiss Alps — seasonally-closed cable cars / mountain passes / alpine trails must be caught at planning time against the target date, not discovered on arrival",
+      "must_schedule_against_last_admission": "museums and viewing-deck attractions scheduled against last admission, not closing time",
+      "must_respect_one_lead_anchor_per_day": "with pace=leisurely (1–2 anchors/day), do not stack two heavy timed mountain anchors in one day; density must match the stated leisurely pace",
+      "must_check_weekly_closure": "museums with a weekly rest day (often Monday) checked against the specific trip date",
+      "must_not": [
+        "schedule a seasonally-closed winter attraction as if open",
+        "schedule an arrival after last admission because only the closing time was checked",
+        "stack two far-apart timed mountain anchors on one leisurely-paced day",
+        "exceed the leisurely density ceiling without surfacing the conflict"
+      ],
+      "notes": "Pins attractions §2 (operating calendar / last-admission / seasonal closure) and §3 (anchor-per-day + pace-calibrated density). Orthogonal to case 29's capacity/advance-booking branch.",
+      "rule_refs": [
+        "attractions.md §2",
+        "attractions.md §3",
+        "intake.md §4"
       ]
     }
   }

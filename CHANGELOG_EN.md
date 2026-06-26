@@ -8,6 +8,16 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.17.0] — 2026-06-26
+
+### Added
+- **`attractions.md` — attraction / activity rules (fills the biggest structural gap)** — the trip exists *for* its attractions, yet "what to do" was a single line in Core Workflow step 4. New file, four sections: §1 Advance Booking & Capacity (per-category lead-time table · capacity-capped sell-out logic for teamLab/Uffizi/Alhambra/Vatican/Ghibli · release-day rush · unbookable target date = checkpoint) · §2 Operating Calendar & Time-Slot Fit (last-admission ≠ closing · weekly + seasonal closures · timed-slot scheduling) · §3 Anchor-Per-Day & Density (one lead anchor/day · no two heavy timed anchors stacked · density calibrated to pace) · §4 Output Card. Thin file, heavy reuse of existing rules (verification→knowledge-layers · post-disaster closure→safety §6 · target-date discipline→dining §3 · batch→§Batch Verification · sources→travel-sources); no re-implementation, no deep file.
+- **test-prompts.json case 29 + 30** — case 29 capacity-capped advance-booking branch (Alhambra); case 30 last-admission + seasonal-closure + leisurely-density branch (Jungfrau region, winter). Orthogonal.
+
+### Changed
+- **SKILL.md integration** — Navigation table gains an attractions row; Core Workflow step 4 expands "attractions with booking windows" into a pointer; Confirmation Checkpoints gains "capacity/timed-entry not bookable for target date"; Final Check gains an attractions line.
+- **provenance.md** — new attractions.md section (§1→29 · §2→30 · §3→30); intake §4 gains case 30.
+
 ## [0.16.0] — 2026-06-26
 
 ### Changed

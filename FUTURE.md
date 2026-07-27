@@ -15,12 +15,12 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 1. Automated testing for `test-prompts.json`
 
-**Current state**: 25 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
+**Current state**: 34 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
 
 **What it could look like**: a script (Node / Python, Anthropic SDK) that runs each case, applies two kinds of assertion: `grep-level` (must_contain / must_not_contain_literal) and `judge-level` (must_have_section, rule_refs traced). Ground truth is already structured; the harness just consumes it.
 
 **Why not now**:
-- 25 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
+- 34 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
 - Judge-level assertion (LLM judging LLM) has drift risk.
 - Manual case spot-checking on PR review catches most regressions.
 
@@ -109,7 +109,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 7. Live-fetch smoke test in the release ritual
 
-**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 25 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
+**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 34 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
 
 **What it exposed**: v0.12.0 shipped a snippet-level §2 bar that passed every static check and both adversarial plan-reviews, then **failed on the first real fetch** — the "≥2 aggregators agree" gate was unsatisfiable in practice (DuckDuckGo and Bing return disjoint results), which would have demoted a genuinely-open restaurant. A v0.7.2-style dry-run caught it; v0.12.1 fixed it. Static checks structurally could not.
 
@@ -162,6 +162,25 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 **Worth doing when**:
 - A release ships ≥4 rule edits and a regression slips through that smaller batches would have isolated (motivates the learning-rate cap).
 - The same rejected edit is proposed twice across sessions (motivates the rejected-edit log — write it the second time, not the first).
+
+### 11. Intake field-coverage gaps exposed by the v0.19.0 dry-run
+
+**Current state**: v0.19.0's defaults-first intake (one batched question → read-back brief) works, but a dry-run on a deliberately thin brief ("10月去大阪玩5天，两个人，预算2万") showed the model having to *infer* four rules that `intake.md` does not state. All four are pre-existing, none introduced by v0.19.0:
+
+- **Departure city has no capture slot.** §1's input order (dates · destination · party · theme · pace · medication · food · budget · transport mode) never names origin city / home airport. It appears only in §0 Traveller Profile Recall, which is for returning users. A first-time conversation has no rule for where the origin question goes — yet no transport recommendation can exist without it. The dry-run bundled it next to transport preference by inference.
+- **Is a hotel "in scope" for a bare "帮我规划…玩5天"?** SKILL.md's Mode-Specific Scope table gives `planning-only` hotels "Direction only if asked." The dry-run read a generic full-trip ask as implicitly wanting hotel direction and spent a question slot on room style; a stricter reading would skip it until the user raises hotels. Both readings are defensible today.
+- **Currency / per-person-vs-total ambiguity has no rule.** "预算2万" carries neither. §2 says budget is an MVB field but not whether an ambiguous one is *asked* (consuming one of the four capped slots) or *defaulted-and-stated*. The dry-run defaulted to CNY-total and disclosed it — reasonable, but unsourced.
+- **"Month known, week unknown" vs the ≤7-day bar.** §2 accepts "a window with ≤7-day uncertainty." A bare "10月" with a known 5-day duration is a ~30-day window; the rule gives the numeric bar but not this shape, so the dry-run extrapolated via the Fallback Rules scaffold-mode clause.
+
+Adjacent wording gap from the same release's review: §10 is titled "Hotel Room Style and Transport Preference" and its first bullet says "room style," but the only hotel field the skill actually defines is **hardware preference** (`modern-hardware-preferred` / `heritage-OK` / `no-preference`). "Room style" is used as if it were a defined capture and never is — which is likely why the dry-run's question conflated the two.
+
+**What it could look like**: one intake-hygiene pass — add departure city to §1's order, pick one reading of hotel scope in `planning-only` and state it, add a one-line rule for the ask-vs-default-and-state boundary on unit/scope ambiguity, name the month-known case under §2's dates bar, and collapse "room style" into "hardware preference" throughout §10. Each is a line or two, and each needs its own test case, or the provenance loop won't hold it.
+
+**Why not now**: v0.19.0 was an efficiency release; these are content rules, and adding five at once contradicts §10's bounded-edit instinct — the intake flow just changed shape and should be exercised on a few real briefs before its field list is rewritten around a single dry-run.
+
+**Worth doing when**:
+- The next release touches `intake.md` for any reason (touch-it-test-it, per §9), OR
+- A second dry-run or real session hits the same inference twice — in particular, a plan built for the wrong origin city or the wrong budget currency, which is the only failure mode here that reaches the user's itinerary rather than just costing a turn.
 
 ---
 

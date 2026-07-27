@@ -36,7 +36,7 @@ Four steps, in order — the goal is a confirmed brief in **one or two turns**, 
 3. **Ask once, batched.** Only the items that genuinely change the plan go into a *single* structured question (`AskUserQuestion` where the harness offers it): the minimum-viable-brief fields that are still missing (§2), transport preference and hotel room style (§10) when they are unstated and in scope, plus any capture the Capture Relevance Rule fires (self-drive triad, child bands, accessibility, medication). If more than four apply, ask the top four by risk — legal/safety > scheduling > preference — and defer the rest to mid-flight checkpoints.
 4. **Read back a one-screen brief** listing every assumed default alongside the confirmed inputs, and wait for the user's go-ahead before detailed planning.
 
-If all four minimum-viable-brief fields are already present, step 3 asks **nothing** — go straight to the brief.
+If all four minimum-viable-brief fields are already present, step 3 drops to whatever still must not be defaulted silently — usually just transport preference, and room style if a hotel is in scope. If nothing is left, ask **nothing** and go straight to the brief.
 
 If the user's message implies destination inspiration ("有什么建议", "where should I go"), offer 2–3 brief destination ideas based on season + stated constraints **before** proceeding with the intake order.
 

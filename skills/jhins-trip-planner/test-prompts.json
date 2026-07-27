@@ -1210,5 +1210,49 @@
         "attractions.md §Verification and Fallback"
       ]
     }
+  },
+  {
+    "id": 38,
+    "scenario": "html-deliverable-embeds-trip-data",
+    "prompt": "帮我把这次京都5天的行程做成一个可以发给朋友的网页，酒店和餐厅都要写清楚价格。",
+    "assertions": {
+      "mode": "guide-redesign",
+      "must_embed_trip_data": "the HTML carries the whole plan in one <script id=\"trip-data\" type=\"application/json\"> block in <head>, shaped per assets/trip-data.schema.md — not prose-only markup",
+      "must_run_validator": "runs `node assets/validate.js <file.html>` before handing the file over, and fixes what it reports",
+      "must_pair_every_price_with_source": "each hotel rate and per-person price band carries source + date; the validator exits 1 naming the field otherwise",
+      "must_not": [
+        "emit an HTML file whose only copy of the data is the rendered prose",
+        "invent map markers for places whose coordinates were never verified",
+        "write GCJ-02 coordinates from Amap/Tencent into the block without converting to WGS-84"
+      ],
+      "notes": "Pins the v0.21 asset layer. The failure mode it prevents: a later 'swap day 3 dinner' request costs a second full research pass because the page holds no structured data.",
+      "rule_refs": [
+        "weather-and-output.md §2",
+        "assets/trip-data.schema.md §Validation",
+        "SKILL.md §Final Check"
+      ]
+    }
+  },
+  {
+    "id": 39,
+    "scenario": "edit-existing-page-parses-embedded-data",
+    "prompt": "上次那个京都网页，帮我把第3天的晚餐换一家，其他都别动。",
+    "assertions": {
+      "mode": "existing-page-refactor",
+      "must_parse_before_researching": "reads the page's trip-data block and mutates days[2].dining — does not re-research the untouched days",
+      "must_reverify_only_the_change": "the replacement restaurant gets its own operating-status check (dining-rules.md §2); the other 4 days' verified data is reused as-is",
+      "must_stage_backup": "the swap propagates per dining-rules.md §9, and backups[] gains or keeps an alternative for the replaced slot",
+      "must_not": [
+        "re-run the full itinerary verification because one dinner changed",
+        "drop any field the old block carried without restating it in the prose"
+      ],
+      "notes": "The payoff half of the embed rule — case 38 writes the block, this one spends it. Content preservation is decidable here by diffing the two blocks.",
+      "rule_refs": [
+        "weather-and-output.md §2",
+        "assets/trip-data.schema.md §Pre-staged backups",
+        "SKILL.md §Final Check",
+        "dining-rules.md §9"
+      ]
+    }
   }
 ]

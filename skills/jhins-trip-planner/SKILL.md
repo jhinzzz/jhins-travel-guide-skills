@@ -26,6 +26,7 @@ The goal is a trip the user will actually enjoy and remember. The rules below ex
 | [knowledge-layers.md](references/knowledge-layers.md) §§4–6 | Destination inspiration, search advisory cards, exhaustion gate | On trigger |
 | [trip-prep.md](references/trip-prep.md) | International trip: visa + transit visa, payment, SIM, insurance, etiquette, religious / festival overlap | On trigger |
 | [weather-and-output.md](references/weather-and-output.md) | Weather (incl. climate-shift risk); producing markdown / HTML files | On trigger |
+| [assets/trip-data.schema.md](assets/trip-data.schema.md) | Emitting or editing an HTML deliverable — the embedded `trip` object's field list | On trigger |
 | [travel-mode.md](references/travel-mode.md) | Independent-vs-guided decision, tour / private-guide inserts, licensed-operator vetting | On trigger |
 | [transportation.md](references/transportation.md) | Round-trip transport, booking windows, arrival times, transfers, self-drive route-book, multi-carrier luggage | On trigger |
 | [budget.md](references/budget.md) | Budget breakdown, hidden costs, refundable-vs-not, FX / payment timing | On trigger |
@@ -177,7 +178,9 @@ Verification fans out **once per itinerary**, not once per domain. Do not serial
 
 ## Final Check
 
-Judge the drafted output against the assertions below. Each one is decidable by reading the draft — **do not reopen a reference to run this check**. If an assertion fails, go back to the reference that owns the rule and fix the draft. Items marked `→ v0.21 validate.js` are not readable assertions and stay LLM-judged until the validator ships.
+Judge the drafted output against the assertions below. Each one is decidable by reading the draft — **do not reopen a reference to run this check**. If an assertion fails, go back to the reference that owns the rule and fix the draft.
+
+When the deliverable is HTML, run `node assets/validate.js <file.html>` first and fix what it reports. It decides field presence, source/date pairing, both transport legs, one lead anchor per day, and coordinate sanity mechanically — leaving you the judgement calls below.
 
 - **Output mode**: the artifact type matches what was asked — no HTML for `planning-only`, no bare advice when a guide was requested.
 - **Trip prep** (international): visa + transit-visa status · payment method · SIM/eSIM · insurance · etiquette items · religious/festival overlap all present as named lines, not "check before you go". Accessibility captures from intake appear resolved by name.
@@ -197,8 +200,8 @@ Judge the drafted output against the assertions below. Each one is decidable by 
 - **Pre-trip recheck block**: present when the trip overlaps a destination peak period **or** a disaster/closure signal fired. Exactly **one** such block in the output, never two.
 - **Specialties** (if present): every card carries 8 fields — item name · tier · what it is · where to buy · price range (with currency + source) · transport notes · best for · source + date. Season-bound items are flagged against the trip date. `signature` tier items each have ≥2 sources.
 - **Knowledge layers**: every named entity (hotel · restaurant · shop · dish · attraction · price) either carries web evidence or has degraded to a search advisory card. No named entity rests on training data alone. Destination-inspiration answers use objective dimensions only, no named entities.
-- **Data traceability**: every price, schedule, rating, and availability claim carries `(source, research date)`. Anything older than 3 months is flagged as such. → v0.21 validate.js
-- **Content preservation**: for `existing-page-refactor`, every fact in the source is still present — moved, not deleted. → v0.21 validate.js
+- **Data traceability**: every price, schedule, rating, and availability claim carries `(source, research date)`. Anything older than 3 months is flagged as such.
+- **Content preservation**: for `existing-page-refactor`, every fact in the source is still present — moved, not deleted. When the source page carried a `trip-data` block, diff it against the new one; nothing may vanish without being restated in the prose.
 
 ## Minimal Output Shape
 

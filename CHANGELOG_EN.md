@@ -8,6 +8,23 @@ Version numbers follow the spirit of semver:
 - `0.x.0` — new coverage area or structural refactor
 - `0.x.y` — small patch, no user-visible behavior change
 
+## [0.19.0] — 2026-07-27
+
+Efficiency release: no new rules, only changes to *where rules live* and *how questions are paced*. Not one anti-fabrication rule was touched.
+
+### Changed
+- **All 20 `SKILL.md §Final Check` items rewritten as self-contained assertions** — each previously read "confirm the output passes <reference>'s own checklist," which meant re-reading the entire corpus after drafting: the largest avoidable cost in the skill. Each item now states the **observable** the rule produces (e.g. a hotel card carries 8 fields — name+tier · area · transit · rate+currency+source+date · budget fit · why · verdict · Hardware), judgeable against the draft without reopening a reference. Two items that cannot be judged by reading (data-traceability completeness, content preservation) are marked `→ v0.21 validate.js` and stay LLM-judged until the validator ships.
+- **`SKILL.md §Navigation` is now the single router, with an Always/On-trigger tier** — the table said "read lazily" while later sections independently pointed at nearly every reference (76 links before this release; `transportation.md` targeted 11 times, `dining-rules.md` 10), which defeated lazy loading in practice. This release brings the total to 47 and takes the redundant links in §Confirmation Checkpoints and §Fallback Rules to zero (§Data Traceability keeps its links — it is the anti-fabrication entry point and may be read before Navigation). The Always tier is exactly three entries: intake · knowledge-layers §§1–3 · travel-sources §Citation Format.
+- **`intake.md §1` is now defaults-first** — the old flow asked one item at a time, capped at three per turn, costing many round-trips before any draft existed. Four steps now: extract what is already stated → fill every unstated parameter with an explicit default (pace, theme, food preferences, daily start/end times — do not ask) → put only plan-changing items into a **single** structured question (`AskUserQuestion`, max four ranked by risk: legal/safety > scheduling > preference) → read back a one-screen brief and wait. The confirmation gate itself is not relaxed; it costs 1–2 turns instead of many.
+- **Transport mode and room style are not defaults** — they belong to that one batched question. The transport mode (flight / rail / self-drive) determines the whole shape of the trip and a wrong guess means redoing it, and §Confirmation Checkpoints already made "choosing a transport mode when the user has stated no preference" a stop-and-ask. The all-four-MVB-fields-present shortcut narrows accordingly: it drops to whatever still must not be defaulted silently, and skips the question entirely only when nothing is left.
+- **`SKILL.md §Confirmation Checkpoints` batching rule** — intake-time checkpoints fold into that single batched question; **mid-flight checkpoints are still asked one at a time**, because the reason for that rule is isolation, which batching would defeat.
+- **`test-prompts.json` case 3** — `must_ask_one_at_a_time_or_batch_up_to_three` contradicted the new batching rule; replaced with "three missing core inputs → one batched question" plus a two-turn ceiling.
+
+### Added
+- **`intake.md §0` Traveller Profile Recall** — at the start of a request, check for a stored traveller profile (home city / departure airport · usual party composition · pace preference · hotel tier and hardware preference · disliked activity types · loyalty programmes). If present, read it back in one sentence and do not re-ask what it answers. If absent, **skip silently** — do not prompt the user to create one, and never invent recalled preferences. The rule names the *fields*, not the storage mechanism, so it degrades to a no-op in a harness without persistent memory.
+- **`test-prompts.json` cases 33 + 34** — case 33: when all four minimum-viable-brief fields are present, no core-input question is asked, every assumed default appears in the brief, and the transport mode goes into the batched question rather than being picked silently. Case 34: profile absent degrades silently; fabricating profile contents is the failure mode it guards.
+- **`provenance.md`** — fixes a pre-existing gap: case 21 references `SKILL.md §Final Check` but the table never had that row. Adds intake §0 → 34 · §1 → 3, 33 · §2 → 33, and records case 33 under §10 and §Confirmation Checkpoints.
+
 ## [0.18.0] — 2026-06-26
 
 ### Added

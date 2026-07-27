@@ -15,23 +15,25 @@ The goal is a trip the user will actually enjoy and remember. The rules below ex
 
 ## Navigation
 
-Read references lazily, based on what the request actually needs:
+**Always** = read at the start of any trip request. **On trigger** = read only when the trigger fires. This table is the *only* router — later sections state rules, not pointers.
 
-| When the request involves… | Read this |
-|---|---|
-| Intake order, minimum viable brief, theme / pace / medication / accessibility / child / self-drive / food captures | [intake.md](references/intake.md) |
-| Visa + transit visa, payment, SIM, insurance, etiquette, religious / festival overlap, multi-country parallel verification | [trip-prep.md](references/trip-prep.md) |
-| Weather (incl. climate-shift risk), output format (markdown / HTML) | [weather-and-output.md](references/weather-and-output.md) |
-| Independent-travel-vs-guided decision, tour / private-guide inserts, licensed-operator vetting | [travel-mode.md](references/travel-mode.md) |
-| Round-trip transport, booking windows, arrival times, transfers, self-drive route-book, multi-carrier luggage | [transportation.md](references/transportation.md) |
-| Budget category split by region, hidden costs, refundable-vs-not, FX / payment timing | [budget.md](references/budget.md) |
-| Hotel tiering, evidence, check-in/out, luggage | [hotel-selection.md](references/hotel-selection.md) |
-| Restaurant selection, cuisine matrix, operating-status, reservation, swap cascade | [dining-rules.md](references/dining-rules.md) |
-| Attraction booking lead times, capacity limits, timed-entry, last-admission, seasonal closure, anchor-per-day density | [attractions.md](references/attractions.md) |
-| Souvenirs, 特产, 手信 | [local-specialties.md](references/local-specialties.md) |
-| Emergency numbers, medical, embassy, insurance claim, theft/loss, destination risks, ethical-tourism guardrails | [safety-and-emergency.md](references/safety-and-emergency.md) |
-| Knowledge layer classification, destination matching, search advisory cards | [knowledge-layers.md](references/knowledge-layers.md) |
-| Which platform to use for which info type, rating floors, citation format | [travel-sources.md](references/travel-sources.md) |
+| Read this | When | Tier |
+|---|---|---|
+| [intake.md](references/intake.md) | Profile recall, brief capture, minimum-viable threshold, theme / pace / medication / accessibility / child / self-drive / food captures | **Always** |
+| [knowledge-layers.md](references/knowledge-layers.md) §§1–3 | Classifying every named entity before it enters the draft | **Always** |
+| [travel-sources.md](references/travel-sources.md) §Citation Format | Writing any price, schedule, or rating | **Always** |
+| [travel-sources.md](references/travel-sources.md) (rest) | Which platform for which info type, rating floors, login-wall channel ladder | On trigger |
+| [knowledge-layers.md](references/knowledge-layers.md) §§4–6 | Destination inspiration, search advisory cards, exhaustion gate | On trigger |
+| [trip-prep.md](references/trip-prep.md) | International trip: visa + transit visa, payment, SIM, insurance, etiquette, religious / festival overlap | On trigger |
+| [weather-and-output.md](references/weather-and-output.md) | Weather (incl. climate-shift risk); producing markdown / HTML files | On trigger |
+| [travel-mode.md](references/travel-mode.md) | Independent-vs-guided decision, tour / private-guide inserts, licensed-operator vetting | On trigger |
+| [transportation.md](references/transportation.md) | Round-trip transport, booking windows, arrival times, transfers, self-drive route-book, multi-carrier luggage | On trigger |
+| [budget.md](references/budget.md) | Budget breakdown, hidden costs, refundable-vs-not, FX / payment timing | On trigger |
+| [hotel-selection.md](references/hotel-selection.md) | Hotel shortlist requested | On trigger |
+| [dining-rules.md](references/dining-rules.md) | Any restaurant enters the draft | On trigger |
+| [attractions.md](references/attractions.md) | Any attraction enters the draft — booking lead times, capacity, timed-entry, last-admission, seasonal closure, anchor density | On trigger |
+| [local-specialties.md](references/local-specialties.md) | Souvenirs, 特产, 手信 | On trigger |
+| [safety-and-emergency.md](references/safety-and-emergency.md) | Multi-day itinerary or any full trip plan | On trigger |
 
 If a rule is in a reference, do not restate it here — follow the pointer.
 
@@ -96,14 +98,14 @@ Stop and ask before crossing any of these — rule bodies live in the referenced
 
 - Switching from advice/outline into markdown + HTML deliverables
 - Replacing an existing page structure (vs. reorganizing inside it)
-- Choosing a transport mode when the user has stated no preference (see [transportation.md](references/transportation.md))
+- Choosing a transport mode when the user has stated no preference
 - Treating missing dates/destination/budget as permission to invent
 - Dropping existing sections, venues, or notes
 - Budget overage >15% — present overage, suggest trims, confirm
-- Restaurant/hotel/anchor-attraction swap after first draft — run cascade per [dining-rules.md](references/dining-rules.md) §9
-- Capacity-capped or timed-entry attraction not bookable for the target date at planning time — surface it; offer date shift / substitute anchor per [attractions.md](references/attractions.md) §1
-- Publishing a trip overlapping a destination peak without the "3–5 days before departure" recheck block per [dining-rules.md](references/dining-rules.md) §8
-- Self-drive day exceeding the intake-captured driving-time ceiling ([intake.md](references/intake.md) §8)
+- Restaurant/hotel/anchor-attraction swap after first draft — run the swap cascade (dining-rules §9)
+- Capacity-capped or timed-entry attraction not bookable for the target date at planning time — surface it; offer date shift / substitute anchor (attractions §1)
+- Publishing a trip overlapping a destination peak without the "3–5 days before departure" recheck block (dining-rules §8)
+- Self-drive day exceeding the intake-captured driving-time ceiling (intake §8)
 - Daily density conflicts with the chosen pace (e.g., 6 anchors on `leisurely`)
 - Theme conflicts (e.g., `adventure` + `wellness`, `photography` + `family-young-kids`) — ask which theme wins per day before drafting
 - `pace=leisurely` + high-intensity adventure sub-activity (sunrise-hike, pre-dawn start, full-day trek, open-water dive, multi-pitch, whitewater) — reconcile per day
@@ -115,19 +117,19 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 
 - **Missing dates/destination** → stay in scaffold mode; surface assumptions; no day-by-day sequencing.
 - **Missing budget or food preferences** → neutral structure; mark hotel/dining as provisional.
-- **No reliable forecast** → seasonal averages, labeled approximate; also check climate-shift risk per [weather-and-output.md](references/weather-and-output.md) §1.
-- **Weak hotel evidence** → do not promote as first pick; backup/niche/omit per [hotel-selection.md](references/hotel-selection.md). If verification times out, degrade to search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5.
+- **No reliable forecast** → seasonal averages, labeled approximate; also check climate-shift risk (weather-and-output §1).
+- **Weak hotel evidence** → do not promote as first pick; backup/niche/omit per hotel-selection. If verification times out, degrade to a search advisory card (knowledge-layers §5).
 - **Missing transport preference** → if one mode is dominant, present as primary with alternatives and confirm; if genuinely competitive, present comparison and wait.
-- **Transport schedule/price unavailable** → ranges + research date per [transportation.md](references/transportation.md); never fabricate.
+- **Transport schedule/price unavailable** → ranges + research date (transportation); never fabricate.
 - **Visa/entry unknown** → flag before booking; assume nothing.
 - **Ticket/reservation availability unknown** → label "advance booking likely required — verify"; do not schedule silently.
 - **Off-peak timing unknown** → omit the suggestion rather than guess.
-- **Self-drive infeasible/risky** (licence not recognised, low-signal stretches, LHD/RHD first-timer, elderly/kids/pregnant/pets/altitude) → follow [transportation.md](references/transportation.md) §Rental Car / Self-Drive.
+- **Self-drive infeasible/risky** (licence not recognised, low-signal stretches, LHD/RHD first-timer, elderly/kids/pregnant/pets/altitude) → follow transportation §Rental Car / Self-Drive.
 - **Last-minute trip (≤48h)** → real-time channels only; warn about price/availability; skip visa-dependent options.
 - **Conflicting constraints** (luxury-on-tight-budget, 10-attractions-in-2-days) → surface conflict; offer 2–3 prioritization choices; do not silently compromise.
-- **Thin specialty data** → category guidance + "verify locally"; no specific shops without source per [local-specialties.md](references/local-specialties.md). Output search advisory card per [knowledge-layers.md](references/knowledge-layers.md) §5 when verification unavailable.
+- **Thin specialty data** → category guidance + "verify locally"; no specific shops without source (local-specialties). Output a search advisory card (knowledge-layers §5) when verification unavailable.
 - **Contradictory existing content** → preserve source facts; flag; don't resolve by invention.
-- **Web verification stalls** → a login wall / 302 / blank on one platform is **not** a failure. Climb the channel ladder and apply the exhaustion gate ([knowledge-layers.md](references/knowledge-layers.md) §6) before degrading to a search advisory card.
+- **Web verification stalls** → a login wall / 302 / blank on one platform is **not** a failure. Climb the channel ladder and apply the exhaustion gate (knowledge-layers §6) before degrading to a search advisory card.
 - **Batch verification** — when a batch crosses a per-domain threshold, fan out parallel sub-agents per §Batch Verification below.
 
 ## Batch Verification

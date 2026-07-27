@@ -100,7 +100,7 @@ When presenting multiple specialties for a destination:
 
 ## Parallel Verification for Specialty Shortlists
 
-Trigger: shortlist exceeds **5 candidate specialties** (typical when the destination has multiple well-known categories — tea + silk + crafts + snacks, etc.). Run the fan-out per SKILL.md §Batch Verification — slicing axis: by category or sub-region.
+No separate specialty threshold: every candidate needing verification joins the itinerary-wide list and fans out with it per SKILL.md §Batch Verification, sliced by geography.
 
 Per-item return fields: **tier · shop or outlet · address · current price range · customs / transport flag · source URLs · research date**.
 

@@ -276,7 +276,7 @@
         "all headings/anchors referencing old name",
         "cuisine matrix (free old / occupy new)"
       ],
-      "must_dispatch_parallel_sub_agents_for": "remaining days' restaurants operating-status recheck",
+      "must_dispatch_parallel_sub_agents_for": "remaining days' restaurants operating-status recheck — the recheck list joins the itinerary-wide batch and slices by geography (ward), not by domain",
       "must_report_to_user": [
         "list of updated locations",
         "categories freed/occupied"
@@ -406,10 +406,7 @@
     "scenario": "multi-country-safety-parallel",
     "prompt": "明年春节（2月10日-2月22日）全家四口（父母+我+我老婆）去日韩泰三国串联：东京4天+首尔4天+曼谷4天，从北京出发，预算8万元，爸爸有高血压在吃药",
     "assertions": {
-      "must_trigger_parallel_sub_agents": [
-        "trip-prep (≥2 countries → 2 sub-agents by country)",
-        "safety (≥2 cities → 2–3 sub-agents)"
-      ],
+      "must_fan_out_exactly_once": "one itinerary-wide fan-out sliced by geography — 3 sub-agents, one per country (Japan / Korea / Thailand), each returning that country's trip-prep AND safety rows together. Not a trip-prep sweep followed by a safety sweep.",
       "must_trigger_budget_overage_check": "8万 for 4 pax across 3 countries — likely >15% over; confirm",
       "chronic_medication_legality_per_country": {
         "Japan": "hypertension meds OK; verify exact drug",
@@ -446,9 +443,13 @@
       ],
       "spring_festival_pretrip_recheck_block_required": true,
       "cuisine_matrix_spans_all_three_cities": true,
+      "must_not": [
+        "run one fan-out for trip-prep and a second for safety — the geographic slice carries both"
+      ],
       "rule_refs": [
         "trip-prep.md §1",
-        "safety-and-emergency.md §9"
+        "safety-and-emergency.md §9",
+        "SKILL.md §Batch Verification"
       ]
     }
   },
@@ -1125,6 +1126,82 @@
       "notes": "Pins intake.md §0. The rule names the fields, not the storage mechanism, so it must degrade to a no-op in a harness with no persistent memory. Fabricating a recalled profile is the failure mode this case guards.",
       "rule_refs": [
         "intake.md §0"
+      ]
+    }
+  },
+  {
+    "id": 35,
+    "scenario": "tier-b-claim-clears-on-one-source",
+    "prompt": "京都清水寺的开放时间和门票多少钱？周几休息？",
+    "assertions": {
+      "mode": "planning-only",
+      "tier": "B — opening hours, weekly closure, and ticket price range are all Tier-B claims",
+      "one_authoritative_source_is_sufficient": "the official temple site alone clears the bar — do NOT withhold the answer pending a second independent source",
+      "must_still_carry": [
+        "source name",
+        "research date"
+      ],
+      "must_not": [
+        "demand ≥2 independent sources before answering a Tier-B claim",
+        "state opening hours or ticket price from training data with no source at all",
+        "degrade to a search advisory card merely because only one source was found"
+      ],
+      "notes": "Pins knowledge-layers.md §3's Tier-B standard: 1 authoritative source + source and date, no second-source requirement. The failure mode this guards is the pre-v0.20 behaviour where every claim paid Tier-A cost — two fetches for a datum the official page settles. The bright-line test (§2) still applies: this is a Local Knowledge claim and needs a source, just not two.",
+      "rule_refs": [
+        "knowledge-layers.md §2 (bright-line test)",
+        "knowledge-layers.md §3"
+      ]
+    }
+  },
+  {
+    "id": 36,
+    "scenario": "tier-a-claim-keeps-full-standard",
+    "prompt": "帮我确认一下大阪这家「鮨 なんば」还在营业吗？想订 Day 2 晚餐。",
+    "assertions": {
+      "mode": "planning-only",
+      "tier": "A — restaurant operating status",
+      "must_apply_full_tier_a_standard": [
+        "≥2 independent sources",
+        "live page check (not training data)",
+        "channel ladder when a platform is login-walled",
+        "exhaustion gate before any degradation"
+      ],
+      "must_not": [
+        "accept a single source because verification is now tiered",
+        "output the restaurant as open on training-data recall",
+        "treat Tier-B's one-source rule as applying to operating status"
+      ],
+      "if_unverifiable": "search advisory card only — the dining-rules.md §2 absolute ban survives tiering; no 'approximate' label is permitted for restaurants",
+      "notes": "The guard on v0.20's tiering: Tier A is the existing standard verbatim, so nothing in §3 relaxes the restaurant operating-status rules. Paired with case 35 — same file, opposite tier, so a model that collapses the tiers fails one of the two.",
+      "rule_refs": [
+        "knowledge-layers.md §3",
+        "dining-rules.md §2 (operating-status verification)",
+        "knowledge-layers.md §6 (exhaustion gate)"
+      ]
+    }
+  },
+  {
+    "id": 37,
+    "scenario": "single-fan-out-sliced-by-geography",
+    "prompt": "帮我把东京5天的行程定下来：想去3家餐厅（浅草、银座、惠比寿各一家）、订2家酒店（浅草和银座）、再加teamLab和东京塔两个景点，都帮我核实一下。",
+    "assertions": {
+      "mode": "planning-only",
+      "combined_verification_list_size": "7 items (3 restaurants + 2 hotels + 2 attractions) — crosses the ≥5 single trigger",
+      "must_fan_out_exactly_once": "one fan-out, 2–4 sub-agents sliced by district (浅草 / 银座 / 惠比寿 + teamLab-area), each verifying every item in its slice regardless of domain",
+      "must_draft_skeleton_before_verifying": "names selected first, then the full Tier-A + Tier-B list computed in one step",
+      "must_emit_status_line": "Dispatched N sub-agents for verification across M slices",
+      "must_not": [
+        "run a dining sweep, then a hotel sweep, then an attractions sweep",
+        "fan out once per domain because each domain has its own return fields",
+        "serialize the fetches in the main conversation"
+      ],
+      "per_item_return_fields_stay_domain_specific": "the 浅草 agent returns a dining row (operating status · address · closures · reservation channel) AND a hotel row (rate · ratings · transit · check-in/out · luggage · refund) — different fields, same agent, same slice",
+      "notes": "Pins v0.20's single fan-out. Same-city trip, so the ≥5-item half of the trigger is what fires (the ≥2-cities half is covered by case 12). The failure mode is the pre-v0.20 behaviour: six per-domain thresholds meant one itinerary could fan out up to six times sequentially.",
+      "rule_refs": [
+        "SKILL.md §Batch Verification",
+        "dining-rules.md §10",
+        "hotel-selection.md §Parallel Verification",
+        "attractions.md §Verification and Fallback"
       ]
     }
   }

@@ -95,7 +95,7 @@ All safety info follows skill-wide traceability rules — cite source (official 
 
 ### Rule
 
-Trigger: trip crosses ≥ 2 cities or ≥ 2 countries. Run the fan-out per SKILL.md §Batch Verification — slicing axis: one city or country's full safety block per sub-agent.
+A trip crossing ≥2 cities or countries already trips the single fan-out in SKILL.md §Batch Verification, and its geographic slicing is this domain's slicing: **one city or country's full safety block per sub-agent**. Each destination's safety items ride in that slice's row set — do not run a separate safety sweep.
 
 Per-destination return fields: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination risks with §6 phrasing · source URLs · research date.
 

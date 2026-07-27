@@ -130,21 +130,22 @@ Degrade gracefully — never invent certainty. Each fallback: what's missing →
 - **Thin specialty data** → category guidance + "verify locally"; no specific shops without source (local-specialties). Output a search advisory card (knowledge-layers §5) when verification unavailable.
 - **Contradictory existing content** → preserve source facts; flag; don't resolve by invention.
 - **Web verification stalls** → a login wall / 302 / blank on one platform is **not** a failure. Climb the channel ladder and apply the exhaustion gate (knowledge-layers §6) before degrading to a search advisory card.
-- **Batch verification** — when a batch crosses a per-domain threshold, fan out parallel sub-agents per §Batch Verification below.
+- **Batch verification** — when the combined verification list reaches ≥5 items or the trip spans ≥2 cities, fan out parallel sub-agents per §Batch Verification below.
 
 ## Batch Verification
 
-When a verification batch crosses a per-domain threshold, do **not** serialize the fetches in the main conversation — fan out. The orchestration skeleton is the same everywhere; only the trigger threshold and the per-item return fields differ (each domain file defines its own fields).
+Verification fans out **once per itinerary**, not once per domain. Do not serialize the fetches in the main conversation, and do not run a dining sweep, then a hotel sweep, then an attractions sweep — one restaurant's operating status, address, weekly closure, and reservation channel come back from one agent in one row.
 
-Thresholds: Dining ≥5 → [dining-rules.md](references/dining-rules.md) §10 · Hotels >4 → [hotel-selection.md](references/hotel-selection.md) §Parallel Verification · Specialties >5 → [local-specialties.md](references/local-specialties.md) §Parallel Verification · Attractions ≥5 → [attractions.md](references/attractions.md) §Verification and Fallback · Safety ≥2 cities/countries → [safety-and-emergency.md](references/safety-and-emergency.md) §9 · Trip prep ≥2 countries → [trip-prep.md](references/trip-prep.md) §1.
+**Single trigger**: the combined Tier-A + Tier-B verification list (per [knowledge-layers.md](references/knowledge-layers.md) §3) reaches **≥5 items**, or the trip spans **≥2 cities or countries**.
 
-Skeleton (every batch follows this):
-
-1. Spawn **2–3 parallel sub-agents**, each covering one slice of the batch along the domain's natural axis (by city, ward, budget tier, country, or category).
-2. Each sub-agent returns **one structured row per item** — the row's fields are domain-specific, defined in the domain file's section.
-3. Each sub-agent independently obeys its domain's degradation / timeout rules (e.g. hotel Timeout Degradation, the channel-ladder exhaustion gate).
-4. The main conversation synthesizes the rows, de-duplicates across slices, and decides the final output.
-5. Emit one status line to the user: `Dispatched N sub-agents for <domain> verification`.
+1. Draft the itinerary skeleton first — names selected, nothing verified.
+2. Compute the whole Tier-A + Tier-B list in one step, across every domain.
+3. Slice by **geography** (city, then district), not by domain. Trip-prep and safety slice by country / city, which is the same axis.
+4. Fan out **2–4 sub-agents**, one per slice. Each verifies *everything* in its slice.
+5. Each sub-agent returns **one structured row per item**, using the return fields its domain defines — dining §10 · hotels §Parallel Verification · specialties §Parallel Verification · attractions §Verification and Fallback · safety §9 · trip prep §1.
+6. Each sub-agent independently obeys its domain's degradation / timeout rules (hotel Timeout Degradation, the channel-ladder exhaustion gate).
+7. The main conversation synthesizes the rows, de-duplicates across slices, and decides the final output.
+8. Emit one status line: `Dispatched N sub-agents for verification across M slices`.
 
 ## Core Workflow
 

@@ -161,7 +161,7 @@ Some popular activities are not safe for animals, communities, or the traveller'
 
 Why this batches: a multi-city international trip easily generates 15+ independent research tasks (per city: emergency numbers × medical facility × consulate × insurer hotline × destination-specific risks) — serializing them in the main conversation is the failure mode this rule prevents.
 
-Trigger: trip crosses ≥ 2 cities or ≥ 2 countries. Run the fan-out per SKILL.md §Batch Verification — slicing axis: one destination per sub-agent.
+A trip crossing ≥2 cities or countries already trips the single fan-out in SKILL.md §Batch Verification — safety items ride in the geographic slices, one destination per sub-agent. No separate safety sweep.
 
 Per-destination return fields: emergency numbers · foreigner-friendly hospital + address · embassy / consulate + after-hours line · insurer claim hotline · top 2–3 destination-specific risks with §6 phrasing · source URLs · research date.
 

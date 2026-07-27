@@ -10,78 +10,77 @@ Version numbers follow the spirit of semver:
 
 ## [0.21.0] — 2026-07-27
 
-Asset-layer release: HTML deliverables carry their own structured data, so editing an itinerary no longer means re-researching it.
+HTML deliverables carry their own structured data, so editing an itinerary no longer means re-researching it.
 
 ### Added
-- **`assets/trip-data.schema.md`** — the contract for the `trip` object embedded in every HTML deliverable: trip · days · attractions · dining · hotels · transport · budget · safety, with WGS-84 coordinates throughout and a mandatory source + date on every price and rating. New `backups[]` field pre-stages alternatives, so rain, a sell-out, a weekly closure, or a budget overrun each has a replacement already in hand.
-- **`assets/validate.js`** — zero-dependency Node validator. Missing fields, an unsourced price, only one transport leg, two lead anchors on one day, colliding coordinates, or a point outside the destination bounding box each fail with the offending field named. `--gcj02-to-wgs84` converts Amap / Tencent coordinates; `--selftest` covers 13 cases.
-- **test-prompts.json cases 38 + 39** — 38 asserts the HTML embeds `trip-data` and runs the validator; 39 asserts a follow-up edit parses the existing data and re-verifies only what actually changed.
+- **`assets/trip-data.schema.md`** — the field list for the `trip` object embedded in every HTML deliverable (trip · days · attractions · dining · hotels · transport · budget · safety). Coordinates are WGS-84 throughout; every price and rating carries a source and a date. New `backups[]` pre-stages a replacement for rain, a sell-out, a weekly closure, and a budget overrun.
+- **`assets/validate.js`** — zero-dependency validator. Missing fields, an unsourced price, only one transport leg, two lead anchors on one day, colliding coordinates, or a point outside the destination bounding box each fail with the offending field named. Ships with `--gcj02-to-wgs84` for Amap / Tencent coordinates.
+- **test-prompts.json cases 38 + 39** — the HTML must embed the data and run the validator; a follow-up edit parses what is already there.
 
 ### Changed
-- **weather-and-output.md §2** — adds the data-embed rule and the Leaflet map rule. "Swap day 3's dinner" now parses and rewrites the existing data instead of researching the whole trip again.
-- **SKILL.md §Final Check** — data traceability and content preservation are now the validator's job; run `node assets/validate.js` before handing over an HTML file.
-- **`scripts/check-provenance.sh`** — resolves rule_refs paths outside `references/`.
+- **weather-and-output.md §2** — adds the data-embed rule and the Leaflet map rule. "Swap day 3's dinner" now parses and rewrites the existing data, re-verifying only what actually changed.
+- **SKILL.md §Final Check** — run `node assets/validate.js` before handing over an HTML file; field presence and source pairing are the validator's job.
+- **README / README_CN** — `assets/` and attractions.md added to the layout list.
 
 ## [0.20.0] — 2026-07-27
 
-Verification-tiering release: how hard a claim is verified now depends on how bad it is if wrong, and batch verification collapses from up to six sequential fan-outs into one.
+How hard a claim is verified now depends on how bad it is if wrong, and batch verification collapses from up to six sequential fan-outs into one.
 
 ### Changed
-- **knowledge-layers.md §3 gains an evidence-tier table.** **Tier A (ruins the trip)** — restaurant operating status · capacity/timed-entry status and deadlines · visa and entry · round-trip schedule and fare · disaster closures · hotel existence → the existing standard, verbatim (≥2 independent sources · live page · channel ladder · exhaustion gate). **Tier B (disrupts a day)** — opening hours · weekly closures · ticket prices · walking times · shop hours → one authoritative source plus its research date. **Tier C (nice to have)** — landmark background · district character · crowd levels · packing advice → no fetch required. The Strict / Tolerated degradation table and the hotel brand-recognition carve-out are preserved as-is. Tiers B and C stop paying Tier-A verification cost; the line on what may never be invented is unchanged.
-- **Hotel nightly rates point at §Progressive Search** instead of entering the tier table; the three ≥2-source rules are untouched.
-- **SKILL.md §Batch Verification: six triggers collapse into one, sliced by geography instead of by domain.** New trigger: **≥5 combined items, or the trip spans ≥2 cities or countries.** Flow: draft the skeleton → compute the whole verification list at once → slice by city (then district) → one sub-agent per slice verifies everything in it → synthesize and de-duplicate. An itinerary fans out at most once, and no single venue gets looked up by two agents. Country-level items (visa / entry · currency + payment · eSIM · nationwide emergency numbers) attach to one slice per country. Per-domain return fields are unchanged.
-- **Six domain thresholds now join the combined list** — dining §10 · hotel §Parallel Verification · specialties §Parallel Verification · attractions §Verification and Fallback · safety §9 · trip-prep §1, plus the two deep-file restatements.
-- **test-prompts.json cases 8 + 12 + 14** — now assert exactly one fan-out, geographic slicing, and country-level items on a single slice.
+- **knowledge-layers.md §3 gains an evidence-tier table** — Tier A (ruins the trip: restaurant operating status · capacity/timed-entry · visa and entry · round-trip schedule and fare · disaster closures · hotel existence) keeps the full standard; Tier B (disrupts a day: opening hours · weekly closures · ticket prices · walking times · shop hours) needs one authoritative source plus its research date; Tier C (landmark background · district character · crowd levels · packing advice) needs no fetch. Tiers B and C stop paying Tier-A cost; the line on what may never be invented is unchanged.
+- **SKILL.md §Batch Verification** — one trigger, "≥5 combined items or the trip spans ≥2 cities or countries", sliced by geography (city, then district) instead of by domain. An itinerary fans out at most once and no venue is looked up by two agents; country-level items attach to one slice per country.
+- **Six domain thresholds join the combined list** — dining §10 · hotel · specialties · attractions · safety §9 · trip-prep §1.
+- **Hotel nightly rates point at §Progressive Search** instead of entering the tier table.
+- **test-prompts.json cases 8 + 12 + 14** — now assert a single geography-sliced fan-out.
 
 ### Added
-- **test-prompts.json cases 35 + 36 + 37** — 35: a Tier-B claim clears on one source (Kiyomizu-dera hours / ticket / weekly closure). 36: a Tier-A claim keeps the full standard (restaurant operating status). 37: one geography-sliced fan-out (7 Tokyo items sliced by district).
-- **provenance.md** — case coverage added for §Batch Verification, knowledge-layers §3, attractions §Verification and Fallback, and hotel §Parallel Verification.
+- **test-prompts.json cases 35 + 36 + 37** — a Tier-B claim clears on one source, a Tier-A claim keeps the full standard, one geography-sliced fan-out.
+- **provenance.md** — case coverage added for the new rules.
 
 ## [0.19.0] — 2026-07-27
 
-Efficiency release: no new rules, only changes to where rules live and how questions are paced. Not one anti-fabrication rule was touched.
+Efficiency release: the rules are unchanged; where they live and how questions are paced is not.
 
 ### Changed
-- **All 20 `SKILL.md §Final Check` items rewritten as self-contained assertions** — each now states the observable the rule produces (e.g. a hotel card carries 8 fields — name+tier · area · transit · rate+currency+source+date · budget fit · why · verdict · Hardware), judgeable against the draft. Removes a full re-read of the corpus after every draft.
-- **`SKILL.md §Navigation` is now the single router, split into Always / On-trigger tiers** — total links drop from 76 to 47, so lazy loading actually works. The Always tier is three entries: intake · knowledge-layers §§1–3 · travel-sources §Citation Format.
-- **`intake.md §1` is now defaults-first** — extract what is stated → fill unstated parameters with explicit defaults (pace, theme, food preferences, daily start/end times) → put only plan-changing items into one structured question (max four, ranked legal/safety > scheduling > preference) → read back a one-screen brief. Intake costs 1–2 turns instead of many, with the confirmation gate intact.
+- **All 20 `SKILL.md §Final Check` items rewritten as self-contained assertions** — each states the observable the rule produces, judgeable against the draft without re-reading the corpus.
+- **`SKILL.md §Navigation` is the single router, split into Always / On-trigger tiers** — links drop from 76 to 47, so lazy loading actually works.
+- **`intake.md §1` is now defaults-first** — unstated parameters get explicit defaults, and only plan-changing items go into one structured question (max four). Intake costs 1–2 turns instead of many, with the confirmation gate intact.
 - **Transport mode and room style go into that batched question** rather than being defaulted silently.
 - **`SKILL.md §Confirmation Checkpoints`** — intake-time checkpoints fold into the batched question; mid-flight checkpoints are still asked one at a time.
 - **`test-prompts.json` case 3** — now asserts one batched question plus a two-turn ceiling.
 
 ### Added
-- **`intake.md §0` Traveller Profile Recall** — check for a stored traveller profile at the start (home city / departure airport · usual party · pace · hotel tier and hardware preference · disliked activities · loyalty programmes). If present, read it back in one sentence and don't re-ask. If absent, skip silently and never invent one.
-- **`test-prompts.json` cases 33 + 34** — 33: with all four minimum-viable-brief fields present, no core-input question is asked, defaults appear in the brief, and transport mode still goes into the question. 34: a missing profile degrades silently.
-- **`provenance.md`** — coverage added for §Final Check and intake §0 / §1 / §2.
+- **`intake.md §0` Traveller Profile Recall** — check for a stored traveller profile first (home city · usual party · pace · hotel tier · loyalty programmes). If present, read it back in one sentence; if absent, skip silently.
+- **`test-prompts.json` cases 33 + 34** — a complete minimum-viable brief skips core-input questions; a missing profile degrades silently.
+- **`provenance.md`** — case coverage added for the new rules.
 
 ## [0.18.0] — 2026-06-26
 
 ### Added
-- **dining-rules.md §12 Destination Signature Priority** — the destination's signature categories (Osaka 粉物, Hakata ramen, San Sebastián pintxos) take meal slots before variety is optimized. Signatures may repeat; time-bound ones (fish-market breakfast, late-night ramen) go in their real slot. Diversity no longer pushes travellers away from what they came to eat.
-- **local-specialties.md §Seasonal Availability** — season-bound specialties are checked against the trip date (spring new-tea, festival editions, harvest-timed goods); out of season, the year-round form is offered instead of an unbuyable item.
-- **test-prompts.json cases 31 + 32** — 31 signature priority over diversity; 32 specialty tiering + seasonal availability + signature bridge.
+- **dining-rules.md §12 Destination Signature Priority** — the destination's signature categories (Osaka 粉物, Hakata ramen, San Sebastián pintxos) take meal slots first. Signatures may repeat; time-bound ones go in their real slot. Diversity no longer pushes travellers away from what they came to eat.
+- **local-specialties.md §Seasonal Availability** — season-bound specialties are checked against the trip date; out of season, the year-round form is offered instead.
+- **test-prompts.json cases 31 + 32** — signature priority over diversity; specialty tiering + seasonal availability.
 
 ### Changed
-- **dining-rules.md §1** — diversity demoted from a hard rule to the default after signatures are placed; it never blocks a signature.
-- **local-specialties.md §Tiering** — rewritten as an AND-list: `signature` = strong local identity AND ≥2 sources AND transportable; "weak evidence" cap added; bridged to dining §12.
-- **provenance.md** — dining §1 gains 31, new §12→31; specialties gains §Tiering→32 and §Seasonal Availability→32.
+- **dining-rules.md §1** — diversity demoted from a hard rule to the default after signatures are placed.
+- **local-specialties.md §Tiering** — rewritten as an AND-list: strong local identity AND ≥2 sources AND transportable, with a weak-evidence cap.
+- **provenance.md** — case coverage added for the new rules.
 
 ## [0.17.0] — 2026-06-26
 
 ### Added
-- **`attractions.md`** — attraction / activity rules, replacing the single line that used to cover "what to do." Four sections: §1 Advance Booking & Capacity (per-category lead-time table · sell-out logic for teamLab/Uffizi/Alhambra/Vatican/Ghibli · release-day rush · unbookable target date = checkpoint) · §2 Operating Calendar & Time-Slot Fit (last admission ≠ closing · weekly + seasonal closures · timed-slot scheduling) · §3 Anchor-Per-Day & Density (one lead anchor/day · no two heavy timed anchors stacked · density calibrated to pace) · §4 Output Card.
-- **test-prompts.json cases 29 + 30** — 29 capacity-capped advance booking (Alhambra); 30 last admission + seasonal closure + leisurely density (Jungfrau region, winter).
+- **`attractions.md`** — attraction / activity rules, where "what to do" used to be one line. §1 Advance Booking & Capacity (per-category lead times · sell-out list · release-day rush · unbookable target date = checkpoint) · §2 Operating Calendar & Time-Slot Fit (last admission ≠ closing · weekly and seasonal closures · timed-slot scheduling) · §3 Anchor-Per-Day & Density · §4 Output Card.
+- **test-prompts.json cases 29 + 30** — capacity-capped advance booking; last admission + seasonal closure + leisurely density.
 
 ### Changed
-- **SKILL.md integration** — Navigation gains an attractions row; Core Workflow step 4 becomes a pointer; Confirmation Checkpoints gains "capacity/timed-entry not bookable for target date"; Final Check gains an attractions line.
-- **provenance.md** — new attractions.md section (§1→29 · §2→30 · §3→30); intake §4 gains case 30.
+- **SKILL.md** — Navigation gains an attractions row; Core Workflow step 4 becomes a pointer; Confirmation Checkpoints gains "capacity/timed-entry not bookable for target date"; Final Check gains an attractions line.
+- **provenance.md** — case coverage added for the new rules.
 
 ## [0.16.0] — 2026-06-26
 
 ### Changed
-- **Parallel batch-verification skeleton extracted to `SKILL.md §Batch Verification`** — it was repeated verbatim in 7 places (dining §10, deep/dining §10, hotel §Parallel, specialties §Parallel, safety §9, deep/safety §8, trip-prep §1). Each domain file now keeps only its trigger threshold, its return fields, and a pointer. Editing the protocol drops from seven edits to one.
+- **Parallel batch-verification skeleton extracted to `SKILL.md §Batch Verification`** — it was repeated verbatim in 7 places; each domain file now keeps only its trigger threshold, its return fields, and a pointer. Editing the protocol drops from seven edits to one, with no behavior change.
 - Fixed a dangling reference in `deep/dining-rules.md`; it now resolves to the real §Batch Verification anchor.
-- Pure structural de-duplication, zero behavior change: every trigger threshold and return-field contract preserved verbatim.
 
 ## [0.15.0] — 2026-06-21
 

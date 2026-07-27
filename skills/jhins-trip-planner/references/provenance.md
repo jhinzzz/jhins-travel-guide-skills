@@ -27,7 +27,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Fallback Rules (Missing dates/destination) | 3, 14 |
 | §Fallback Rules (Web verification stalls) | 19 |
 | §Batch Verification | 12, 14, 37 |
-| §Final Check | 21 |
+| §Final Check | 21, 38, 39 |
 | §Intake (destination-inspiration pointer) | 16 |
 
 ### intake.md
@@ -58,7 +58,14 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 
 | Anchor | Cases |
 |---|---|
-| §2 | 1, 2 |
+| §2 | 1, 2, 38, 39 |
+
+### assets/trip-data.schema.md
+
+| Anchor | Cases |
+|---|---|
+| §Validation | 38 |
+| §Pre-staged backups | 39 |
 
 ### transportation.md
 
@@ -76,7 +83,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §3 (Spring Festival / New Year peak) | 5 |
 | §4 | 20 |
 | §8 | 23, 24 |
-| §9 | 8 |
+| §9 | 8, 39 |
 | §10 | 8, 37 |
 | §11 | 19, 20 |
 | §12 | 31 |

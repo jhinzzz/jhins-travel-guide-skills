@@ -32,6 +32,22 @@ When the output relies on seasonal averages rather than a live forecast, add a o
 - If the user wants a maintainable project, split HTML, CSS, and JS as needed.
 - State the chosen HTML structure explicitly.
 
+### Embed the Data
+
+Every HTML deliverable carries its own data. Embed the whole plan as one block in `<head>`:
+
+```html
+<script id="trip-data" type="application/json">{ ...the trip object... }</script>
+```
+
+Shape and field list: [assets/trip-data.schema.md](../assets/trip-data.schema.md).
+
+**Rule** — a later edit request ("swap day 3's dinner", "cut the budget 20%") parses this block, mutates it, and re-renders the affected sections. Do not re-research what the block already holds; re-verify only what the edit actually touches (a new restaurant needs its own operating-status check per [dining-rules.md](dining-rules.md) §2). Without the embed, every edit costs a second full research pass and the prose drifts from the data behind it.
+
+Run `node assets/validate.js <file.html>` before handing the file over — it catches unsourced prices, a missing return leg, colliding coordinates, and the other mechanical omissions. Visual design is out of scope here; delegate aesthetics to a design skill.
+
+**Map** — when the plan has coordinates, render one Leaflet map from a CDN (`unpkg.com/leaflet`), markers built from `days[].slots[].coord` in itinerary order, day-coloured. Coordinates are WGS-84 only; OSM tiles shift GCJ-02 points a few hundred metres. No map when no coordinates were verified — an invented marker is worse than no map.
+
 ## 3. Downstream Pointers
 
 - **Transportation** — see [transportation.md](transportation.md) for all transport rules: booking windows, arrival times, pricing, transfers, return-trip planning, output format.

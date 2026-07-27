@@ -105,14 +105,16 @@ anchor_matches() {
 }
 
 # Resolve a filename referenced in rule_refs to an actual path under a skill.
-# SKILL.md lives at the skill root. Every other .md lives under references/.
+# Refs are written references-relative ("dining-rules.md", "deep/intake.md"),
+# except SKILL.md and anything outside references/ ("assets/…"), which are
+# skill-relative. Try references/ first, fall back to the skill root.
 resolve_rule_file() {
   local skill_dir="$1"
   local filename="$2"
-  if [ "$filename" = "SKILL.md" ]; then
-    echo "$skill_dir/SKILL.md"
-  else
+  if [ "$filename" != "SKILL.md" ] && [ -f "$skill_dir/references/$filename" ]; then
     echo "$skill_dir/references/$filename"
+  else
+    echo "$skill_dir/$filename"
   fi
 }
 

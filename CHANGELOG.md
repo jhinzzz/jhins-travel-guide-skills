@@ -2,74 +2,85 @@
 
 [English / CHANGELOG_EN.md](./CHANGELOG_EN.md)
 
-记录 jhins-trip-planner 这个 skill 的迭代轨迹，每个版本说明**改了什么**。最新版本在最上面。
+记录 jhins-trip-planner 这个 skill 的迭代轨迹。每条只说**改了什么**和**带来什么改进**，不解释背景与取舍。最新版本在最上面。
 
 版本号遵循 semver 的精神：
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
-## [0.20.0] — 2026-07-27
+## [0.21.0] — 2026-07-27
 
-验证分级版本：把「每条声明都按最高标准核」改成「按错了多严重分档」，并把 6 次串行 fan-out 收成 1 次。Tier A（错了毁行程）的标准逐字不变——省下来的是 B 和 C 此前白付的成本。
-
-### Changed
-- **knowledge-layers.md §3 拆成两张表，同一个标题下** — 这一节此前只回答「核不到时输出什么」（Strict / Tolerated 降级表），没有回答「一条声明需要几个来源」，于是所有声明默认都按最严的来。现在前一张表分三档：**Tier A（毁行程）** 餐厅营业状态 · 限流/时段预约状态与截止 · 签证入境 · 往返班次票价 · 灾害封闭 · 酒店存在性 → **现标准逐字不变**（≥2 独立来源 · live page · 渠道阶梯 · exhaustion gate · 不许回落训练数据）；**Tier B（毁一天）** 景点开放时间 · 周休 · 门票价格区间 · 步行时间 · 店铺营业时间 → 1 个权威来源 + 来源与查证日期，不要求第二来源；**Tier C（有更好）** 地标背景 · 街区气质 · 人流概况 · 通用打包建议 → Reasoning Layer + `approximate`，不必抓取。原来的 Strict / Tolerated 降级表和酒店品牌 carve-out **逐字保留**，作为后一张表（「达不到标准时输出什么」）。分级只改「几个来源、要不要 live page」，从不改「能不能编」——§2 bright-line test 对 B/C 一样适用。
-- **酒店每晚价格故意不进分档表** — 它已经被 §Progressive Search 按阶段分好了（Phase 1 侦察允许单平台，Phase 2 只对用户挑中的做 ≥2 来源交叉）。所以 SKILL.md §Data Traceability、hotel-selection.md §Evidence Standard、travel-sources.md §Evidence Principle 三处 ≥2 来源规则**一个字没动**，分档表里只写一行指向 §Progressive Search。
-- **SKILL.md §Batch Verification：6 个阈值 → 1 个，切片轴从「领域」换成「地理」** — 改动前 dining ≥5 / hotels >4 / specialties >5 / attractions ≥5 / safety ≥2 城 / trip-prep ≥2 国各自触发一次 fan-out，一份行程最多串行 fan out 六次；同一家餐厅的营业状态由 dining agent 查、地址由 attractions agent 查，重复往返。现在：先出行程骨架（只选名字不核实）→ 一次算出完整 Tier A+B 清单 → **按地理切片**（城市，再按区）→ 一次 fan out 2–4 个 sub-agent，每个把自己那片的所有项目全查完 → 汇总去重。触发线：**合计 ≥5 项，或跨 ≥2 城市/国家**。5 是它替掉的六个阈值的下界，所以没有任何场景变得比今天更少 fan out。每领域的**返回字段不变**——各领域文件仍各自定义自己的字段，agent 按片内项目填对应的那套。
-- **六处领域阈值句改为「并入总清单」** — dining §10 · hotel §Parallel Verification · specialties §Parallel Verification · attractions §Verification and Fallback · safety §9 · trip-prep §1（含 deep/dining §10、deep/safety §8 两处复述）。trip-prep 和 safety 的「按国家/城市切」本来就是地理轴，所以它们的切片规则不变，只是不再单独扫一遍。
-- **test-prompts.json case 12** — 原来断言两次 fan-out（trip-prep 一次 + safety 一次），这正是本版消除的行为；改为断言**恰好一次** fan-out、3 个 sub-agent 按国家切、每个同时返回该国的 trip-prep 与 safety 行。case 8 的餐厅复核清单同步改为并入总批次、按区切片。
-
-- **多城 dry-run 修掉两处新引入的缺陷** — 发版前按 spec §6.4 跑了一次多城 dry-run（上海出发 → 大阪/京都/首尔）：①「fan out **2–4** 个 sub-agent」被读成硬上限，5 国行程无处安放，单切片行程（同城但 ≥5 项）看起来也没有合法派发方式 → 改为**每片一个 sub-agent，2–4 是典型值而非上限**，单片也照样派一个（重点是别在主对话里串行抓取）；②地理切得比国家更细时（一国三城），**没规定国家级项目（签证/入境 · 货币支付 · eSIM · 全国急救号）放哪片** → 同一个阿根廷签证行会被三个城市片各抓一遍，正是本版要消除的重复 → 明确**每国只挂一片**，SKILL.md §Batch Verification 与 trip-prep.md §1 两处同时写明。case 14（阿根廷三城）补上 `must_fan_out_exactly_once` + 反例断言。
+HTML 交付物自带结构化数据，改行程不用重新调研。
 
 ### Added
-- **test-prompts.json case 35 + 36 + 37** — case 35 Tier-B 单来源即可过（清水寺开放时间/门票/周休，官网一个来源就够，不许因为只有一个来源就降级成搜索建议卡）；case 36 Tier-A 仍走全套标准（餐厅营业状态，≥2 来源 + live page + 渠道阶梯 + exhaustion gate，dining §2 绝对禁令不因分级而松动）——35 与 36 同文件反向配对，把两档混为一谈的模型必然挂掉一个；case 37 一次地理切片 fan-out（东京 3 餐厅 + 2 酒店 + 2 景点 = 7 项，一次 fan out 按区切，不许 dining 扫一遍再 hotel 扫一遍）。
-- **provenance.md** — 新增 `SKILL.md §Batch Verification → 12, 37`、`knowledge-layers.md §3 → 35, 36`、`attractions.md §Verification and Fallback → 37`、`hotel-selection.md §Parallel Verification → 37`，并把 35/36/37 记到 dining §2、§10、knowledge-layers §2/§6 下。后两条顺带补上了 FUTURE.md §9 记录的既有覆盖缺口。
+- **`assets/trip-data.schema.md`** — HTML 内嵌 `trip` 对象的字段清单（行程 · 天 · 景点 · 餐厅 · 酒店 · 交通 · 预算 · 安全）。坐标统一 WGS-84，价格与评分必须带来源和日期。新增 `backups[]`：雨天、售罄、周休、超预算各有预置替代。
+- **`assets/validate.js`** — 零依赖校验器。字段缺失、价格没来源、往返程缺一半、一天多个主锚点、坐标撞车或落在目的地范围外，都会报错并指名字段。附 `--gcj02-to-wgs84` 高德/腾讯坐标转换。
+- **test-prompts.json case 38 + 39** — HTML 必须内嵌数据并跑校验器；后续改动先解析已有数据。
+
+### Changed
+- **weather-and-output.md §2** — 新增内嵌数据规则与 Leaflet 地图规则。改「换掉第 3 天晚餐」时解析已有数据再改写，只重新核实真正改动的那一项。
+- **SKILL.md §Final Check** — HTML 交付前先跑 `node assets/validate.js`，字段齐全与来源配对交给校验器。
+- **README / README_CN** — 补上 `assets/` 与 attractions.md 条目。
+
+## [0.20.0] — 2026-07-27
+
+按「错了多严重」决定核到什么程度；批量核实从最多 6 次串行收成 1 次。
+
+### Changed
+- **knowledge-layers.md §3 新增证据分档表** — Tier A（错了毁行程：餐厅营业状态 · 限流/时段预约 · 签证入境 · 往返班次票价 · 灾害封闭 · 酒店存在性）走全套标准；Tier B（毁一天：开放时间 · 周休 · 门票价格 · 步行时间 · 店铺营业时间）1 个权威来源 + 查证日期即可；Tier C（地标背景 · 街区气质 · 人流 · 打包建议）不必抓取。B、C 两档不再白付 A 档的核实成本，能不能编造的红线不变。
+- **SKILL.md §Batch Verification** — 触发线合并为「合计 ≥5 项，或跨 ≥2 城市/国家」，切片轴从领域换成地理（先城市再区）。一份行程最多 fan out 一次，同一家店不再被多个 agent 各查一遍；国家级项目每国只挂一片。
+- **六处领域阈值并入总清单** — dining §10 · hotel · specialties · attractions · safety §9 · trip-prep §1。
+- **酒店每晚价格指向 §Progressive Search**，不进分档表。
+- **test-prompts.json case 8 + 12 + 14** — 改为断言单次地理切片 fan-out。
+
+### Added
+- **test-prompts.json case 35 + 36 + 37** — Tier-B 单来源即可过、Tier-A 仍走全套、一次地理切片 fan-out。
+- **provenance.md** — 补齐新增规则的 case 覆盖。
 
 ## [0.19.0] — 2026-07-27
 
-效率版本：不加规则，只改「规则写在哪」和「问问题的节奏」。反篡改（anti-fabrication）规则一条未动。
+效率版本：规则内容不变，改的是规则写在哪、问题怎么问。
 
 ### Changed
-- **SKILL.md §Final Check 全部 20 条改写为自足断言** — 此前每条都写「确认输出通过 <reference> 自己的清单」，等于起草完再把整个语料库读一遍，这是本 skill 最大的一笔可避免开销。现在每条直接说规则产出的**可观察结果**（例：酒店卡 8 个字段 — 名称+tier · 区域 · 交通 · 价格区间+币种+来源+日期 · 预算契合 · 理由 · verdict · Hardware），对着草稿就能判，不必回头开 reference。两条读不出来的（数据溯源完整性、原内容保留）标记 `→ v0.21 validate.js`，在校验器落地前仍由 LLM 判。
-- **SKILL.md §Navigation 成为唯一路由，新增 Always/On-trigger 分层** — 表格写着「按需读」，但后面几节各自又指向几乎每个 reference（改动前全文 76 个链接，transportation 被指 11 次、dining-rules 10 次），懒加载在实践中失效。本版把总数降到 47，§Confirmation Checkpoints 与 §Fallback Rules 的重复链接归零（§Data Traceability 的链接保留——它是反篡改入口，可能在读 Navigation 之前就被读到）。Always 层只有三项：intake · knowledge-layers §§1–3 · travel-sources §Citation Format。
-- **intake.md §1 改为 defaults-first** — 原来一次问一项、每轮最多三项，出草稿前要来回很多轮。新流程四步：抽取已知 → 未说的参数填显式默认（pace / theme / 口味 / 每日起止时间，不问）→ 只把真正改变方案的项**合并成一次**结构化提问（`AskUserQuestion`，最多四项按风险排序：法律/安全 > 排程 > 偏好）→ 回读一屏 brief 等确认。确认闸门本身没有放松，只是从多轮压到 1–2 轮。
-- **交通方式与房型不进默认集** — 它们进那一次合并提问。交通方式（飞/高铁/自驾）决定整个行程骨架，猜错要重做，且 §Confirmation Checkpoints 本来就规定「用户未表态时选定交通方式」必须先问；MVB 四要素齐全时的捷径也相应收窄为「只剩不能静默默认的项就问那些，真没有才直接出 brief」。
-- **SKILL.md §Confirmation Checkpoints batching rule** — intake 期的 checkpoint 并入那次合并提问；**mid-flight checkpoint 仍然一次一个**（这条规则的理由是隔离，合并会破坏它）。
-- **test-prompts.json case 3** — `must_ask_one_at_a_time_or_batch_up_to_three` 与新 batching rule 矛盾，替换为「三项核心输入缺失 → 合并成一次提问」+ 两轮上限。
+- **SKILL.md §Final Check 20 条改为自足断言** — 每条直接给出规则产出的可观察结果，对着草稿就能判，不必回头重读整份语料。
+- **§Navigation 成为唯一路由，分 Always / On-trigger 两层** — 全文链接 76 → 47，懒加载真正生效。
+- **intake.md §1 改为 defaults-first** — 未说的参数填显式默认，只把真正改变方案的项合并成一次结构化提问（最多四项）。提问从多轮压到 1–2 轮，确认闸门未放松。
+- **交通方式与房型进那次合并提问**，不静默默认。
+- **§Confirmation Checkpoints** — intake 期 checkpoint 并入合并提问；mid-flight checkpoint 仍逐个问。
+- **test-prompts.json case 3** — 改为断言合并提问 + 两轮上限。
 
 ### Added
-- **intake.md §0 Traveller Profile Recall** — 开场先查是否已有旅行者画像（常驻地/出发机场 · 常规同行构成 · 节奏偏好 · 酒店档位与硬件偏好 · 不喜欢的活动类型 · 里程/会员）。有就用一句话回读确认，不重复问；没有就**静默跳过**——不引导用户去建，更不凭空编一个出来。规则只规定**字段**、不规定存储机制，所以在没有持久记忆的 harness 里自然退化为 no-op。
-- **test-prompts.json case 33 + 34** — case 33 四项最小可用要素齐全时不该问任何核心输入、默认值必须写进 brief、交通方式必须进那次提问而不能静默选定；case 34 画像缺失时静默降级，编造画像内容是它守的失败模式。
-- **provenance.md** — 补上一个既有缺口：case 21 引用 `SKILL.md §Final Check`，但表里一直没有这一行。新增 intake §0 → 34 · §1 → 3, 33 · §2 → 33，并把 case 33 记到 §10 与 §Confirmation Checkpoints 下。
+- **intake.md §0 Traveller Profile Recall** — 开场先查已有旅行者画像（常驻地 · 常规同行构成 · 节奏 · 酒店档位 · 里程会员）。有就一句话回读确认，没有就静默跳过。
+- **test-prompts.json case 33 + 34** — 最小可用要素齐全时不问核心输入；画像缺失时静默降级。
+- **provenance.md** — 补齐新增规则的 case 覆盖。
 
 ## [0.18.0] — 2026-06-26
 
 ### Added
-- **dining-rules.md §12 Destination Signature Priority** — 先问「这地方最该吃什么」：目的地招牌品类（大阪粉物、博多拉面、圣塞 pintxos）优先占位，再谈多样性。招牌可重复（大阪两餐粉物是对的，不算违规）；时段绑定的招牌（筑地朝食、深夜拉面）按真实时段排。修正了「多样性把人推离该吃的东西」这一审视发现的偏差。
-- **local-specialties.md §Seasonal Availability** — 季节限定特产按行程日期核查（春茶、节庆限定、应季物产）；过季则给常售替代形态，不推不可买的东西。Scope 早提了 seasonal items，规则此前缺失。
-- **test-prompts.json case 31 + 32** — case 31 dining 招牌优先压过多样性（大阪「最有名最地道」应允许粉物重复）；case 32 specialty AND-list tiering + 季节限定 + 招牌连接（京都 3 月手信）。
+- **dining-rules.md §12 Destination Signature Priority** — 目的地招牌品类（大阪粉物、博多拉面、圣塞 pintxos）优先占位。招牌可重复；时段绑定的招牌按真实时段排。多样性不再把人推离该吃的东西。
+- **local-specialties.md §Seasonal Availability** — 季节限定特产按行程日期核查，过季给常售替代形态。
+- **test-prompts.json case 31 + 32** — 招牌优先压过多样性；specialty tiering + 季节限定。
 
 ### Changed
-- **dining-rules.md §1** — 多样性从「硬规则」降为「招牌满足后的默认」：先按 §12 放招牌，其余 slot 才避免重复；多样性永不阻止招牌。Non-Goals 同步澄清。
-- **local-specialties.md §Tiering** — 改写为 AND-list（对标 hotel/dining 的严谨度）：`signature` = 强本地身份 AND ≥2 源 AND 可携带；加「弱证据」上限；连接 dining §12（吃的招牌常有带得走的形态）。
-- **provenance.md** — dining §1→加 31、新增 §12→31；specialties 新增 §Tiering→32、§Seasonal Availability→32。
+- **dining-rules.md §1** — 多样性从硬规则降为「招牌满足后的默认」。
+- **local-specialties.md §Tiering** — 改写为 AND-list：强本地身份 AND ≥2 源 AND 可携带；加弱证据上限。
+- **provenance.md** — 补齐新增规则的 case 覆盖。
 
 ## [0.17.0] — 2026-06-26
 
 ### Added
-- **`attractions.md` — 景点 / 活动规则（填补最大的结构性空白）** — 行程的本质是景点，但此前「做什么」只是 Core Workflow step 4 的一行字。新文件四节：§1 提前预约与限量（按类别前置期表 · 限量售罄清单逻辑 teamLab/Uffizi/Alhambra/Vatican/Ghibli · 开票即抢 · 不可订即 checkpoint）· §2 营业日历与时段匹配（末次入场≠闭馆 · 每周休 + 季节性关闭 · 时段票排程）· §3 anchor-per-day 与密度（每天一个主角 · 不叠两个重头时段锚 · 密度随 pace 校准）· §4 输出卡片。薄文件、大量复用既有规则（验证→knowledge-layers · 灾后关闭→safety §6 · 目标日期纪律→dining §3 · 批量→§Batch Verification · 源→travel-sources），不重造、不建 deep。
-- **test-prompts.json case 29 + 30** — case 29 限量售罄/提前预约分支（Alhambra）；case 30 末次入场 + 季节关闭 + leisurely 密度分支（少女峰冬季）。两者正交。
+- **`attractions.md`** — 景点 / 活动规则，此前「做什么」只有一行字。§1 提前预约与限量（按类别前置期 · 售罄清单 · 开票即抢 · 不可订即 checkpoint）· §2 营业日历与时段匹配（末次入场≠闭馆 · 周休与季节性关闭 · 时段票排程）· §3 anchor-per-day 与密度 · §4 输出卡片。
+- **test-prompts.json case 29 + 30** — 限量售罄提前预约；末次入场 + 季节关闭 + leisurely 密度。
 
 ### Changed
-- **SKILL.md 集成** — Navigation 表加 attractions 行；Core Workflow step 4 把「attractions with booking windows」展开为指针；Confirmation Checkpoints 加「限量/时段票目标日期不可订」；Final Check 加景点检查行。
-- **provenance.md** — 新增 attractions.md 段（§1→29 · §2→30 · §3→30）；intake §4 追加 case 30。
+- **SKILL.md** — Navigation 加 attractions 行；Core Workflow step 4 改为指针；Confirmation Checkpoints 加「限量/时段票目标日期不可订」；Final Check 加景点检查行。
+- **provenance.md** — 补齐新增规则的 case 覆盖。
 
 ## [0.16.0] — 2026-06-26
 
 ### Changed
-- **并行批量验证去重 → `SKILL.md §Batch Verification`** — "spawn 2–3 子代理 / 各返回结构化行 / 主对话综合 / 状态行 Dispatched N" 这套编排骨架原先在 7 处逐字重复（dining §10、deep/dining §10、hotel §Parallel、specialties §Parallel、safety §9、deep/safety §8、trip-prep §1）。抽成 `SKILL.md` 单一骨架，各 domain 文件只保留**触发阈值** + **专属返回字段** + 指针。改协议从改 7 处变改 1 处。
-- 修复 `deep/dining-rules.md` 的悬空引用——原先指向 "SKILL.md Fallback Rules" 的并行协议本体从未写入 SKILL.md，现指向真实的 §Batch Verification 锚点。
-- 纯结构性去重：每个触发阈值和返回字段契约逐字保留，**零行为变化**。Provenance 三个带 case 的锚点（dining §10 / safety §9 / trip-prep §1）标题不变，test-prompts.json 与 provenance.md 无需改动。
+- **并行批量验证骨架抽到 `SKILL.md §Batch Verification`** — 原先在 7 处逐字重复，现各领域只留触发阈值 + 专属返回字段 + 指针。改协议从改 7 处变改 1 处，行为不变。
+- 修复 `deep/dining-rules.md` 的悬空引用，改指真实的 §Batch Verification 锚点。
 
 ## [0.15.0] — 2026-06-21
 

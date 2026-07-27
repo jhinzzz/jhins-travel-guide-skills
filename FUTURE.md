@@ -15,12 +15,12 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 1. Automated testing for `test-prompts.json`
 
-**Current state**: 37 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
+**Current state**: 39 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
 
 **What it could look like**: a script (Node / Python, Anthropic SDK) that runs each case, applies two kinds of assertion: `grep-level` (must_contain / must_not_contain_literal) and `judge-level` (must_have_section, rule_refs traced). Ground truth is already structured; the harness just consumes it.
 
 **Why not now**:
-- 37 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
+- 39 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
 - Judge-level assertion (LLM judging LLM) has drift risk.
 - Manual case spot-checking on PR review catches most regressions.
 
@@ -103,13 +103,15 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 - API costs, API key management, rate limits all at once.
 - Basic rules need to be bulletproof first — otherwise real-time data just industrializes flawed plans.
 
+**Partly closed in v0.21.0**: HTML deliverables now embed the whole plan as a `<script id="trip-data">` block ([assets/trip-data.schema.md](skills/jhins-trip-planner/assets/trip-data.schema.md)), so an edit request parses and mutates that block instead of re-researching the trip. That covers "persistent trip memory" and the data half of "swap in place" without a backend. Still open: live API integrations, in-page interactivity, and the in-trip companion.
+
 **Worth doing when**:
 - Personal repeat use hits "would be nice if X" often enough.
 - Sharing with family / friends where manual skill invocation is a barrier.
 
 ### 7. Live-fetch smoke test in the release ritual
 
-**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 37 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
+**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 39 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
 
 **What it exposed**: v0.12.0 shipped a snippet-level §2 bar that passed every static check and both adversarial plan-reviews, then **failed on the first real fetch** — the "≥2 aggregators agree" gate was unsatisfiable in practice (DuckDuckGo and Bing return disjoint results), which would have demoted a genuinely-open restaurant. A v0.7.2-style dry-run caught it; v0.12.1 fixed it. Static checks structurally could not.
 

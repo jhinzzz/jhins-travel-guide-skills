@@ -8,6 +8,23 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.19.0] — 2026-07-27
+
+效率版本：不加规则，只改「规则写在哪」和「问问题的节奏」。反篡改（anti-fabrication）规则一条未动。
+
+### Changed
+- **SKILL.md §Final Check 全部 20 条改写为自足断言** — 此前每条都写「确认输出通过 <reference> 自己的清单」，等于起草完再把整个语料库读一遍，这是本 skill 最大的一笔可避免开销。现在每条直接说规则产出的**可观察结果**（例：酒店卡 8 个字段 — 名称+tier · 区域 · 交通 · 价格区间+币种+来源+日期 · 预算契合 · 理由 · verdict · Hardware），对着草稿就能判，不必回头开 reference。两条读不出来的（数据溯源完整性、原内容保留）标记 `→ v0.21 validate.js`，在校验器落地前仍由 LLM 判。
+- **SKILL.md §Navigation 成为唯一路由，新增 Always/On-trigger 分层** — 表格写着「按需读」，但后面几节各自又指向几乎每个 reference（改动前全文 76 个链接，transportation 被指 11 次、dining-rules 10 次），懒加载在实践中失效。本版把总数降到 47，§Confirmation Checkpoints 与 §Fallback Rules 的重复链接归零（§Data Traceability 的链接保留——它是反篡改入口，可能在读 Navigation 之前就被读到）。Always 层只有三项：intake · knowledge-layers §§1–3 · travel-sources §Citation Format。
+- **intake.md §1 改为 defaults-first** — 原来一次问一项、每轮最多三项，出草稿前要来回很多轮。新流程四步：抽取已知 → 未说的参数填显式默认（pace / theme / 口味 / 每日起止时间，不问）→ 只把真正改变方案的项**合并成一次**结构化提问（`AskUserQuestion`，最多四项按风险排序：法律/安全 > 排程 > 偏好）→ 回读一屏 brief 等确认。确认闸门本身没有放松，只是从多轮压到 1–2 轮。
+- **交通方式与房型不进默认集** — 它们进那一次合并提问。交通方式（飞/高铁/自驾）决定整个行程骨架，猜错要重做，且 §Confirmation Checkpoints 本来就规定「用户未表态时选定交通方式」必须先问；MVB 四要素齐全时的捷径也相应收窄为「只剩不能静默默认的项就问那些，真没有才直接出 brief」。
+- **SKILL.md §Confirmation Checkpoints batching rule** — intake 期的 checkpoint 并入那次合并提问；**mid-flight checkpoint 仍然一次一个**（这条规则的理由是隔离，合并会破坏它）。
+- **test-prompts.json case 3** — `must_ask_one_at_a_time_or_batch_up_to_three` 与新 batching rule 矛盾，替换为「三项核心输入缺失 → 合并成一次提问」+ 两轮上限。
+
+### Added
+- **intake.md §0 Traveller Profile Recall** — 开场先查是否已有旅行者画像（常驻地/出发机场 · 常规同行构成 · 节奏偏好 · 酒店档位与硬件偏好 · 不喜欢的活动类型 · 里程/会员）。有就用一句话回读确认，不重复问；没有就**静默跳过**——不引导用户去建，更不凭空编一个出来。规则只规定**字段**、不规定存储机制，所以在没有持久记忆的 harness 里自然退化为 no-op。
+- **test-prompts.json case 33 + 34** — case 33 四项最小可用要素齐全时不该问任何核心输入、默认值必须写进 brief、交通方式必须进那次提问而不能静默选定；case 34 画像缺失时静默降级，编造画像内容是它守的失败模式。
+- **provenance.md** — 补上一个既有缺口：case 21 引用 `SKILL.md §Final Check`，但表里一直没有这一行。新增 intake §0 → 34 · §1 → 3, 33 · §2 → 33，并把 case 33 记到 §10 与 §Confirmation Checkpoints 下。
+
 ## [0.18.0] — 2026-06-26
 
 ### Added

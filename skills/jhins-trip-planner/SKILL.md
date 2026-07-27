@@ -140,8 +140,8 @@ Verification fans out **once per itinerary**, not once per domain. Do not serial
 
 1. Draft the itinerary skeleton first — names selected, nothing verified.
 2. Compute the whole Tier-A + Tier-B list in one step, across every domain.
-3. Slice by **geography** (city, then district), not by domain. Trip-prep and safety slice by country / city, which is the same axis.
-4. Fan out **2–4 sub-agents**, one per slice. Each verifies *everything* in its slice.
+3. Slice by **geography** (city, then district), not by domain. Country-level items (visa / entry / payment / SIM, nationwide emergency numbers) attach to **one** slice per country — not to every city slice inside it, which would duplicate the same fetch two or three times.
+4. Fan out **one sub-agent per slice** — typically 2–4, but there is no cap: a 5-country trip uses 5, one per country. If geography yields a single slice, still dispatch that one sub-agent; the point is keeping the fetches out of the main conversation. Each verifies *everything* in its slice.
 5. Each sub-agent returns **one structured row per item**, using the return fields its domain defines — dining §10 · hotels §Parallel Verification · specialties §Parallel Verification · attractions §Verification and Fallback · safety §9 · trip prep §1.
 6. Each sub-agent independently obeys its domain's degradation / timeout rules (hotel Timeout Degradation, the channel-ladder exhaustion gate).
 7. The main conversation synthesizes the rows, de-duplicates across slices, and decides the final output.

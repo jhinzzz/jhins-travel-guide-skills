@@ -707,6 +707,7 @@
         "dcc_warning_required": true,
         "rate_assumption_line_required": "output must state assumed USD→ARS rate + research date + FX buffer location"
       },
+      "must_fan_out_exactly_once": "3 city slices (布宜诺斯艾利斯 / 门多萨 / El Calafate) in one itinerary-wide fan-out. Argentina's country-level prep rows (visa · currency + payment · eSIM · nationwide emergency numbers) attach to ONE slice — the geography slices finer than the country, and repeating them per city triples the same fetch.",
       "must_cite_source_for": [
         "international flight price range",
         "every intercity flight / long-distance bus fare",
@@ -716,13 +717,18 @@
         "specific credit card brand",
         "specific travel card / FX app by product name without 'verify current terms'"
       ],
+      "must_not": [
+        "repeat the same Argentina visa / currency / eSIM / emergency-number fetch in all three city slices"
+      ],
       "rule_refs": [
         "budget.md §1",
         "budget.md §2",
         "budget.md §3",
         "budget.md §4",
         "trip-prep.md §3",
-        "SKILL.md §Fallback Rules (Missing dates/destination)"
+        "SKILL.md §Fallback Rules (Missing dates/destination)",
+        "SKILL.md §Batch Verification",
+        "trip-prep.md §1"
       ]
     }
   },

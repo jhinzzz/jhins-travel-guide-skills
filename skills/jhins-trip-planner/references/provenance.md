@@ -26,7 +26,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Data Traceability | 5 |
 | §Fallback Rules (Missing dates/destination) | 3, 14 |
 | §Fallback Rules (Web verification stalls) | 19 |
-| §Batch Verification | 12, 37 |
+| §Batch Verification | 12, 14, 37 |
 | §Final Check | 21 |
 | §Intake (destination-inspiration pointer) | 16 |
 
@@ -49,7 +49,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | (whole file) | 5 |
-| §1 | 12 |
+| §1 | 12, 14 |
 | §2 | 21, 24 |
 | §3 | 14 |
 | §6 | 13 |

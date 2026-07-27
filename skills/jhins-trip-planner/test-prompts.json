@@ -1080,6 +1080,7 @@
         "theme → general sightseeing (stated as an assumption, not asked)",
         "food preferences → neutral picks (stated as an assumption, not asked)"
       ],
+      "must_ask_transport_preference_in_the_batched_question": "transport preference is unstated and is never defaulted silently (SKILL.md §Confirmation Checkpoints) — it belongs in the one batched question, not in the silent-default set",
       "must_not_ask_about": [
         "pace",
         "theme",
@@ -1088,19 +1089,22 @@
         "accessibility (no flag in prompt)",
         "child age bands (no minors in prompt)"
       ],
-      "minimum_viable_brief_already_met": "destination + dates + party size + budget are all present — no core-input question is needed at all",
+      "minimum_viable_brief_already_met": "destination + dates + party size + budget are all present — no core-input question is needed; the one batched question carries only transport preference (and room style if a hotel is in scope)",
       "must_read_back_one_screen_brief": "a single confirmation brief listing every assumed default, awaiting user go-ahead before detailed planning",
       "max_question_turns_before_brief": 2,
       "must_not": [
         "ask the four minimum-viable-brief items that the prompt already answered",
+        "silently pick a transport mode because the user did not state one",
         "run the full capture list as a rote interview",
         "begin detailed day-by-day planning before the brief is confirmed",
         "silently assume a default without stating it in the brief"
       ],
-      "notes": "Pins intake.md §1 defaults-first flow + §2 minimum-viable brief. All four MVB fields are present in the prompt, so the correct behaviour is zero core-input questions and one confirmation brief. Contrast with case 3 (incomplete-inputs), where MVB fields are missing and one batched AskUserQuestion is correct.",
+      "notes": "Pins intake.md §1 defaults-first flow + §2 minimum-viable brief. All four MVB fields are present in the prompt, so the correct behaviour is zero core-input questions and one batched question covering only what must not be defaulted silently (transport preference per §10). Contrast with case 3 (incomplete-inputs), where MVB fields are missing too.",
       "rule_refs": [
         "intake.md §1",
-        "intake.md §2"
+        "intake.md §2",
+        "intake.md §10",
+        "SKILL.md §Confirmation Checkpoints"
       ]
     }
   },

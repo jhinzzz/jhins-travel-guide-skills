@@ -32,8 +32,8 @@ Ask for missing trip inputs in this order: travel dates · destination · party 
 Four steps, in order — the goal is a confirmed brief in **one or two turns**, not an interview:
 
 1. **Extract** everything the conversation already states. Never ask for something the user has said.
-2. **Fill** every still-unstated parameter with an explicit default — pace, theme, food preferences (§2), plus hotel room style, transport preference, and daily start/end times. Do **not** ask for these.
-3. **Ask once, batched.** Only the items that genuinely change the plan go into a *single* structured question (`AskUserQuestion` where the harness offers it): the minimum-viable-brief fields that are still missing (§2), plus any capture the Capture Relevance Rule fires (self-drive triad, child bands, accessibility, medication). If more than four apply, ask the top four by risk — legal/safety > scheduling > preference — and defer the rest to mid-flight checkpoints.
+2. **Fill** every still-unstated parameter with an explicit default — pace, theme, food preferences (§2), plus daily start/end times. Do **not** ask for these.
+3. **Ask once, batched.** Only the items that genuinely change the plan go into a *single* structured question (`AskUserQuestion` where the harness offers it): the minimum-viable-brief fields that are still missing (§2), transport preference and hotel room style (§10) when they are unstated and in scope, plus any capture the Capture Relevance Rule fires (self-drive triad, child bands, accessibility, medication). If more than four apply, ask the top four by risk — legal/safety > scheduling > preference — and defer the rest to mid-flight checkpoints.
 4. **Read back a one-screen brief** listing every assumed default alongside the confirmed inputs, and wait for the user's go-ahead before detailed planning.
 
 If all four minimum-viable-brief fields are already present, step 3 asks **nothing** — go straight to the brief.
@@ -155,6 +155,6 @@ When the user uses "or" between two cuisines ("izakaya or sashimi"), capture bot
 
 ## 10. Hotel Room Style and Transport Preference
 
-- If hotel suggestions are needed and room style is missing, ask after the core inputs.
+- If hotel suggestions are needed and room style is missing, fold the question into §1 step 3's single batched question rather than asking it on its own turn.
 - If hotel suggestions are in scope, capture **hardware preference** once: `modern-hardware-preferred` / `heritage-OK` / `no-preference`. Ask only when relevant (per the Capture Relevance Rule at the top of this file). This bends hotel *ranking weight* per [hotel-selection.md](hotel-selection.md) §Hardware Weighting — it does **not** change what is disclosed on the card.
-- If the user has not mentioned transport preferences, ask after budget: "Do you have a preferred transport mode for getting there and back (flight, high-speed rail, rental car, etc.)?"
+- If the user has not mentioned transport preferences, ask — folded into §1 step 3's single batched question, not on its own turn: "Do you have a preferred transport mode for getting there and back (flight, high-speed rail, rental car, etc.)?" Never default a transport mode silently; SKILL.md §Confirmation Checkpoints makes choosing one on the user's behalf a stop-and-ask.

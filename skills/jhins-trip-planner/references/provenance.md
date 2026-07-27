@@ -21,7 +21,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | §Classify The Task First | 2 |
-| §Confirmation Checkpoints | 11 |
+| §Confirmation Checkpoints | 11, 33 |
 | §Confirmation Checkpoints (Ramadan) | 13 |
 | §Data Traceability | 5 |
 | §Fallback Rules (Missing dates/destination) | 3, 14 |
@@ -41,7 +41,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §4 | 30 |
 | §6, §7 | 22 |
 | §8 | 9 |
-| §10 | 26, 27 |
+| §10 | 26, 27, 33 |
 
 ### trip-prep.md
 

@@ -99,7 +99,7 @@ Trigger: any restaurant / hotel / anchor swap after first draft. Flow: [deep/din
 
 ### Rule
 
-Trigger: trips with 5+ dining picks. Run the fan-out per SKILL.md §Batch Verification.
+No separate dining threshold: every restaurant needing verification joins the itinerary-wide list and fans out with it per SKILL.md §Batch Verification, sliced by geography.
 
 Per-venue return fields: operating status · address · regular closures · peak-season notes · reservation channel · source URL. Pointer: [deep/dining-rules.md](deep/dining-rules.md) §10.
 

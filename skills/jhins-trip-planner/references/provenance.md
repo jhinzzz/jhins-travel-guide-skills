@@ -26,6 +26,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Data Traceability | 5 |
 | §Fallback Rules (Missing dates/destination) | 3, 14 |
 | §Fallback Rules (Web verification stalls) | 19 |
+| §Batch Verification | 12, 14, 37 |
 | §Final Check | 21 |
 | §Intake (destination-inspiration pointer) | 16 |
 
@@ -48,7 +49,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | (whole file) | 5 |
-| §1 | 12 |
+| §1 | 12, 14 |
 | §2 | 21, 24 |
 | §3 | 14 |
 | §6 | 13 |
@@ -71,12 +72,12 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | §1 | 1, 31 |
-| §2 | 8, 19, 20, 25 |
+| §2 | 8, 19, 20, 25, 36 |
 | §3 (Spring Festival / New Year peak) | 5 |
 | §4 | 20 |
 | §8 | 23, 24 |
 | §9 | 8 |
-| §10 | 8 |
+| §10 | 8, 37 |
 | §11 | 19, 20 |
 | §12 | 31 |
 | §§1-10 | 6, 7 |
@@ -88,6 +89,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §1 | 29 |
 | §2 | 30 |
 | §3 | 30 |
+| §Verification and Fallback | 37 |
 
 ### budget.md
 
@@ -113,6 +115,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Hardware-Freshness Signal | 15, 26, 27, 28 |
 | §Recency-Weighted Reviews | 26, 28 |
 | §Hardware Weighting | 17, 26, 27, 28 |
+| §Parallel Verification | 37 |
 
 ### local-specialties.md
 
@@ -141,12 +144,13 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 
 | Anchor | Cases |
 |---|---|
-| §2 (bright-line test) | 16 |
+| §2 (bright-line test) | 16, 35 |
+| §3 | 35, 36 |
 | §3 (tolerated policy for hotels) | 17 |
 | §4 (destination matching) | 16 |
 | §5 (search advisory card) | 16, 17 |
 | §6 (user-supplied hotel name flow) | 18 |
-| §6 (exhaustion gate) | 19, 20, 25 |
+| §6 (exhaustion gate) | 19, 20, 25, 36 |
 
 ### travel-sources.md
 

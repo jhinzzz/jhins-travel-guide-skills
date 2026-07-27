@@ -118,9 +118,9 @@ Use a grep-first flow: list every occurrence of the outgoing name, update one by
 
 ## 10. Parallel Batch Verification Workflow
 
-For trips with 5+ dining picks, verification runs as a batch per the skeleton in SKILL.md §Batch Verification.
+Restaurant verification runs inside the itinerary-wide batch per SKILL.md §Batch Verification — no dining-specific threshold or sweep.
 
-- **Domain slicing axis**: group every restaurant requiring verification by day / ward / category before fanning out.
+- **Domain slicing axis**: the itinerary-wide fan-out slices by geography, so a restaurant lands in the slice for its city / ward.
 - **Per-venue return fields**: operating status · address · regular closures · peak-season notes · reservation channel · source URL.
 
 ## Edge: Markets and stall clusters as destination

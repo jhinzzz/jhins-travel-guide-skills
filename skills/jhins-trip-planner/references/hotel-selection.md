@@ -153,7 +153,7 @@ When degrading, output the search advisory card with: platform + keywords + filt
 
 ## Parallel Verification for Hotel Shortlists
 
-Trigger: shortlist exceeds **4 candidates** (typical when the trip spans multiple cities, or the user wants options across 3 budget tiers). Run the fan-out per SKILL.md §Batch Verification — slicing axis: by city, by budget tier, or by platform.
+No separate hotel threshold: every candidate needing verification joins the itinerary-wide list and fans out with it per SKILL.md §Batch Verification, sliced by geography.
 
 Per-hotel return fields: **current nightly rate range · rating on two platforms · transit time to main hub · check-in / check-out policy · luggage storage availability · refund policy · source URL · research date**.
 

@@ -22,7 +22,25 @@ General characterizations without names or specific numbers are Reasoning Layer.
 - Reasoning: "配套设施比较成熟"
 - Local Knowledge: "有5家五星级酒店"
 
-## 3. Per-Category Degradation Rules
+## 3. Verification Tiers and Degradation
+
+Two questions, in this order: **how much verification does this claim need**, and **what do I output when that standard cannot be met**. One table each.
+
+### How much verification a claim needs
+
+| Tier | Claims | Standard |
+|---|---|---|
+| **A — ruins the trip** | Restaurant operating status · capacity / timed-entry booking status and deadlines · visa and entry · round-trip transport schedule and fare · disaster / closure status · hotel existence | **The existing standard, verbatim**: ≥2 independent sources · live page · channel ladder · exhaustion gate · no training-data fallback. Every current rule applies in full. |
+| **B — disrupts a day** | Attraction opening hours · weekly closures · ticket price ranges · walking times · shop hours | 1 authoritative source + source and research date. No second-source requirement. |
+| **C — nice to have** | Landmark background · district character · general crowd levels · generic packing advice | Reasoning Layer, labelled `approximate`. No fetch required. |
+
+**Tier A is the existing standard verbatim.** The savings come from B and C, which today pay Tier-A cost.
+
+Tier-B and Tier-C claims still obey the bright-line test (§2) and still cite a source where one was used. Tiering changes *how many* sources and *whether a live page is required* — never whether a claim may be invented.
+
+Hotel nightly rates are deliberately **not** in this table: they are already tiered by phase in [hotel-selection.md](hotel-selection.md) §Progressive Search (Phase 1 scout may use a single platform; the user's picks get ≥2 sources in Phase 2). Follow that, not a tier here.
+
+### What to output when the standard is not met
 
 Two policies govern what happens when web search evidence is unavailable:
 

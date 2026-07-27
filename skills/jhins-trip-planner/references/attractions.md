@@ -68,7 +68,7 @@ Keep cards compact — tables or chip-style labels, not paragraphs. Embed each a
 
 - Attraction names, ticket prices, and ratings are **Local Knowledge** — they need web evidence or degrade to a search advisory card per [knowledge-layers.md](knowledge-layers.md) §5. Well-known landmarks (UNESCO / national-level) may use the Reasoning Layer with a "widely documented" note per [knowledge-layers.md](knowledge-layers.md) §3 — but **opening hours, ticket prices, and capacity/booking status always require live verification**, never training data.
 - Sources: official site / Klook for tickets; 马蜂窝 / TripAdvisor for selection — per [travel-sources.md](travel-sources.md).
-- When an itinerary has **5+ attractions to verify** (hours, prices, booking status across many sites), run the batch per SKILL.md §Batch Verification — slicing axis: by day or by area. Per-attraction return fields: operating status on target date · last-admission time · booking lead time + channel · current ticket price · source URL + research date.
+- No separate attraction threshold: every attraction needing verification joins the itinerary-wide list and fans out with it per SKILL.md §Batch Verification, sliced by geography. Per-attraction return fields: operating status on target date · last-admission time · booking lead time + channel · current ticket price · source URL + research date.
 - Post-disaster / advisory closure-status recheck is **not** done here — it fires on a specific signal and folds into the pre-trip recheck block per [safety-and-emergency.md](safety-and-emergency.md) §6.
 
 ## Non-Goals

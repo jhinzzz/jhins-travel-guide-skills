@@ -34,6 +34,9 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | Anchor | Cases |
 |---|---|
 | (whole file) | 3 |
+| §0 | 34 |
+| §1 | 3, 33 |
+| §2 | 33 |
 | §3, §4 | 11 |
 | §4 | 30 |
 | §6, §7 | 22 |

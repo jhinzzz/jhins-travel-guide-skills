@@ -94,7 +94,7 @@ Follow [intake.md](references/intake.md) for required inputs, question order, mi
 
 Stop and ask before crossing any of these — rule bodies live in the referenced file.
 
-**Batching rule**: if multiple checkpoints trigger at **intake time** (before any draft exists), batch up to three questions into one message. If more than three apply, ask the top three by risk (legal / safety > scheduling > preference) and defer the rest. **Mid-flight checkpoints** (budget overage during draft, swap cascade, pace/theme conflict discovered while scheduling) must be asked one at a time so the user can see each in isolation.
+**Batching rule**: checkpoints that trigger at **intake time** (before any draft exists) fold into the single batched intake question (intake §1 step 3) — up to four, ranked by risk (legal / safety > scheduling > preference), rest deferred. **Mid-flight checkpoints** (budget overage during draft, swap cascade, pace/theme conflict discovered while scheduling) are still asked **one at a time** — the reason for that rule is isolation, which batching would defeat.
 
 - Switching from advice/outline into markdown + HTML deliverables
 - Replacing an existing page structure (vs. reorganizing inside it)

@@ -87,9 +87,11 @@
         "specific hotel name without user destination",
         "specific fare"
       ],
-      "must_ask_one_at_a_time_or_batch_up_to_three": true,
+      "must_batch_missing_core_inputs_into_one_question": "destination + dates + budget are all missing — ask them together in a single structured question, not one per turn",
+      "max_question_turns_before_brief": 2,
       "rule_refs": [
         "intake.md",
+        "intake.md §1",
         "SKILL.md §Fallback Rules (Missing dates/destination)"
       ]
     }
@@ -1064,6 +1066,61 @@
       "rule_refs": [
         "local-specialties.md §Tiering",
         "local-specialties.md §Seasonal Availability"
+      ]
+    }
+  },
+  {
+    "id": 33,
+    "scenario": "defaults-first-batched-intake",
+    "prompt": "帮我规划 10 月去大阪玩 5 天，两个人，预算 2 万。",
+    "assertions": {
+      "mode": "planning-only",
+      "must_fill_defaults_without_asking": [
+        "pace → balanced (stated as an assumption, not asked)",
+        "theme → general sightseeing (stated as an assumption, not asked)",
+        "food preferences → neutral picks (stated as an assumption, not asked)"
+      ],
+      "must_not_ask_about": [
+        "pace",
+        "theme",
+        "food preferences",
+        "chronic medication (no health flag in prompt)",
+        "accessibility (no flag in prompt)",
+        "child age bands (no minors in prompt)"
+      ],
+      "minimum_viable_brief_already_met": "destination + dates + party size + budget are all present — no core-input question is needed at all",
+      "must_read_back_one_screen_brief": "a single confirmation brief listing every assumed default, awaiting user go-ahead before detailed planning",
+      "max_question_turns_before_brief": 2,
+      "must_not": [
+        "ask the four minimum-viable-brief items that the prompt already answered",
+        "run the full capture list as a rote interview",
+        "begin detailed day-by-day planning before the brief is confirmed",
+        "silently assume a default without stating it in the brief"
+      ],
+      "notes": "Pins intake.md §1 defaults-first flow + §2 minimum-viable brief. All four MVB fields are present in the prompt, so the correct behaviour is zero core-input questions and one confirmation brief. Contrast with case 3 (incomplete-inputs), where MVB fields are missing and one batched AskUserQuestion is correct.",
+      "rule_refs": [
+        "intake.md §1",
+        "intake.md §2"
+      ]
+    }
+  },
+  {
+    "id": 34,
+    "scenario": "profile-recall-absent-degrades-silently",
+    "prompt": "下周想去京都待 4 天，一个人，预算随意。",
+    "assertions": {
+      "mode": "planning-only",
+      "profile_recall_attempted_first": "check for a stored traveller profile before asking anything",
+      "if_profile_absent": "skip silently — proceed to §1 defaults-first intake; do NOT prompt the user to create a profile",
+      "if_profile_present": "read it back in one sentence for confirmation; do not re-ask what it already answers",
+      "must_not": [
+        "ask the user to set up or fill in a traveller profile",
+        "block planning on the absence of a profile",
+        "invent profile contents (home city, loyalty programme, past trips) that were not stored"
+      ],
+      "notes": "Pins intake.md §0. The rule names the fields, not the storage mechanism, so it must degrade to a no-op in a harness with no persistent memory. Fabricating a recalled profile is the failure mode this case guards.",
+      "rule_refs": [
+        "intake.md §0"
       ]
     }
   }

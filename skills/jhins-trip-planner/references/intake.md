@@ -17,15 +17,26 @@ Do **not** ask every capture below for every trip. Ask only when the party compo
 
 Default posture: **ask less, then ask more when a captured answer unlocks a specific follow-up**. Never run the full capture list as a rote intake interview.
 
+## 0. Traveller Profile Recall
+
+At the start of a trip request, check whether a traveller profile is already stored — home city / departure airport · usual party composition · pace preference · hotel tier and hardware preference · disliked activity types · airline or hotel loyalty. If one exists, read it back in **one sentence** for confirmation and do not re-ask what it answers.
+
+If no profile exists, **skip silently**. Do not ask the user to create one, and never invent recalled preferences — an unstored profile is a no-op, not a gap to fill.
+
+This rule names the *fields*, not the storage mechanism: in a harness with no persistent memory it degrades to nothing.
+
 ## 1. Core Inputs and Order
 
 Ask for missing trip inputs in this order: travel dates · destination · party size and companions · trip purpose / theme · pace preference · chronic medication (if relevant) · food preferences · budget · preferred transport mode.
 
-Question pacing:
+Four steps, in order — the goal is a confirmed brief in **one or two turns**, not an interview:
 
-- Ask one missing item at a time when possible.
-- If three or more core inputs are missing (dates, destination, budget), batch the first two or three in one turn.
-- Never exceed three questions per turn.
+1. **Extract** everything the conversation already states. Never ask for something the user has said.
+2. **Fill** every still-unstated parameter with an explicit default — pace, theme, food preferences (§2), plus hotel room style, transport preference, and daily start/end times. Do **not** ask for these.
+3. **Ask once, batched.** Only the items that genuinely change the plan go into a *single* structured question (`AskUserQuestion` where the harness offers it): the minimum-viable-brief fields that are still missing (§2), plus any capture the Capture Relevance Rule fires (self-drive triad, child bands, accessibility, medication). If more than four apply, ask the top four by risk — legal/safety > scheduling > preference — and defer the rest to mid-flight checkpoints.
+4. **Read back a one-screen brief** listing every assumed default alongside the confirmed inputs, and wait for the user's go-ahead before detailed planning.
+
+If all four minimum-viable-brief fields are already present, step 3 asks **nothing** — go straight to the brief.
 
 If the user's message implies destination inspiration ("有什么建议", "where should I go"), offer 2–3 brief destination ideas based on season + stated constraints **before** proceeding with the intake order.
 

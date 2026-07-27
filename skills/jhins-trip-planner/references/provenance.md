@@ -26,6 +26,7 @@ Reverse index: **which test case exercises which rule**. Each entry points from 
 | §Data Traceability | 5 |
 | §Fallback Rules (Missing dates/destination) | 3, 14 |
 | §Fallback Rules (Web verification stalls) | 19 |
+| §Final Check | 21 |
 | §Intake (destination-inspiration pointer) | 16 |
 
 ### intake.md

@@ -15,12 +15,12 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 1. Automated testing for `test-prompts.json`
 
-**Current state**: 34 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
+**Current state**: 37 cases with machine-checkable `assertions`, rule_refs verified by `check-provenance.sh` at commit time, but nothing actually runs the prompts through a model and checks the output.
 
 **What it could look like**: a script (Node / Python, Anthropic SDK) that runs each case, applies two kinds of assertion: `grep-level` (must_contain / must_not_contain_literal) and `judge-level` (must_have_section, rule_refs traced). Ground truth is already structured; the harness just consumes it.
 
 **Why not now**:
-- 34 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
+- 37 cases × ~30 tool calls each × several runs/month = tens of dollars. Not worth it for a single-person skill today.
 - Judge-level assertion (LLM judging LLM) has drift risk.
 - Manual case spot-checking on PR review catches most regressions.
 
@@ -52,7 +52,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 3. `thresholds.json` — centralize numeric rules
 
-**Current state**: numeric thresholds scattered (15% budget overage · 6h daily driving · 3.45/3.55/3.80 Tabelog floor · 5-venue parallel-agent trigger · 250/220/260 line caps · etc.).
+**Current state**: numeric thresholds scattered (15% budget overage · 6h daily driving · 3.45/3.55/3.80 Tabelog floor · ≥5-item fan-out trigger · 250/220/260 line caps · etc.). **This direction got weaker in v0.20.0**, not stronger: six per-domain fan-out thresholds collapsed into one, so the count of scattered numbers went down by five without any indirection layer.
 
 **What it could look like**: `references/thresholds.json`, referenced by key in rule files. Rule files read "use `budget_overage_confirm_threshold`" not "15%".
 
@@ -109,7 +109,7 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 7. Live-fetch smoke test in the release ritual
 
-**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 34 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
+**Current state**: `check-all.sh` validates structure — anchors, versions, sizes, provenance links. `test-prompts.json` has 37 cases but nothing runs them against a model (FUTURE §1). The anti-scraping logic (v0.11/v0.12) is **runtime-conditional**: it only fires when a live fetch hits a login wall, and it is the least statically-testable code in the skill.
 
 **What it exposed**: v0.12.0 shipped a snippet-level §2 bar that passed every static check and both adversarial plan-reviews, then **failed on the first real fetch** — the "≥2 aggregators agree" gate was unsatisfiable in practice (DuckDuckGo and Bing return disjoint results), which would have demoted a genuinely-open restaurant. A v0.7.2-style dry-run caught it; v0.12.1 fixed it. Static checks structurally could not.
 
@@ -140,7 +140,9 @@ The main skill should stay thin. A few hundred lines total in `references/*.md` 
 
 ### 9. Backfill test coverage for uncovered reference sections
 
-**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), the `travel-mode.md` §§1–3, the `dining-rules.md` §12 **user-override branch** ("if the user says 'no repeats,' honor it" — case 31 covers the signature-wins path but not the user-overrides-signature path), and `attractions.md` §4 / §Verification and Fallback (the "Attractions ≥5" batch threshold + return fields — uncovered like the peer batch sections in hotel / specialties / trip-prep). These have no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
+**What**: add machine-checkable cases for `transportation.md` §Booking Window Guidelines / §Recommended Arrival Times / §Multi-Carrier Luggage Conflicts / §Return Trip Planning, `weather-and-output.md` §1 (climate-shift), the `travel-mode.md` §§1–3, the `dining-rules.md` §12 **user-override branch** ("if the user says 'no repeats,' honor it" — case 31 covers the signature-wins path but not the user-overrides-signature path), `attractions.md` §4, and `local-specialties.md` §Parallel Verification. These have no `rule_refs` in any test case — covered by the rules' presence, not by a regression case.
+
+**Partly closed in v0.20.0**: `attractions.md` §Verification and Fallback and `hotel-selection.md` §Parallel Verification gained case 37 (both were edited by the single-fan-out change, so I5 touch-it-test-it applied). Their headings are now frozen for renaming purposes. `local-specialties.md` §Parallel Verification was edited too but is covered only transitively — case 37 has no specialties in its itinerary, so this one stayed on the list.
 
 **Why not now**: these are pre-existing gaps, out of scope of the v0.15.0 hotel-hardware change; adding cases for rules this change did not touch would be scope creep.
 

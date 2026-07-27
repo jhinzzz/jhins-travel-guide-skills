@@ -8,6 +8,21 @@
 - `0.x.0` — 新增覆盖面或结构性重构
 - `0.x.y` — 小补丁，不改用户感知的行为
 
+## [0.20.0] — 2026-07-27
+
+验证分级版本：把「每条声明都按最高标准核」改成「按错了多严重分档」，并把 6 次串行 fan-out 收成 1 次。Tier A（错了毁行程）的标准逐字不变——省下来的是 B 和 C 此前白付的成本。
+
+### Changed
+- **knowledge-layers.md §3 拆成两张表，同一个标题下** — 这一节此前只回答「核不到时输出什么」（Strict / Tolerated 降级表），没有回答「一条声明需要几个来源」，于是所有声明默认都按最严的来。现在前一张表分三档：**Tier A（毁行程）** 餐厅营业状态 · 限流/时段预约状态与截止 · 签证入境 · 往返班次票价 · 灾害封闭 · 酒店存在性 → **现标准逐字不变**（≥2 独立来源 · live page · 渠道阶梯 · exhaustion gate · 不许回落训练数据）；**Tier B（毁一天）** 景点开放时间 · 周休 · 门票价格区间 · 步行时间 · 店铺营业时间 → 1 个权威来源 + 来源与查证日期，不要求第二来源；**Tier C（有更好）** 地标背景 · 街区气质 · 人流概况 · 通用打包建议 → Reasoning Layer + `approximate`，不必抓取。原来的 Strict / Tolerated 降级表和酒店品牌 carve-out **逐字保留**，作为后一张表（「达不到标准时输出什么」）。分级只改「几个来源、要不要 live page」，从不改「能不能编」——§2 bright-line test 对 B/C 一样适用。
+- **酒店每晚价格故意不进分档表** — 它已经被 §Progressive Search 按阶段分好了（Phase 1 侦察允许单平台，Phase 2 只对用户挑中的做 ≥2 来源交叉）。所以 SKILL.md §Data Traceability、hotel-selection.md §Evidence Standard、travel-sources.md §Evidence Principle 三处 ≥2 来源规则**一个字没动**，分档表里只写一行指向 §Progressive Search。
+- **SKILL.md §Batch Verification：6 个阈值 → 1 个，切片轴从「领域」换成「地理」** — 改动前 dining ≥5 / hotels >4 / specialties >5 / attractions ≥5 / safety ≥2 城 / trip-prep ≥2 国各自触发一次 fan-out，一份行程最多串行 fan out 六次；同一家餐厅的营业状态由 dining agent 查、地址由 attractions agent 查，重复往返。现在：先出行程骨架（只选名字不核实）→ 一次算出完整 Tier A+B 清单 → **按地理切片**（城市，再按区）→ 一次 fan out 2–4 个 sub-agent，每个把自己那片的所有项目全查完 → 汇总去重。触发线：**合计 ≥5 项，或跨 ≥2 城市/国家**。5 是它替掉的六个阈值的下界，所以没有任何场景变得比今天更少 fan out。每领域的**返回字段不变**——各领域文件仍各自定义自己的字段，agent 按片内项目填对应的那套。
+- **六处领域阈值句改为「并入总清单」** — dining §10 · hotel §Parallel Verification · specialties §Parallel Verification · attractions §Verification and Fallback · safety §9 · trip-prep §1（含 deep/dining §10、deep/safety §8 两处复述）。trip-prep 和 safety 的「按国家/城市切」本来就是地理轴，所以它们的切片规则不变，只是不再单独扫一遍。
+- **test-prompts.json case 12** — 原来断言两次 fan-out（trip-prep 一次 + safety 一次），这正是本版消除的行为；改为断言**恰好一次** fan-out、3 个 sub-agent 按国家切、每个同时返回该国的 trip-prep 与 safety 行。case 8 的餐厅复核清单同步改为并入总批次、按区切片。
+
+### Added
+- **test-prompts.json case 35 + 36 + 37** — case 35 Tier-B 单来源即可过（清水寺开放时间/门票/周休，官网一个来源就够，不许因为只有一个来源就降级成搜索建议卡）；case 36 Tier-A 仍走全套标准（餐厅营业状态，≥2 来源 + live page + 渠道阶梯 + exhaustion gate，dining §2 绝对禁令不因分级而松动）——35 与 36 同文件反向配对，把两档混为一谈的模型必然挂掉一个；case 37 一次地理切片 fan-out（东京 3 餐厅 + 2 酒店 + 2 景点 = 7 项，一次 fan out 按区切，不许 dining 扫一遍再 hotel 扫一遍）。
+- **provenance.md** — 新增 `SKILL.md §Batch Verification → 12, 37`、`knowledge-layers.md §3 → 35, 36`、`attractions.md §Verification and Fallback → 37`、`hotel-selection.md §Parallel Verification → 37`，并把 35/36/37 记到 dining §2、§10、knowledge-layers §2/§6 下。后两条顺带补上了 FUTURE.md §9 记录的既有覆盖缺口。
+
 ## [0.19.0] — 2026-07-27
 
 效率版本：不加规则，只改「规则写在哪」和「问问题的节奏」。反篡改（anti-fabrication）规则一条未动。

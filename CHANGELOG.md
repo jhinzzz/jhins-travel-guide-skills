@@ -19,6 +19,8 @@
 - **六处领域阈值句改为「并入总清单」** — dining §10 · hotel §Parallel Verification · specialties §Parallel Verification · attractions §Verification and Fallback · safety §9 · trip-prep §1（含 deep/dining §10、deep/safety §8 两处复述）。trip-prep 和 safety 的「按国家/城市切」本来就是地理轴，所以它们的切片规则不变，只是不再单独扫一遍。
 - **test-prompts.json case 12** — 原来断言两次 fan-out（trip-prep 一次 + safety 一次），这正是本版消除的行为；改为断言**恰好一次** fan-out、3 个 sub-agent 按国家切、每个同时返回该国的 trip-prep 与 safety 行。case 8 的餐厅复核清单同步改为并入总批次、按区切片。
 
+- **多城 dry-run 修掉两处新引入的缺陷** — 发版前按 spec §6.4 跑了一次多城 dry-run（上海出发 → 大阪/京都/首尔）：①「fan out **2–4** 个 sub-agent」被读成硬上限，5 国行程无处安放，单切片行程（同城但 ≥5 项）看起来也没有合法派发方式 → 改为**每片一个 sub-agent，2–4 是典型值而非上限**，单片也照样派一个（重点是别在主对话里串行抓取）；②地理切得比国家更细时（一国三城），**没规定国家级项目（签证/入境 · 货币支付 · eSIM · 全国急救号）放哪片** → 同一个阿根廷签证行会被三个城市片各抓一遍，正是本版要消除的重复 → 明确**每国只挂一片**，SKILL.md §Batch Verification 与 trip-prep.md §1 两处同时写明。case 14（阿根廷三城）补上 `must_fan_out_exactly_once` + 反例断言。
+
 ### Added
 - **test-prompts.json case 35 + 36 + 37** — case 35 Tier-B 单来源即可过（清水寺开放时间/门票/周休，官网一个来源就够，不许因为只有一个来源就降级成搜索建议卡）；case 36 Tier-A 仍走全套标准（餐厅营业状态，≥2 来源 + live page + 渠道阶梯 + exhaustion gate，dining §2 绝对禁令不因分级而松动）——35 与 36 同文件反向配对，把两档混为一谈的模型必然挂掉一个；case 37 一次地理切片 fan-out（东京 3 餐厅 + 2 酒店 + 2 景点 = 7 项，一次 fan out 按区切，不许 dining 扫一遍再 hotel 扫一遍）。
 - **provenance.md** — 新增 `SKILL.md §Batch Verification → 12, 37`、`knowledge-layers.md §3 → 35, 36`、`attractions.md §Verification and Fallback → 37`、`hotel-selection.md §Parallel Verification → 37`，并把 35/36/37 记到 dining §2、§10、knowledge-layers §2/§6 下。后两条顺带补上了 FUTURE.md §9 记录的既有覆盖缺口。

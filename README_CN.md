@@ -34,6 +34,9 @@
 - [`skills/jhins-trip-planner/references/dining-rules.md`](./skills/jhins-trip-planner/references/dining-rules.md)：餐饮规划规则 — 品类矩阵、运营状态核实、目标日期日历、行政区一致性、餐次×品类×区域输入、预订渠道、旺季复查、替换级联
 - [`skills/jhins-trip-planner/references/safety-and-emergency.md`](./skills/jhins-trip-planner/references/safety-and-emergency.md)：安全与应急规则 — 目的地紧急号码、医疗就近、领事支持、保险理赔路径、失窃/丢失响应、目的地特定风险
 - [`skills/jhins-trip-planner/references/budget.md`](./skills/jhins-trip-planner/references/budget.md)：预算规则 — 按区域 band 分类目占比、隐性成本、refundable 取舍触发、汇率与支付时机
+- [`skills/jhins-trip-planner/references/attractions.md`](./skills/jhins-trip-planner/references/attractions.md)：景点规则 — 预约提前期、容量与分时段入场、最晚入场、季节性闭园、每日锚点密度
+- [`skills/jhins-trip-planner/assets/trip-data.schema.md`](./skills/jhins-trip-planner/assets/trip-data.schema.md)：HTML 交付物内嵌 `trip` 对象的字段清单
+- [`skills/jhins-trip-planner/assets/validate.js`](./skills/jhins-trip-planner/assets/validate.js)：该对象的零依赖校验器（`node validate.js <trip.json | page.html>`、`--selftest`、`--gcj02-to-wgs84`）
 - [`skills/jhins-trip-planner/references/deep/`](./skills/jhins-trip-planner/references/deep/)：opt-in 深度 reference（`budget` / `dining-rules` / `intake` / `safety-and-emergency` / `trip-prep` 的表格 + 示例扩展）。LLM 只在主 reference 的 pointer 命中 depth trigger 时才读。
 - [`skills/jhins-trip-planner/references/provenance.md`](./skills/jhins-trip-planner/references/provenance.md)：反向索引 — 每条规则 heading 被 test-prompts.json 的哪些 case 覆盖（元数据：测试覆盖反向索引，非规则参考）
 - [`scripts/check-provenance.sh`](./scripts/check-provenance.sh)：校验 `test-prompts.json` 里每个 `rule_refs` 锚点指向的 heading 真实存在
